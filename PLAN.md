@@ -7,11 +7,11 @@ Core message: *"Rezolvăm probleme complexe de la nivel de senzor și PCB până
 
 | Piece | Choice | Why |
 |---|---|---|
-| Framework | **Astro 5** (static output) | Ships plain HTML/CSS, near-zero JS → instant load from a WhatsApp link |
+| Framework | **Astro 7** (static output) | Ships plain HTML/CSS, near-zero JS → instant load from a WhatsApp link |
 | Styling | **Tailwind CSS 4** | Fast iteration, design tokens in one place |
 | Language | TypeScript | Typed content (translations, verticals) |
 | i18n | Astro built-in routing | RO at `/`, EN at `/en/` |
-| Fonts | Self-hosted via Fontsource | Display: **Unbounded** (wide, bold, uppercase) · Text: **Inter** or **Manrope** |
+| Fonts | Self-hosted via Fontsource | Display: **Unbounded** (wide, bold, uppercase) · Text: **Manrope** · Mono: **IBM Plex Mono** |
 | Images | `astro:assets` | Auto WebP/AVIF, responsive sizes |
 | Form | Web3Forms or Formspree (free tier) → email | No backend to run |
 | SEO | `@astrojs/sitemap`, JSON-LD Schema.org, hreflang, Open Graph | Local SEO + good WhatsApp preview |
