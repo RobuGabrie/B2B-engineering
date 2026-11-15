@@ -8,6 +8,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://example.com', // placeholder, keep in sync with src/config/site.ts
 
+  // One small stylesheet: inline it so the first paint doesn't wait for a second request.
+  build: { inlineStylesheets: 'always' },
+
   vite: {
     plugins: [tailwindcss()]
   },

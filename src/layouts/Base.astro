@@ -1,5 +1,9 @@
 ---
 import '../styles/global.css';
+// Fonts the first screen needs (headline + body): preloaded so the hero text doesn't re-render late.
+// The URLs resolve to the same hashed files the @font-face rules point to.
+import unbounded from '../assets/fonts/unbounded-ro-wght.woff2?url';
+import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import { site } from '../config/site';
 import { defaultLang, homePath, languages, type Lang } from '../i18n/utils';
 
@@ -29,6 +33,9 @@ const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
+    {[unbounded, manropeLatin].map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />

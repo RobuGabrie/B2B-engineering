@@ -11,7 +11,7 @@ Core message: *"Rezolvăm probleme complexe de la nivel de senzor și PCB până
 | Styling | **Tailwind CSS 4** | Fast iteration, design tokens in one place |
 | Language | TypeScript | Typed content (translations, verticals) |
 | i18n | Astro built-in routing | RO at `/`, EN at `/en/` |
-| Fonts | Self-hosted via Fontsource | Display: **Unbounded** (wide, bold, uppercase) · Text: **Manrope** · Mono: **IBM Plex Mono** |
+| Fonts | Self-hosted (Fontsource; Unbounded as a custom subset) | Display: **Unbounded** (wide, bold, uppercase) · Text: **Manrope** · Mono: **IBM Plex Mono** |
 | Images | `astro:assets` | Auto WebP/AVIF, responsive sizes |
 | Form | Web3Forms or Formspree (free tier) → email | No backend to run |
 | SEO | `@astrojs/sitemap`, JSON-LD Schema.org, hreflang, Open Graph | Local SEO + good WhatsApp preview |

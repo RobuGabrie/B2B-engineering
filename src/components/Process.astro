@@ -20,7 +20,7 @@ const icons = ['audit', 'prototype', 'integrate', 'scale'] as const;
 <section id={t.anchors.process} class="container-site py-20 md:py-32" aria-labelledby="process-title">
   <SectionHeading id="process-title" title={t.process.title} kicker={t.process.kicker} intro={t.process.intro} />
 
-  <div class="mt-12 grid gap-12 md:mt-16 lg:grid-cols-12 lg:gap-16">
+  <div class="mt-12 grid grid-cols-1 gap-12 md:mt-16 lg:grid-cols-12 lg:gap-16">
     <NotchedImage
       src={bench}
       alt={t.process.imageAlt}
@@ -40,13 +40,13 @@ const icons = ['audit', 'prototype', 'integrate', 'scale'] as const;
       <span aria-hidden="true" class="steps-fill absolute top-0 left-[1.5rem] w-0.5 -translate-x-1/2 bg-accent md:left-[1.6rem]"></span>
 
       {t.process.steps.map((step, i) => (
-        <li class="step relative grid grid-cols-[3rem_1fr] gap-x-4 pb-12 last:pb-0 md:grid-cols-[3.2rem_1fr] md:gap-x-8" data-step>
+        <li class="step relative grid grid-cols-[3rem_minmax(0,1fr)] gap-x-4 pb-12 last:pb-0 md:grid-cols-[3.2rem_1fr] md:gap-x-8" data-step>
           <span class="num relative z-10 bg-paper py-1 text-center font-display text-[1.6rem] leading-none font-bold md:text-[2.6rem]" aria-hidden="true">
             0{i + 1}
           </span>
           <div class="border-b border-line pb-12 [li:last-child_&]:border-0 [li:last-child_&]:pb-0">
-            <div class="flex items-center justify-between gap-6">
-              <h3 class="text-lg leading-tight md:text-2xl">
+            <div class="flex items-center justify-between gap-3 sm:gap-6">
+              <h3 class="min-w-0 text-base leading-tight break-words sm:text-lg md:text-2xl">
                 <span class="sr-only">{i + 1}. </span>{step.title}
               </h3>
               <Icon name={icons[i]} class="size-8 md:size-10" />

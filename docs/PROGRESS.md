@@ -1,6 +1,6 @@
 # Progress & handoff
 
-Last updated: 2026-11-15. **Read this first when resuming in a new terminal/session**, then `RULES.md`.
+Last updated: 2026-11-15 (steps 8–11 done). **Read this first when resuming in a new terminal/session**, then `RULES.md`.
 
 ## Status
 
@@ -16,8 +16,8 @@ Last updated: 2026-11-15. **Read this first when resuming in a new terminal/sess
 | 8 | Contact form + WhatsApp + footer | ✅ done (Web3Forms key still a placeholder) |
 | 9 | Case studies placeholder (content collection, hidden while empty) | ✅ done |
 | 10 | SEO: Open Graph image, JSON-LD, robots.txt (sitemap + hreflang already done) | ✅ done |
-| 11 | Polish: mobile QA, accessibility, Lighthouse ≥ 95 | todo |
-| 12 | Deploy + domain | todo |
+| 11 | Polish: mobile QA, accessibility, Lighthouse ≥ 95 | ✅ done: mobile 99/100/100/100, desktop 100×4 |
+| 12 | Deploy + domain | ⏸ waiting: user chose to decide hosting later |
 
 ## Form
 
@@ -48,6 +48,7 @@ Other open items (not blocking): real company name/logo/contacts/domain, real ph
 - **Removed on request:** the Input → Procesare → Rezultat flow and the dark scroll-driven "Schema sistemului" panel (user: redundant). Don't bring them back.
 - Primary button text is **ink on orange** (not white) for contrast; offered to switch to white if the user insists.
 - The two hero audience texts and the 3 outcomes per vertical were written by Claude (not in the brief) — the user should review them in `src/i18n/ro.ts`.
+- **Performance (step 11):** CSS is inlined (`build.inlineStylesheets`), Unbounded is a self-hosted subset (`src/assets/fonts/unbounded-ro-wght.woff2`, Latin + Romanian diacritics, weights 400–800, 44 KB; rebuild with `scripts/subset-font.sh` if new characters appear, e.g. another language), and Unbounded + Manrope latin are preloaded. `steel` gray darkened to #6e6e6a for AA contrast. No horizontal overflow from 320 to 1440 px.
 - Photos: Pexels (Unsplash blocks automated downloads). Listed in `CREDITS.md`.
 - Hosting: user chose **later** (2026-11-15); stop at step 11 until they pick.
 - Workflow: one step at a time, screenshot desktop (1440) + phone (390) before reporting, commit + push after each step. The user writes in Romanian; answer in Romanian.

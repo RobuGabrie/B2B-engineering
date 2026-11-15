@@ -1,15 +1,23 @@
 @import "tailwindcss";
-@import "@fontsource-variable/unbounded";
 @import "@fontsource-variable/manrope";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
+
+/* Unbounded, subset to the characters and weights the site uses (scripts/subset-font.sh). */
+@font-face {
+  font-family: "Unbounded Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url("../assets/fonts/unbounded-ro-wght.woff2") format("woff2-variations");
+}
 
 /* Design tokens — the only place raw colors and fonts are defined. */
 @theme {
   --color-paper: #ffffff;
   --color-mist: #f4f4f2;
   --color-line: #e2e2de;
-  --color-steel: #8a8a86;
+  --color-steel: #6e6e6a; /* AA on paper and mist for small labels */
   --color-graphite: #4a4a48;
   --color-ink: #0d0d0e;
 
