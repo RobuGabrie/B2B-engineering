@@ -1,0 +1,169 @@
+// Romanian copy — primary language. Source: docs/BRIEF.md.
+// en.ts must mirror this structure exactly (enforced by the Dictionary type).
+export const ro = {
+  meta: {
+    title: 'Hardware, firmware, computer vision și software custom',
+    description:
+      'Sisteme inteligente la cheie: proiectare PCB, firmware, IoT industrial, computer vision și aplicații cloud. Echipă completă de ingineri hardware & software.',
+  },
+  nav: {
+    solutions: 'Soluții',
+    process: 'Proces',
+    whyUs: 'De ce noi',
+    contact: 'Contact',
+    cta: 'Cere un demo',
+    menu: 'Meniu',
+    close: 'Închide',
+    language: 'Limba',
+  },
+  anchors: {
+    home: 'acasa',
+    solutions: 'solutii',
+    process: 'proces',
+    cases: 'demo',
+    whyUs: 'de-ce-noi',
+    contact: 'contact',
+  },
+  hero: {
+    title: 'Sisteme inteligente la cheie: de la hardware și senzori până la AI și Cloud.',
+    subtitle:
+      'Proiectăm și dezvoltăm soluții custom pentru industrie, orașe inteligente și produse hardware. Fără intermediari — echipă completă de ingineri software & hardware.',
+    primary: 'Discută cu un inginer',
+    secondary: 'Vezi domeniile noastre',
+    badge: 'Echipă premiată la competiția internațională de inginerie Hard&Soft (USV)',
+  },
+  solutions: {
+    title: 'Ce rezolvăm concret',
+    intro: 'Patru domenii în care ducem un proiect de la senzor până la aplicație.',
+    labels: {
+      problem: 'Problema',
+      solution: 'Soluția noastră',
+      benefit: 'Beneficiu cheie',
+      input: 'Input',
+      processing: 'Procesare',
+      result: 'Rezultat',
+    },
+    items: [
+      {
+        id: 'iot',
+        tab: 'IoT industrial',
+        title: 'Retrofitting industrial & monitorizare producție',
+        problem: 'Utilaje vechi fără date, timpi morți neobservați, pierderi de energie și rebuturi.',
+        solution:
+          'Atașăm senzori industriali (vibrații, curent, temperatură, optic) și unități de achiziție pe utilajele existente, conectate la un dashboard live în cloud.',
+        benefit:
+          'Vezi randamentul (OEE) în timp real pe telefon și primești alerte înainte ca un utilaj să se defecteze.',
+        flow: ['Senzori pe utilaj', 'Achiziție & cloud', 'OEE live + alerte'],
+      },
+      {
+        id: 'vision',
+        tab: 'Computer vision',
+        title: 'Computer vision & Edge AI',
+        problem:
+          'Control vizual lent sau greșit făcut manual; lipsa automatizării în trafic, parcări sau securitate perimetrală.',
+        solution:
+          'Sisteme cu camere video și procesare AI locală (Edge) care detectează defecte pe banda de producție, recunosc numere de înmatriculare sau protejează trecerile de pietoni prin avertizare activă.',
+        benefit: 'Decizii în milisecunde, fără dependență de internet și fără erori umane.',
+        flow: ['Cameră video', 'AI local (Edge)', 'Decizie în ms'],
+      },
+      {
+        id: 'rnd',
+        tab: 'R&D hardware',
+        title: 'R&D & prototipare hardware / firmware',
+        problem:
+          'Companii sau startup-uri care au o idee de produs fizic, dar nu au echipa care să ducă proiectul de la schemă la prototip funcțional.',
+        solution:
+          'Proiectare PCB, selecție componente, firmware (STM32, ESP32, Linux Embedded), carcasare și aplicația mobilă/web de control.',
+        benefit: 'Un singur partener tehnic pentru tot produsul, gata de testare și producție în serie.',
+        flow: ['Idee & specificații', 'PCB + firmware', 'Prototip funcțional'],
+      },
+      {
+        id: 'automation',
+        tab: 'Logistică & agro',
+        title: 'Automatizări custom pentru logistică & agricultură',
+        problem: 'Procese lente în depozite, erori la pregătirea comenzilor sau lipsa datelor din teren.',
+        solution:
+          'Sisteme Pick-to-Light pentru rafturi, stații autonome de monitorizare meteo/sol și sisteme telematice custom pentru flote și utilaje.',
+        benefit: 'Reducerea costurilor operaționale și control total asupra activității din teren.',
+        flow: ['Rafturi, câmp, flotă', 'Automatizare', 'Costuri reduse'],
+      },
+    ],
+    cta: 'Discută proiectul cu un inginer',
+  },
+  process: {
+    title: 'Cum lucrăm',
+    intro: 'Pași mici, rezultate verificabile. Nu plătești pentru ceva ce nu ai văzut funcționând.',
+    steps: [
+      {
+        title: 'Audit tehnic',
+        text: 'La fața locului sau online. Analizăm problema reală și definim specificațiile.',
+      },
+      {
+        title: 'Prototip / PoC',
+        text: 'Construim rapid o variantă funcțională pe un singur utilaj sau flux, ca să vezi rezultatele concret.',
+      },
+      {
+        title: 'Implementare & integrare',
+        text: 'Instalăm sistemul complet, conectăm interfața web/mobilă și instruim echipa ta.',
+      },
+      {
+        title: 'Mentenanță & scalare',
+        text: 'Monitorizăm sistemul pe termen lung și îl extindem pe măsură ce crești.',
+      },
+    ],
+  },
+  cases: {
+    title: 'Studii de caz & demo-uri',
+    intro: 'Kit-uri demo și proiecte livrate, cu poze și video.',
+    watch: 'Vezi demo-ul',
+  },
+  whyUs: {
+    title: 'De ce noi?',
+    items: [
+      {
+        title: 'Full-stack în lumea reală',
+        text: 'Nu ne oprim la cod. Înțelegem atât electrica/electronica de pe teren, cât și arhitectura cloud.',
+      },
+      {
+        title: 'Echipă testată sub presiune',
+        text: 'Câștigători ai concursului internațional Hard&Soft, obișnuiți să livrăm sisteme complexe funcționale în timp record.',
+      },
+      {
+        title: 'Fără vendor lock-in',
+        text: 'Construim soluții adaptate pe infrastructura ta, ușor de întreținut și extins.',
+      },
+    ],
+  },
+  contact: {
+    title: 'Programează o discuție tehnică',
+    intro: 'Spune-ne ce vrei să automatizezi sau să construiești. Răspunde un inginer, nu un agent de vânzări.',
+    form: {
+      name: 'Nume',
+      company: 'Firmă / domeniu',
+      reach: 'Telefon sau email',
+      problem: 'Descrie pe scurt ce vrei să automatizezi sau să construiești',
+      submit: 'Trimite',
+      sending: 'Se trimite…',
+      success: 'Mulțumim! Te contactăm în cel mult o zi lucrătoare.',
+      error: 'Nu am putut trimite mesajul. Încearcă din nou sau scrie-ne pe WhatsApp.',
+      required: 'Câmp obligatoriu',
+    },
+    direct: 'Sau direct',
+    phone: 'Telefon',
+    email: 'Email',
+    whatsapp: 'WhatsApp',
+    whatsappMessage: 'Bună ziua! Aș vrea să discut despre un proiect.',
+  },
+  footer: {
+    rights: 'Toate drepturile rezervate.',
+    cui: 'CUI',
+  },
+} as const;
+
+type Widen<T> = T extends string
+  ? string
+  : T extends readonly (infer U)[]
+    ? readonly Widen<U>[]
+    : { readonly [K in keyof T]: Widen<T[K]> };
+
+export type Dictionary = Widen<typeof ro>;

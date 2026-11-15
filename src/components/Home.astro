@@ -1,0 +1,40 @@
+---
+// The single page, rendered once per language by src/pages/index.astro and src/pages/en/index.astro.
+import Base from '../layouts/Base.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import { site } from '../config/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Base lang={lang} title={t.meta.title} description={t.meta.description}>
+  <!-- Temporary step-2 preview. Real sections replace this from step 4 on. -->
+  <div class="container-site flex items-center justify-between py-4">
+    <span class="font-display font-bold">{site.name}</span>
+    <LanguageSwitch lang={lang} />
+  </div>
+
+  <main class="container-site py-16 md:py-24">
+    <h1 class="max-w-5xl text-3xl sm:text-5xl md:text-6xl">{t.hero.title}</h1>
+    <p class="mt-6 max-w-2xl text-lg text-graphite">{t.hero.subtitle}</p>
+
+    <section class="mt-16">
+      <h2 class="text-2xl md:text-3xl">{t.solutions.title}</h2>
+      <ol class="mt-6 grid gap-4 sm:grid-cols-2">
+        {t.solutions.items.map((item) => (
+          <li class="border border-line p-5">
+            <p class="font-mono text-sm text-accent-ink">{item.tab}</p>
+            <p class="mt-2 font-semibold">{item.title}</p>
+            <p class="mt-2 text-graphite">{item.benefit}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </main>
+</Base>

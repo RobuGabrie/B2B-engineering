@@ -1,0 +1,30 @@
+---
+import { homePath, languages, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const codes = Object.keys(languages) as Lang[];
+---
+
+<ul class="flex items-center gap-1 font-mono text-sm uppercase">
+  {codes.map((code) => (
+    <li>
+      <a
+        href={homePath(code)}
+        hreflang={code}
+        lang={code}
+        aria-current={code === lang ? 'page' : undefined}
+        title={languages[code]}
+        class:list={[
+          'inline-flex min-h-11 min-w-11 items-center justify-center px-2 transition-colors',
+          code === lang ? 'text-ink underline decoration-accent decoration-2 underline-offset-6' : 'text-steel hover:text-ink',
+        ]}
+      >
+        {code}
+      </a>
+    </li>
+  ))}
+</ul>
