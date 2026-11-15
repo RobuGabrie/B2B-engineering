@@ -1,0 +1,35 @@
+---
+// "De ce noi?", laid out like "YOUR BENEFITS" in the reference: big heading, a short line,
+// three cut-corner cards with solid orange icons, and a centered underlined link.
+import SectionHeading from './ui/SectionHeading.astro';
+import ChamferCard from './ui/ChamferCard.astro';
+import Icon from './ui/Icon.astro';
+import Button from './ui/Button.astro';
+import { sectionHref, useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const icons = ['chip', 'trophy', 'unlock'] as const;
+---
+
+<section id={t.anchors.whyUs} class="container-site py-20 md:py-32" aria-labelledby="why-title">
+  <SectionHeading id="why-title" title={t.whyUs.title} kicker={t.whyUs.kicker} intro={t.whyUs.intro} />
+
+  <ul class="mt-14 grid gap-8 md:mt-16 md:grid-cols-3 md:gap-6">
+    {t.whyUs.items.map((item, i) => (
+      <ChamferCard as="li">
+        <Icon name={icons[i]} />
+        <h3 class="mt-8 font-sans text-sm font-bold tracking-wide">{item.title}</h3>
+        <p class="mt-3 text-sm text-graphite">{item.text}</p>
+      </ChamferCard>
+    ))}
+  </ul>
+
+  <div class="mt-12 text-center">
+    <Button href={sectionHref(lang, 'contact')} variant="link" class="text-[13px] font-semibold">{t.whyUs.link}</Button>
+  </div>
+</section>

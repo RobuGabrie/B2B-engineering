@@ -169,7 +169,10 @@ export const en: Dictionary = {
   },
   process: {
     title: 'How we work',
-    intro: "Small steps, verifiable results. You don't pay for something you haven't seen working.",
+    kicker: 'Small steps, verifiable results',
+    intro: "You don't pay for something you haven't seen working. Every stage ends with a concrete result you see before we move on.",
+    imageLabel: 'From audit to production',
+    imageAlt: 'Engineer soldering components on a board under a workshop lamp',
     steps: [
       {
         title: 'Technical audit',
@@ -196,6 +199,9 @@ export const en: Dictionary = {
   },
   whyUs: {
     title: 'Why us?',
+    kicker: 'What sets us apart',
+    intro: 'One team from the sensor to the app.',
+    link: 'Talk to an engineer',
     items: [
       {
         title: 'Full-stack in the real world',

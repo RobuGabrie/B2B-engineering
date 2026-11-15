@@ -169,7 +169,10 @@ export const ro = {
   },
   process: {
     title: 'Cum lucrăm',
-    intro: 'Pași mici, rezultate verificabile. Nu plătești pentru ceva ce nu ai văzut funcționând.',
+    kicker: 'Pași mici, rezultate verificabile',
+    intro: 'Nu plătești pentru ceva ce nu ai văzut funcționând. Fiecare etapă se încheie cu un rezultat concret, pe care îl vezi înainte să mergem mai departe.',
+    imageLabel: 'De la audit la producție',
+    imageAlt: 'Inginer care lipește componente pe o placă, sub o lampă de atelier',
     steps: [
       {
         title: 'Audit tehnic',
@@ -196,6 +199,9 @@ export const ro = {
   },
   whyUs: {
     title: 'De ce noi?',
+    kicker: 'Ce ne diferențiază',
+    intro: 'Aceeași echipă de la senzor până la aplicație.',
+    link: 'Discută cu un inginer',
     items: [
       {
         title: 'Full-stack în lumea reală',
