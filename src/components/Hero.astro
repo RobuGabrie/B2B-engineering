@@ -36,15 +36,15 @@ const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
     class="mt-12 md:mt-16"
     imgClass="md:h-[36rem] md:object-[50%_10%] xl:h-[40rem]"
   >
-    <Tabs id="hero-audience" label={t.hero.audiencesLabel} tabs={tabs} panelClass="pt-3">
+    <Tabs id="hero-audience" label={t.hero.audiencesLabel} tabs={tabs} panelClass="pt-3" stretch>
       {t.hero.audiences.map((a) => (
         <p slot={`panel-${a.id}`} class="max-w-md text-sm text-graphite">{a.text}</p>
       ))}
     </Tabs>
 
-    <div class="mt-5 flex flex-wrap gap-3">
-      <Button href={sectionHref(lang, 'contact')}>{t.hero.primary}</Button>
-      <Button href={sectionHref(lang, 'solutions')} variant="outline">{t.hero.secondary}</Button>
+    <div class="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+      <Button href={sectionHref(lang, 'contact')} size="lg" class="w-full sm:w-auto md:min-h-11 md:px-5 md:text-[13px]">{t.hero.primary}</Button>
+      <Button href={sectionHref(lang, 'solutions')} variant="outline" size="lg" class="w-full sm:w-auto md:min-h-11 md:px-5 md:text-[13px]">{t.hero.secondary}</Button>
     </div>
 
     <p class="mt-6 flex max-w-md items-center gap-3 text-[13px] leading-snug text-graphite">

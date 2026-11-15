@@ -56,6 +56,8 @@ export const ro = {
       benefit: 'Beneficiu cheie',
       input: 'Input',
       processing: 'Procesare',
+      diagram: 'Schema sistemului',
+      outcomes: 'Ce primești',
       result: 'Rezultat',
     },
     items: [
@@ -69,7 +71,21 @@ export const ro = {
           'Atașăm senzori industriali (vibrații, curent, temperatură, optic) și unități de achiziție pe utilajele existente, conectate la un dashboard live în cloud.',
         benefit:
           'Vezi randamentul (OEE) în timp real pe telefon și primești alerte înainte ca un utilaj să se defecteze.',
-        flow: ['Senzori pe utilaj', 'Achiziție & cloud', 'OEE live + alerte'],
+        stages: [
+          {
+            title: 'Senzori pe utilaj',
+            items: ['Vibrații și temperatură', 'Curent și consum de energie', 'Senzori optici pentru cicluri și rebut'],
+          },
+          {
+            title: 'Achiziție & cloud',
+            items: ['Gateway industrial (ESP32 / Linux)', 'Date trimise criptat (MQTT) în cloud', 'Merge și pe utilaje vechi, fără PLC'],
+          },
+          {
+            title: 'OEE live + alerte',
+            items: ['Dashboard OEE pe telefon', 'Alerte înainte de defectare', 'Rapoarte de energie și rebut'],
+          },
+        ],
+        outcomes: ['OEE în timp real', 'Mentenanță predictivă', 'Fără înlocuirea utilajelor'],
       },
       {
         id: 'vision',
@@ -81,7 +97,21 @@ export const ro = {
         solution:
           'Sisteme cu camere video și procesare AI locală (Edge) care detectează defecte pe banda de producție, recunosc numere de înmatriculare sau protejează trecerile de pietoni prin avertizare activă.',
         benefit: 'Decizii în milisecunde, fără dependență de internet și fără erori umane.',
-        flow: ['Cameră video', 'AI local (Edge)', 'Decizie în ms'],
+        stages: [
+          {
+            title: 'Cameră video',
+            items: ['Camere industriale sau IP', 'Iluminare controlată pe bandă', 'Funcționează zi și noapte (IR)'],
+          },
+          {
+            title: 'AI local (Edge)',
+            items: ['Modele antrenate pe imaginile tale', 'Procesare pe un calculator edge, local', 'Imaginile nu pleacă în cloud'],
+          },
+          {
+            title: 'Decizie în ms',
+            items: ['Piesele defecte sunt respinse automat', 'Numere de înmatriculare citite', 'Avertizare activă la trecerile de pietoni'],
+          },
+        ],
+        outcomes: ['Decizii în milisecunde', 'Funcționează offline', 'Datele rămân la tine'],
       },
       {
         id: 'rnd',
@@ -93,7 +123,21 @@ export const ro = {
         solution:
           'Proiectare PCB, selecție componente, firmware (STM32, ESP32, Linux Embedded), carcasare și aplicația mobilă/web de control.',
         benefit: 'Un singur partener tehnic pentru tot produsul, gata de testare și producție în serie.',
-        flow: ['Idee & specificații', 'PCB + firmware', 'Prototip funcțional'],
+        stages: [
+          {
+            title: 'Idee & specificații',
+            items: ['Workshop de cerințe', 'Arhitectură hardware + software', 'Selecție componente și cost BOM'],
+          },
+          {
+            title: 'PCB + firmware',
+            items: ['Schemă și layout PCB', 'Firmware STM32 / ESP32 / Linux Embedded', 'Carcasă proiectată și printată 3D'],
+          },
+          {
+            title: 'Prototip funcțional',
+            items: ['Prototip testat în condiții reale', 'Aplicație mobilă / web de control', 'Documentație pentru producția în serie'],
+          },
+        ],
+        outcomes: ['Un singur partener tehnic', 'De la schemă la serie', 'Cod și fișiere predate integral'],
       },
       {
         id: 'automation',
@@ -104,7 +148,21 @@ export const ro = {
         solution:
           'Sisteme Pick-to-Light pentru rafturi, stații autonome de monitorizare meteo/sol și sisteme telematice custom pentru flote și utilaje.',
         benefit: 'Reducerea costurilor operaționale și control total asupra activității din teren.',
-        flow: ['Rafturi, câmp, flotă', 'Automatizare', 'Costuri reduse'],
+        stages: [
+          {
+            title: 'Rafturi, câmp, flotă',
+            items: ['Comenzi din WMS / ERP', 'Senzori meteo și de sol', 'GPS și date CAN de la utilaje'],
+          },
+          {
+            title: 'Automatizare',
+            items: ['Pick-to-Light pe fiecare raft', 'Stații autonome solare, LoRa / 4G', 'Telematică custom pentru flotă'],
+          },
+          {
+            title: 'Costuri reduse',
+            items: ['Mai puține erori la pregătirea comenzilor', 'Date din teren în timp real', 'Control total asupra flotei'],
+          },
+        ],
+        outcomes: ['Erori de picking reduse', 'Monitorizare de la distanță', 'Integrare cu ce ai deja'],
       },
     ],
     cta: 'Discută proiectul cu un inginer',

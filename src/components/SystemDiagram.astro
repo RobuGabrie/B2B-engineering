@@ -1,0 +1,103 @@
+---
+// System diagram for a vertical: Input → Processing → Result as three cut-corner cards,
+// joined by PCB-style traces (line + vias) with a pulse travelling along them.
+// Horizontal from lg up, vertical below. The result card carries the orange outline.
+import ChamferCard from './ui/ChamferCard.astro';
+
+interface Props {
+  title: string;
+  labels: readonly [string, string, string];
+  stages: readonly { title: string; items: readonly string[] }[];
+  class?: string;
+}
+
+const { title, labels, stages, class: className } = Astro.props;
+---
+
+<figure class:list={['system-diagram', className]}>
+  <figcaption class="mb-6 flex items-center gap-3 text-[13px] font-bold uppercase tracking-wide">
+    <span class="size-1.5 bg-accent" aria-hidden="true"></span>{title}
+  </figcaption>
+
+  <ol class="grid items-stretch lg:grid-cols-[1fr_4rem_1fr_4rem_1fr]">
+    {stages.map((stage, i) => (
+      <>
+        {i > 0 && (
+          <li aria-hidden="true" class="trace relative flex h-12 items-center justify-center lg:h-auto">
+            <span class="trace-line absolute bg-accent"></span>
+            <span class="via relative z-10 size-2.5 rounded-full border-2 border-accent bg-paper"></span>
+            <span class="pulse absolute z-0 size-1.5 rounded-full bg-accent"></span>
+          </li>
+        )}
+        <ChamferCard as="li" ticks={false} accent={i === stages.length - 1} pad="px-6 py-6 md:px-7 md:py-7">
+          <p class="flex items-baseline gap-3 font-mono text-[11px] uppercase tracking-wider">
+            <span class="text-accent-ink">0{i + 1}</span>
+            <span class="text-steel">{labels[i]}</span>
+          </p>
+          <h4 class="mt-3 font-display text-[15px] font-bold uppercase leading-tight">{stage.title}</h4>
+          <ul class="mt-4 space-y-2.5 text-sm text-graphite">
+            {stage.items.map((item) => (
+              <li class="flex gap-3">
+                <span class="mt-[0.55em] size-1 shrink-0 bg-ink" aria-hidden="true"></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </ChamferCard>
+      </>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  /* Vertical trace on phones/tablets, horizontal from lg. */
+  .trace-line {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1.5px;
+    transform: translateX(-50%);
+  }
+  .pulse {
+    left: 50%;
+    margin-left: -3px;
+    animation: pulse-y 2.4s ease-in-out infinite;
+  }
+
+  @media (min-width: 64rem) {
+    .trace-line {
+      top: 50%;
+      bottom: auto;
+      left: -1px;
+      right: -1px;
+      width: auto;
+      height: 1.5px;
+      transform: translateY(-50%);
+    }
+    .pulse {
+      top: 50%;
+      left: 0;
+      margin: -3px 0 0;
+      animation-name: pulse-x;
+    }
+  }
+
+  @keyframes pulse-y {
+    from { top: 0; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    to { top: calc(100% - 6px); opacity: 0; }
+  }
+  @keyframes pulse-x {
+    from { left: 0; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    to { left: calc(100% - 6px); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pulse {
+      display: none;
+    }
+  }
+</style>

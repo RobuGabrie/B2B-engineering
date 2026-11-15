@@ -4,11 +4,15 @@
 // The outline is an SVG drawn as a 9-slice border-image, so the corners never stretch at any card size.
 interface Props {
   ticks?: boolean;
+  /** Orange outline instead of gray (e.g. the result step). */
+  accent?: boolean;
+  /** Inner padding classes. */
+  pad?: string;
   as?: 'div' | 'li' | 'article';
   class?: string;
 }
 
-const { ticks = true, as: Tag = 'div', class: className } = Astro.props;
+const { ticks = true, accent = false, pad = 'px-7 py-8 md:px-9 md:py-10', as: Tag = 'div', class: className } = Astro.props;
 
 // Geometry, in px: corner radius, chamfer length along each edge, joint softening, slice size.
 const R = 28;
@@ -43,7 +47,7 @@ const outline = (stroke: string) =>
 
 <Tag
   class:list={['chamfer-card relative', className]}
-  style={`--outline: ${outline('#e2e2de')}; --outline-hover: ${outline('#8a8a86')}; --slice: ${S};`}
+  style={`--outline: ${outline(accent ? '#ff5b14' : '#e2e2de')}; --outline-hover: ${outline(accent ? '#ff5b14' : '#8a8a86')}; --slice: ${S};`}
 >
   {ticks && (
     <>
@@ -53,7 +57,7 @@ const outline = (stroke: string) =>
       <span aria-hidden="true" class="tick -right-3 -bottom-3" />
     </>
   )}
-  <div class="relative h-full px-7 py-8 md:px-9 md:py-10">
+  <div class:list={['relative h-full', pad]}>
     <slot />
   </div>
 </Tag>
