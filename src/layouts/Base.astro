@@ -80,6 +80,12 @@ const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
         { rootMargin: '0px 0px -8% 0px' },
       );
       document.querySelectorAll('[data-reveal], [data-stagger]').forEach((el) => io.observe(el));
+
+      // Looping demos run only while on screen: [data-live] gets .is-live while it intersects the viewport.
+      const live = new IntersectionObserver((entries) => {
+        for (const e of entries) e.target.classList.toggle('is-live', e.isIntersecting);
+      });
+      document.querySelectorAll('[data-live]').forEach((el) => live.observe(el));
     </script>
   </body>
 </html>

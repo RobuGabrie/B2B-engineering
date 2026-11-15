@@ -1,6 +1,9 @@
 ---
-// IoT demo: a machine card as it would appear in the dashboard. On reveal the OEE ring fills and counts up,
-// the three OEE factors fill, the production line chart draws itself and the alert slides in.
+// IoT demo: a machine card as it would appear in the dashboard.
+// Intro (once, on reveal): the OEE ring fills while its number counts up, the three factors fill with their
+// percentages counting along, the chart draws itself with a dot riding the tip of the line, then the alert
+// slides in with a brief highlight. Live phase (only while on screen): every few seconds a new reading arrives,
+// the chart shifts left by one point and OEE moves by a point.
 import DemoFrame from './DemoFrame.astro';
 
 interface Props {
@@ -10,66 +13,88 @@ interface Props {
 const { demo } = Astro.props;
 const oee = 87;
 const bars = [92, 96, 98];
-// Parts per hour over 8 hours (illustrative), as chart points in a 320×90 box.
-const series = [41, 44, 43, 47, 38, 46, 49, 48, 52];
-const pts = series.map((v, i) => [i * 40, 90 - ((v - 30) / 25) * 80] as const);
-const line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y.toFixed(1)}`).join(' ');
-const area = `${line} L320 90 L0 90 Z`;
+// Parts per hour (illustrative). The first 9 points are drawn; the rest arrive live.
+const series = [41, 44, 43, 47, 38, 46, 49, 48, 52, 50, 53, 51, 54, 49, 52];
 const R = 46;
 const C = 2 * Math.PI * R;
+const toY = (v: number) => +(90 - ((v - 30) / 25) * 80).toFixed(1);
+const line = series.slice(0, 9).map((v, i) => `${i ? 'L' : 'M'}${i * 40} ${toY(v)}`).join(' ');
 ---
 
 <DemoFrame title={demo.machine} caption={demo.caption} live>
-  <div class="grid gap-6 p-5 sm:grid-cols-[auto_1fr] sm:items-center md:p-7">
-    <div class="relative mx-auto size-36 sm:mx-0">
-      <svg viewBox="0 0 120 120" class="size-full -rotate-90" aria-hidden="true">
-        <circle cx="60" cy="60" r={R} fill="none" stroke="var(--color-line)" stroke-width="10" />
-        <circle class="ring" cx="60" cy="60" r={R} fill="none" stroke="var(--color-accent)" stroke-width="10" stroke-linecap="round"
-          stroke-dasharray={C} style={`--off: ${C * (1 - oee / 100)}px; --len: ${C}px`} />
-      </svg>
-      <div class="absolute inset-0 flex flex-col items-center justify-center">
-        <span class="font-display text-3xl font-bold"><span data-count={oee}>{oee}</span>%</span>
-        <span class="font-mono text-[11px] uppercase text-steel">{demo.oee}</span>
+  <div class="iot" data-iot data-series={JSON.stringify(series)} data-oee={oee}>
+    <div class="grid gap-6 p-5 sm:grid-cols-[auto_1fr] sm:items-center md:p-7">
+      <div class="relative mx-auto size-36 sm:mx-0">
+        <svg viewBox="0 0 120 120" class="size-full -rotate-90" aria-hidden="true">
+          <circle cx="60" cy="60" r={R} fill="none" stroke="var(--color-line)" stroke-width="10" />
+          <circle class="ring" cx="60" cy="60" r={R} fill="none" stroke="var(--color-accent)" stroke-width="10" stroke-linecap="round"
+            stroke-dasharray={C} style={`--off: ${C * (1 - oee / 100)}px; --len: ${C}px`} data-ring data-c={C} />
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="font-display text-3xl font-bold tabular-nums"><span data-count={oee} data-oee-value>{oee}</span>%</span>
+          <span class="font-mono text-[11px] uppercase text-steel">{demo.oee}</span>
+        </div>
       </div>
+
+      <ul class="grid gap-3.5">
+        {demo.bars.map((label, i) => (
+          <li>
+            <div class="flex justify-between text-[13px] font-semibold">
+              <span>{label}</span><span class="font-mono font-normal text-graphite tabular-nums"><span data-count={bars[i]} data-delay={250 + i * 120}>{bars[i]}</span>%</span>
+            </div>
+            <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-mist">
+              <div class="bar h-full origin-left rounded-full bg-ink" style={`--w: ${bars[i] / 100}; --d: ${0.25 + i * 0.12}s`}></div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
 
-    <ul class="grid gap-3.5">
-      {demo.bars.map((label, i) => (
-        <li>
-          <div class="flex justify-between text-[13px] font-semibold"><span>{label}</span><span class="font-mono font-normal text-graphite">{bars[i]}%</span></div>
-          <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-mist">
-            <div class="bar h-full origin-left rounded-full bg-ink" style={`--w: ${bars[i] / 100}; --d: ${0.25 + i * 0.12}s`}></div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
+    <div class="border-t border-line px-5 pt-4 pb-5 md:px-7">
+      <p class="font-mono text-[11px] uppercase text-steel">{demo.chart}</p>
+      <svg viewBox="0 -8 330 104" class="mt-3 w-full overflow-visible" aria-hidden="true">
+        <defs>
+          <clipPath id="iot-window"><rect x="-2" y="-12" width="324" height="112" /></clipPath>
+          <linearGradient id="iot-fill" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="var(--color-accent)" stop-opacity="0.16" />
+            <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        {[10, 50, 90].map((y) => <line x1="0" x2="320" y1={y} y2={y} stroke="var(--color-line)" stroke-dasharray="2 4" />)}
+        <g clip-path="url(#iot-window)">
+          <g class="plot" data-plot>
+            <path class="area" d={`${line} L320 90 L0 90 Z`} fill="url(#iot-fill)" data-area />
+            <path class="line" d={line} pathLength="1" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" data-line />
+          </g>
+        </g>
+        <circle class="tip" r="5" fill="var(--color-brand-cyan-ink)" style={`offset-path: path('${line}')`} data-tip />
+      </svg>
+    </div>
 
-  <div class="border-t border-line px-5 pt-4 pb-5 md:px-7">
-    <p class="font-mono text-[11px] uppercase text-steel">{demo.chart}</p>
-    <svg viewBox="0 -6 330 100" class="mt-3 w-full overflow-visible" aria-hidden="true">
-      {[10, 50, 90].map((y) => <line x1="0" x2="320" y1={y} y2={y} stroke="var(--color-line)" stroke-dasharray="2 4" />)}
-      <path class="area" d={area} fill="var(--color-accent)" opacity="0.08" />
-      <path class="line" d={line} pathLength="1" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linejoin="round" />
-      <circle class="end" cx={pts.at(-1)![0]} cy={pts.at(-1)![1]} r="5" fill="var(--color-brand-cyan-ink)" />
-    </svg>
-  </div>
-
-  <div class="alert flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-line bg-mist px-5 py-3.5 text-[13px] md:px-7">
-    <span class="size-2 shrink-0 bg-accent" aria-hidden="true"></span>
-    <span class="font-semibold">{demo.alert}</span>
-    <span class="ml-auto shrink-0 font-mono text-[11px] text-steel">{demo.alertTime}</span>
+    <div class="alert flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-line px-5 py-3.5 text-[13px] md:px-7">
+      <span class="size-2 shrink-0 bg-accent" aria-hidden="true"></span>
+      <span class="font-semibold">{demo.alert}</span>
+      <span class="ml-auto shrink-0 font-mono text-[11px] text-steel">{demo.alertTime}</span>
+    </div>
   </div>
 </DemoFrame>
 
 <style>
-  /* Final state (also what reduced-motion visitors see); the motion block below starts from empty. */
+  /* Final state: what reduced-motion visitors see, and where the intro ends. */
   .ring {
     stroke-dashoffset: var(--off);
   }
   .bar {
     transform: scaleX(var(--w));
   }
+  .alert {
+    background: var(--color-mist);
+  }
+  .tip {
+    offset-distance: 100%;
+    offset-rotate: 0deg;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .ring {
       stroke-dashoffset: var(--len);
@@ -77,22 +102,30 @@ const C = 2 * Math.PI * R;
     }
     .bar {
       transform: scaleX(0);
-      transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) var(--d);
+      transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1) var(--d);
     }
     .line {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
-      transition: stroke-dashoffset 1.8s cubic-bezier(0.45, 0, 0.2, 1) 0.4s;
+      transition: stroke-dashoffset 1.8s cubic-bezier(0.45, 0, 0.25, 1) 0.5s;
     }
-    .area,
-    .end {
+    .tip {
+      offset-distance: 0%;
       opacity: 0;
-      transition: opacity 0.8s ease 1.6s;
+      transition:
+        offset-distance 1.8s cubic-bezier(0.45, 0, 0.25, 1) 0.5s,
+        opacity 0.3s ease 0.5s;
+    }
+    .area {
+      opacity: 0;
+      transition: opacity 1s ease 1.8s;
     }
     .alert {
       opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.6s ease 2s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2s;
+      transform: translateY(10px);
+      transition:
+        opacity 0.6s ease 2.2s,
+        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 2.2s;
     }
     :global(.is-in) .ring {
       stroke-dashoffset: var(--off);
@@ -103,47 +136,125 @@ const C = 2 * Math.PI * R;
     :global(.is-in) .line {
       stroke-dashoffset: 0;
     }
-    :global(.is-in) .area {
-      opacity: 0.08;
+    :global(.is-in) .tip {
+      offset-distance: 100%;
+      opacity: 1;
     }
-    :global(.is-in) .end,
+    :global(.is-in) .area {
+      opacity: 1;
+    }
     :global(.is-in) .alert {
       opacity: 1;
       transform: none;
+      animation: flash 1.6s ease 2.4s both;
     }
-    .end {
-      transform-box: fill-box;
-      transform-origin: center;
-    }
-    :global(.is-in) .end {
-      animation: pulse 2s ease-in-out 2.4s infinite;
+    /* Live phase: the latest reading breathes. */
+    :global(.is-live.is-in) .tip {
+      animation: breathe 2.4s ease-in-out 2.6s infinite;
     }
   }
-  @keyframes pulse {
+  @keyframes flash {
+    0% {
+      background: color-mix(in srgb, var(--color-accent) 16%, var(--color-mist));
+    }
+    100% {
+      background: var(--color-mist);
+    }
+  }
+  @keyframes breathe {
     50% {
-      transform: scale(1.5);
+      r: 7px;
+      opacity: 0.75;
     }
   }
 </style>
 
 <script>
-  // Count the OEE number up when its frame is revealed (the frame gets .is-in from the observer in Base.astro).
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  for (const el of document.querySelectorAll<HTMLElement>('[data-count]')) {
+  const ease = (p: number) => 1 - Math.pow(1 - p, 3);
+
+  // Run `fn` once the frame around `el` is revealed (.is-in from the observer in Base.astro).
+  const onReveal = (el: Element, fn: () => void) => {
     const frame = el.closest('[data-reveal]');
-    if (!frame || reduce) continue;
-    const target = Number(el.dataset.count);
-    el.textContent = '0';
+    if (!frame) return;
+    if (frame.classList.contains('is-in')) return fn();
     new MutationObserver((_, mo) => {
-      if (!frame.classList.contains('is-in')) return;
-      mo.disconnect();
-      const start = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - start) / 1600);
-        el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
+      if (frame.classList.contains('is-in')) {
+        mo.disconnect();
+        fn();
+      }
     }).observe(frame, { attributes: true, attributeFilter: ['class'] });
+  };
+
+  const countUp = (el: HTMLElement, to: number, ms = 1500) => {
+    const start = performance.now() + Number(el.dataset.delay ?? 200);
+    const tick = (now: number) => {
+      const p = Math.min(1, Math.max(0, (now - start) / ms));
+      el.textContent = String(Math.round(to * ease(p)));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-iot]')) {
+    const counters = [...root.querySelectorAll<HTMLElement>('[data-count]')];
+    if (reduce) continue;
+    counters.forEach((el) => (el.textContent = '0'));
+
+    onReveal(root, () => {
+      counters.forEach((el) => countUp(el, Number(el.dataset.count)));
+
+      // Live phase, after the intro: shift the chart one point left every 3.2s while the card is on screen.
+      const frame = root.closest('[data-live]')!;
+      const series: number[] = JSON.parse(root.dataset.series!);
+      const plot = root.querySelector<SVGGElement>('[data-plot]')!;
+      const lineEl = root.querySelector<SVGPathElement>('[data-line]')!;
+      const area = root.querySelector<SVGPathElement>('[data-area]')!;
+      const tip = root.querySelector<SVGCircleElement>('[data-tip]')!;
+      const oeeEl = root.querySelector<HTMLElement>('[data-oee-value]')!;
+      const ring = root.querySelector<SVGCircleElement>('[data-ring]')!;
+      const C = Number(ring.dataset.c);
+      const baseOee = Number(root.dataset.oee);
+      const toY = (v: number) => (90 - ((v - 30) / 25) * 80).toFixed(1);
+      let offset = 0;
+
+      const draw = () => {
+        const pts = Array.from({ length: 10 }, (_, i) => series[(offset + i) % series.length]);
+        const d = pts.map((v, i) => `${i ? 'L' : 'M'}${i * 40} ${toY(v)}`).join(' ');
+        // Draw one point beyond the window, then slide left by one step so the newest point lands on the edge.
+        lineEl.setAttribute('d', d);
+        lineEl.style.strokeDasharray = 'none';
+        area.setAttribute('d', `${d} L360 90 L0 90 Z`);
+        plot.style.transition = 'none';
+        plot.style.transform = 'translateX(0)';
+        tip.style.transition = 'offset-distance 0s';
+        tip.style.offsetPath = `path('${pts.slice(0, 9).map((v, i) => `${i ? 'L' : 'M'}${i * 40} ${toY(v)}`).join(' ')}')`;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            plot.style.transition = 'transform 1.4s cubic-bezier(0.65, 0, 0.35, 1)';
+            plot.style.transform = 'translateX(-40px)';
+            tip.style.transition = 'transform 1.4s cubic-bezier(0.65, 0, 0.35, 1)';
+            tip.style.transform = `translateY(${Number(toY(pts[9])) - Number(toY(pts[8]))}px)`;
+          }),
+        );
+        setTimeout(() => {
+          offset = (offset + 1) % series.length;
+          tip.style.transition = 'none';
+          tip.style.transform = '';
+          const next = Array.from({ length: 9 }, (_, i) => series[(offset + i) % series.length]);
+          tip.style.offsetPath = `path('${next.map((v, i) => `${i ? 'L' : 'M'}${i * 40} ${toY(v)}`).join(' ')}')`;
+          const value = baseOee + ((offset % 3) - 1);
+          oeeEl.textContent = String(value);
+          ring.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1)';
+          ring.style.strokeDashoffset = `${C * (1 - value / 100)}px`;
+        }, 1450);
+      };
+
+      setTimeout(() => {
+        setInterval(() => {
+          if (frame.classList.contains('is-live') && !document.hidden) draw();
+        }, 3200);
+      }, 2600);
+    });
   }
 </script>

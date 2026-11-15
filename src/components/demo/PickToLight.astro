@@ -1,6 +1,7 @@
 ---
-// Logistics demo: a 4×3 shelf with a light module on every bin. While in view, an order plays on a loop:
-// each pick location lights orange with its quantity, then turns cyan (done), and the order bar advances.
+// Logistics demo: a 4×3 shelf with a light module on every bin. While on screen, an order plays on a loop:
+// each pick location lights up orange with a soft glow and its quantity, the operator presses it (a small
+// press-in), it turns cyan with a check, and the order bar and the n/4 counter advance.
 // CSS-only keyframes on one shared 8s cycle; paused until the frame is revealed.
 import DemoFrame from './DemoFrame.astro';
 
@@ -20,21 +21,33 @@ const bins = Array.from({ length: cols * rows }, (_, i) => i);
 const keyframes = [...picks.values()]
   .map(([k]) => {
     const a = k * 20;
-    return `@keyframes ptl-light-${k}{0%,${a}%{background:var(--color-graphite)}${a + 2}%,${a + 13}%{background:var(--color-accent)}${a + 16}%,90%{background:var(--color-brand-cyan-ink)}96%,100%{background:var(--color-graphite)}}
-@keyframes ptl-qty-${k}{0%,${a}%{opacity:0}${a + 2}%,${a + 13}%{opacity:1}${a + 15}%,100%{opacity:0}}
-@keyframes ptl-ok-${k}{0%,${a + 14}%{opacity:0}${a + 16}%,90%{opacity:1}96%,100%{opacity:0}}`;
+    const off = 'background:var(--color-graphite);box-shadow:0 0 0 0 transparent;transform:none';
+    const lit = 'background:var(--color-accent);box-shadow:0 0 0 4px rgb(255 115 35 / 0.18),0 6px 18px -4px rgb(255 115 35 / 0.6)';
+    const done = 'background:var(--color-brand-cyan-ink);box-shadow:0 0 0 0 transparent;transform:none';
+    return `@keyframes ptl-light-${k}{0%,${a}%{${off}}${a + 3}%,${a + 12}%{${lit};transform:none}${a + 13.5}%{${lit};transform:scale(0.92)}${a + 16}%,90%{${done}}96%,100%{${off}}}
+@keyframes ptl-qty-${k}{0%,${a}%{opacity:0}${a + 3}%,${a + 13}%{opacity:1}${a + 15}%,100%{opacity:0}}
+@keyframes ptl-ok-${k}{0%,${a + 14}%{opacity:0;transform:scale(0.4)}${a + 17}%{opacity:1;transform:scale(1.15)}${a + 19}%,90%{opacity:1;transform:none}96%,100%{opacity:0}}`;
   })
   .join('\n');
+
+// The n/4 counter: number n shows from the moment pick n is confirmed until the next one is.
+const doneAt = (n: number) => (n - 1) * 20 + 16;
+const counter = Array.from({ length: picks.size + 1 }, (_, n) => {
+  const from = n === 0 ? 0 : doneAt(n);
+  const to = n === picks.size ? 90 : doneAt(n + 1);
+  const show = n === 0 ? `0%,${to - 0.5}%{opacity:1}${to}%,95.5%{opacity:0}96%,100%{opacity:1}` : `0%,${from - 0.5}%{opacity:0}${from}%,${to - 0.5}%{opacity:1}${to}%,100%{opacity:0}`;
+  return `@keyframes ptl-n-${n}{${show}}`;
+}).join('\n');
 ---
 
-<style is:inline set:html={keyframes}></style>
+<style is:inline set:html={`${keyframes}\n${counter}`}></style>
 
 <DemoFrame title={`${demo.order} · ${picks.size} ${demo.lines}`} caption={demo.caption} live>
   <div class="ptl p-5 md:p-7">
     <div class="flex items-center gap-3 font-mono text-[11px] uppercase text-steel">
       <span>{demo.shelf}</span>
       <div class="h-1 flex-1 overflow-hidden rounded-full bg-mist"><div class="progress h-full origin-left rounded-full bg-brand-cyan-ink"></div></div>
-      <span class="text-ink">{picks.size}</span>
+      <span class="text-ink tabular-nums"><span class="count">{Array.from({ length: picks.size + 1 }, (_, n) => <span style={`--n:ptl-n-${n}`}>{n}</span>)}</span>/{picks.size}</span>
     </div>
 
     <ul class="mt-5 grid grid-cols-4 gap-2 border-x-[6px] border-b-[6px] border-graphite/80 bg-mist p-2 md:gap-3 md:p-3">
@@ -71,6 +84,17 @@ const keyframes = [...picks.values()]
   .progress {
     transform: scaleX(1);
   }
+  /* Counter digits stacked in one cell; the static state shows the last (done) one. */
+  .count {
+    display: inline-grid;
+  }
+  .count > span {
+    grid-area: 1 / 1;
+    opacity: 0;
+  }
+  .count > span:last-child {
+    opacity: 1;
+  }
 
   @media (prefers-reduced-motion: no-preference) {
     .is-pick .module,
@@ -95,22 +119,26 @@ const keyframes = [...picks.values()]
     [data-step='3'] .ok { animation-name: ptl-ok-3; }
     .progress {
       transform: scaleX(0);
-      animation: progress 8s infinite both paused;
+      animation: progress 8s cubic-bezier(0.22, 1, 0.36, 1) infinite both paused;
     }
-    :global(.is-in) .is-pick .module,
-    :global(.is-in) .is-pick .qty,
-    :global(.is-in) .is-pick .ok,
-    :global(.is-in) .progress {
+    .count > span {
+      animation: var(--n) 8s infinite both paused;
+    }
+    :global(.is-in.is-live) .is-pick .module,
+    :global(.is-in.is-live) .is-pick .qty,
+    :global(.is-in.is-live) .is-pick .ok,
+    :global(.is-in.is-live) .progress,
+    :global(.is-in.is-live) .count > span {
       animation-play-state: running;
     }
   }
 
   @keyframes progress {
     0%, 15% { transform: scaleX(0); }
-    17%, 35% { transform: scaleX(0.25); }
-    37%, 55% { transform: scaleX(0.5); }
-    57%, 75% { transform: scaleX(0.75); }
-    77%, 90% { transform: scaleX(1); }
+    18%, 35% { transform: scaleX(0.25); }
+    38%, 55% { transform: scaleX(0.5); }
+    58%, 75% { transform: scaleX(0.75); }
+    78%, 90% { transform: scaleX(1); }
     96%, 100% { transform: scaleX(0); }
   }
 </style>

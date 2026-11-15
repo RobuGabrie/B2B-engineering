@@ -50,6 +50,15 @@ User found mobile weak and service pages samey. Agreed and done:
 - **Apple-style motion**, still CSS-only: reveal with `cubic-bezier(.22,1,.36,1)`, photos settle 112% → 100% via scroll-driven `animation-timeline: view()` (`[data-zoom]`, compositor-only, skipped where unsupported), hero corner ticks slide in, translucent blurred header (blur on `::before` so the fixed mobile menu still works).
 - **Each service page has its own animated demo** (`src/components/demo/`, inside `DemoFrame`, all labelled "Exemplu…"): IoT dashboard (OEE ring counting up, bars, chart drawing, alert), vision viewfinder (detection boxes + scan line over the camera photo), PCB with traces routing out of the MCU, Pick-to-Light shelf playing an order on a loop. Layout alternates per page (photo side, notch corner, demo side).
 
+## Service demo polish (2026-11-16)
+
+- Loops run only while on screen: `[data-live]` → `.is-live` (second observer in `Base.astro`); intros still play once on `.is-in`.
+- Steps trace on service pages follows the scroll (fills to 55% of the viewport, revealed with `clip-path` so the orange/cyan split stays put); nodes fill with a halo when reached.
+- IoT: counters on the bars, a dot rides the chart line as it draws (`offset-path`), alert slides in with a highlight; live phase shifts the chart one reading every 3.2s and moves OEE ±1.
+- Vision: REC + live clock, boxes track with a slight drift, confidence flickers, faint rescan every 6s, labels slide in.
+- PCB: glowing pulses travel along six traces, antenna radiates.
+- Pick-to-Light: lit module glows, press-in on confirm, check pops, n/4 counter synced with the bar.
+
 ## Form
 
 **Web3Forms** (user confirmed 2026-11-15). The key is a placeholder (`web3formsKey` in `src/config/site.ts`), so submitting currently shows the error message. To go live: create an access key at web3forms.com with the destination email and paste it there.

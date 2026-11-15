@@ -1,7 +1,8 @@
 ---
 // R&D demo: a small board seen from above. On reveal the copper traces route themselves out of the
 // microcontroller to the connector, crystal, sensor header and antenna (the RF line in cyan), then the vias
-// and the status LED light up. Pure SVG + CSS.
+// and the status LED light up. While on screen the board runs: signal pulses travel along a few traces
+// and the antenna radiates. Pure SVG + CSS.
 import DemoFrame from './DemoFrame.astro';
 
 interface Props {
@@ -24,6 +25,8 @@ const traces: [string, number, boolean?][] = [
   ['M240 110 V80 L260 60 H330 L345 45 H420', 0.8, true],
   ['M220 110 V70 L205 55 H150', 0.75],
 ];
+// Traces that carry a travelling pulse once the board is up: [trace index, pulse delay s].
+const pulses: [number, number][] = [[0, 0], [6, 0.7], [9, 1.2], [4, 1.9], [2, 2.6], [7, 3.1]];
 const vias = [[150, 130], [125, 160], [165, 185], [240, 245], [360, 165], [330, 60], [205, 55]];
 const pins = Array.from({ length: 6 }, (_, i) => 120 + i * 13);
 ---
@@ -42,6 +45,15 @@ const pins = Array.from({ length: 6 }, (_, i) => 120 + i * 13);
 
     {traces.map(([d, delay, rf]) => (
       <path class="trace" d={d} pathLength="1" style={`--d:${delay}s`} fill="none" stroke={rf ? 'var(--color-brand-cyan-ink)' : 'var(--color-accent)'} stroke-width={rf ? 3.5 : 2.5} stroke-linecap="round" stroke-linejoin="round" />
+    ))}
+
+    {pulses.map(([t, delay]) => (
+      <path class:list={['pulse', traces[t][2] && 'rf']} d={traces[t][0]} pathLength="1" style={`--p:${delay}s`} fill="none" stroke-linecap="round" />
+    ))}
+
+    <!-- Antenna radiation -->
+    {[14, 22, 30].map((r, i) => (
+      <path class="wave" d={`M428 ${46 - r} A${r} ${r} 0 0 1 428 ${46 + r}`} style={`--w:${i * 0.3}s`} fill="none" stroke="var(--color-brand-cyan)" stroke-width="2" stroke-linecap="round" />
     ))}
 
     <!-- MCU -->
@@ -111,6 +123,42 @@ const pins = Array.from({ length: 6 }, (_, i) => 120 + i * 13);
       fill: var(--color-accent);
       animation: blink 2.4s ease-in-out 2.4s infinite;
     }
+  }
+  /* Signal pulses: a short bright dash running along a trace, away from the MCU. */
+  .pulse {
+    stroke: #ffd2b8;
+    stroke-width: 3.4;
+    stroke-dasharray: 0.09 0.91;
+    stroke-dashoffset: 0.09;
+    opacity: 0;
+    filter: drop-shadow(0 0 3px rgb(255 115 35 / 0.9));
+  }
+  .pulse.rf {
+    stroke: #b9f6ff;
+    stroke-width: 4.2;
+    filter: drop-shadow(0 0 3px rgb(23 229 252 / 0.9));
+  }
+  .wave {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.is-in.is-live) .pulse {
+      animation: pulse 3.6s cubic-bezier(0.45, 0, 0.55, 1) calc(2.2s + var(--p)) infinite;
+    }
+    :global(.is-in.is-live) .wave {
+      animation: wave 2.4s ease-out calc(2.4s + var(--w)) infinite;
+    }
+  }
+  @keyframes pulse {
+    0% { stroke-dashoffset: 0.09; opacity: 0; }
+    5% { opacity: 1; }
+    40% { stroke-dashoffset: -0.93; opacity: 1; }
+    45%, 100% { stroke-dashoffset: -0.93; opacity: 0; }
+  }
+  @keyframes wave {
+    0% { opacity: 0; }
+    20% { opacity: 0.9; }
+    100% { opacity: 0; }
   }
   @keyframes blink {
     50% {

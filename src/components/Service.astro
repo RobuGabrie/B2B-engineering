@@ -125,10 +125,10 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     <section class="container-site py-14 md:py-28" aria-labelledby="how-title">
       <SectionHeading id="how-title" title={labels.how} intro={labels.howIntro} />
       <div class="mt-10 grid grid-cols-1 gap-12 md:mt-16 lg:grid-cols-12 lg:items-center lg:gap-16">
-        <ol data-stagger class:list={['trace relative grid grid-cols-1 gap-9 lg:col-span-5', flip && 'lg:order-last']}>
+        <ol data-stagger data-trace class:list={['trace relative grid grid-cols-1 gap-9 lg:col-span-5', flip && 'lg:order-last']}>
           {page.how.map((step, n) => (
-            <li class="relative pl-10">
-              <span aria-hidden="true" class:list={['node absolute top-1 left-0 size-4 rounded-full border-2 bg-paper', n < 2 ? 'border-accent' : 'border-brand-cyan-ink']}></span>
+            <li class="relative pl-10" data-trace-step>
+              <span aria-hidden="true" class:list={['node absolute top-1 left-0 size-4 rounded-full border-2 bg-paper', n < 2 ? 'border-accent text-accent' : 'border-brand-cyan-ink text-brand-cyan-ink']}></span>
               <span class="font-mono text-xs text-accent-ink">{num(n)}</span>
               <h3 class="mt-1.5 text-lg leading-tight">{step.title}</h3>
               <p class="mt-2.5 text-[15px] text-graphite">{step.text}</p>
@@ -212,8 +212,28 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   <WhatsAppFab lang={lang} />
 </Base>
 
+<script>
+  // Trace fill follows the scroll position (same pattern as the home page process timeline).
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (const list of document.querySelectorAll<HTMLElement>('[data-trace]')) {
+    const steps = [...list.querySelectorAll<HTMLElement>('[data-trace-step]')];
+    const update = () => {
+      const line = window.innerHeight * 0.55;
+      const box = list.getBoundingClientRect();
+      list.style.setProperty('--fill', String(reduce ? 1 : Math.min(1, Math.max(0, (line - box.top) / box.height))));
+      steps.forEach((s) => s.classList.toggle('is-on', reduce || s.getBoundingClientRect().top + 12 < line));
+    };
+    let frame = 0;
+    const schedule = () => (frame ||= requestAnimationFrame(() => ((frame = 0), update())));
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+  }
+</script>
+
 <style>
-  /* The vertical trace through the four nodes: orange for the first half, cyan after, like the S in the logo. */
+  /* The vertical trace through the four nodes: orange for the first half, cyan after, like the S in the logo.
+     It grows with scroll (to 55% of the viewport) and each node fills as the line reaches it. */
   .trace::before {
     content: '';
     position: absolute;
@@ -222,16 +242,19 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     bottom: 0.5rem;
     width: 2px;
     background: linear-gradient(var(--color-accent) 0 50%, var(--color-brand-cyan-ink) 50%);
+    /* Revealed rather than scaled, so the orange/cyan split stays where it belongs. */
+    clip-path: inset(0 0 calc((1 - var(--fill, 1)) * 100%) 0);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .trace::before {
-      transform: scaleY(0);
-      transform-origin: top;
-      transition: transform 1.2s cubic-bezier(0.5, 0, 0.2, 1);
-    }
-    .trace.is-in::before {
-      transform: none;
-    }
+  .node {
+    transition:
+      background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .is-on .node {
+    background: currentColor;
+    box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 18%, transparent);
+    transform: scale(1.1);
   }
 
   /* + that turns into − when the answer is open. */
