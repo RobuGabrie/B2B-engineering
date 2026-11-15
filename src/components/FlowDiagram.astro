@@ -1,0 +1,40 @@
+---
+// Input → Processing → Result, as three outlined nodes joined by orange arrows.
+// Horizontal from sm up, vertical on phones. The result node carries the accent.
+interface Props {
+  labels: readonly [string, string, string];
+  steps: readonly string[];
+  class?: string;
+}
+
+const { labels, steps, class: className } = Astro.props;
+const nodes = labels.map((label, i) => ({ label, value: steps[i] ?? '' }));
+---
+
+<ol class:list={['flex flex-col items-stretch sm:flex-row sm:items-center', className]}>
+  {nodes.map((node, i) => (
+    <>
+      {i > 0 && (
+        <li aria-hidden="true" class="flex justify-center py-1 sm:flex-1 sm:px-2 sm:py-0">
+          <svg viewBox="0 0 12 32" class="h-8 w-3 text-accent sm:hidden">
+            <path d="M6 0v28" stroke="currentColor" stroke-width="1.5" />
+            <path d="M1 22l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          <svg viewBox="0 0 48 12" class="hidden h-3 w-full min-w-8 text-accent sm:block" preserveAspectRatio="none">
+            <path d="M0 6h44" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" />
+            <path d="M40 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" />
+          </svg>
+        </li>
+      )}
+      <li
+        class:list={[
+          'rounded-[10px] border px-4 py-3 sm:min-w-0 sm:basis-48 sm:shrink',
+          i === nodes.length - 1 ? 'border-accent' : 'border-line',
+        ]}
+      >
+        <span class="block font-mono text-[11px] uppercase tracking-wider text-steel">{node.label}</span>
+        <span class="mt-1 block text-sm font-semibold leading-snug">{node.value}</span>
+      </li>
+    </>
+  ))}
+</ol>

@@ -3,6 +3,7 @@
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Hero from './Hero.astro';
+import Solutions from './Solutions.astro';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -14,7 +15,6 @@ const t = useTranslations(lang);
 
 // Temporary stand-ins so the nav anchors work; each is replaced by its real section in steps 5–8.
 const placeholders = [
-  { id: t.anchors.solutions, title: t.solutions.title },
   { id: t.anchors.process, title: t.process.title },
   { id: t.anchors.whyUs, title: t.whyUs.title },
   { id: t.anchors.contact, title: t.contact.title },
@@ -26,6 +26,7 @@ const placeholders = [
 
   <main>
     <Hero lang={lang} />
+    <Solutions lang={lang} />
 
     {placeholders.map((p) => (
       <section id={p.id} class="container-site min-h-[70vh] border-t border-line py-16">

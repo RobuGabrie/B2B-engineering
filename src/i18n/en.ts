@@ -49,6 +49,7 @@ export const en: Dictionary = {
   },
   solutions: {
     title: 'What we solve',
+    kicker: 'From sensor to cloud, with one team',
     intro: 'Four areas where we take a project from the sensor all the way to the app.',
     labels: {
       problem: 'The problem',
@@ -61,6 +62,7 @@ export const en: Dictionary = {
     items: [
       {
         id: 'iot',
+        imageAlt: 'Industrial lathe running with coolant spray',
         tab: 'Industrial IoT',
         title: 'Industrial retrofitting & production monitoring',
         problem: 'Old machines with no data, unnoticed downtime, energy losses and scrap.',
@@ -71,6 +73,7 @@ export const en: Dictionary = {
       },
       {
         id: 'vision',
+        imageAlt: 'Two surveillance cameras mounted on a pole',
         tab: 'Computer vision',
         title: 'Computer vision & edge AI',
         problem:
@@ -82,6 +85,7 @@ export const en: Dictionary = {
       },
       {
         id: 'rnd',
+        imageAlt: 'Circuit board held in a hand',
         tab: 'Hardware R&D',
         title: 'Hardware / firmware R&D & prototyping',
         problem:
@@ -93,6 +97,7 @@ export const en: Dictionary = {
       },
       {
         id: 'automation',
+        imageAlt: 'Orange metal shelving in a warehouse',
         tab: 'Logistics & agri',
         title: 'Custom automation for logistics & agriculture',
         problem: 'Slow warehouse processes, order-picking errors or no data from the field.',

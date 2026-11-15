@@ -113,6 +113,7 @@ const hasNotch = Astro.slots.has('default');
     const joint = Number(root.dataset.joint ?? 28);
     const { width: W, height: H } = shape.getBoundingClientRect();
     const r = bleed ? 0 : 28;
+    if (!W || !H) return; // hidden (e.g. inactive tab); the observer fires again once shown
 
     let d: string;
     if (desktop.matches && notch) {

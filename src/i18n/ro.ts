@@ -48,6 +48,7 @@ export const ro = {
   },
   solutions: {
     title: 'Ce rezolvăm concret',
+    kicker: 'De la senzor la cloud, cu aceeași echipă',
     intro: 'Patru domenii în care ducem un proiect de la senzor până la aplicație.',
     labels: {
       problem: 'Problema',
@@ -60,6 +61,7 @@ export const ro = {
     items: [
       {
         id: 'iot',
+        imageAlt: 'Strung industrial în funcțiune, cu jet de lichid de răcire',
         tab: 'IoT industrial',
         title: 'Retrofitting industrial & monitorizare producție',
         problem: 'Utilaje vechi fără date, timpi morți neobservați, pierderi de energie și rebuturi.',
@@ -71,6 +73,7 @@ export const ro = {
       },
       {
         id: 'vision',
+        imageAlt: 'Două camere de supraveghere montate pe un stâlp',
         tab: 'Computer vision',
         title: 'Computer vision & Edge AI',
         problem:
@@ -82,6 +85,7 @@ export const ro = {
       },
       {
         id: 'rnd',
+        imageAlt: 'Placă electronică ținută în mână',
         tab: 'R&D hardware',
         title: 'R&D & prototipare hardware / firmware',
         problem:
@@ -93,6 +97,7 @@ export const ro = {
       },
       {
         id: 'automation',
+        imageAlt: 'Rafturi metalice portocalii într-un depozit',
         tab: 'Logistică & agro',
         title: 'Automatizări custom pentru logistică & agricultură',
         problem: 'Procese lente în depozite, erori la pregătirea comenzilor sau lipsa datelor din teren.',
