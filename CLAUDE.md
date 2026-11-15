@@ -8,4 +8,4 @@ Read before working:
 - `docs/SKILLS.md`: skills and tools available
 - `PLAN.md`: structure and the step-by-step build plan
 
-Commands: `npm run dev` (localhost:4321), `npm run build`, `npm run preview`.
+Commands: `npm run dev` (localhost:4321; for agents: `npx astro dev --background`, stop with `npx astro dev stop`), `npm run build`, `npm run check` (types), `npm run preview`.
