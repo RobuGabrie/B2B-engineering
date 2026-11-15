@@ -60,7 +60,7 @@ Mobile: hamburger → full-screen menu. Sticky, shrinks on scroll.
 ### 3. Ce rezolvăm — 4 verticals
 Tabs on desktop, accordion/stacked cards on mobile. Each vertical:
 - Problem · Solution · Key benefit
-- **Input → Procesare → Rezultat** diagram (inline SVG, thin lines, orange nodes)
+- benefit box with three concrete outcomes (the flow diagram was removed at the user's request)
 - Photo slot
 
 Verticals:
@@ -120,6 +120,8 @@ All text lives in `i18n/ro.ts` and `i18n/en.ts`, so pages contain no hardcoded c
 
 ## Build steps
 
+Live status: see `docs/PROGRESS.md`.
+
 Each step ends with a commit and something visible in the browser.
 
 | # | Step | Result |
@@ -129,7 +131,7 @@ Each step ends with a commit and something visible in the browser.
 | 3 | UI primitives: Button, CornerTicks, ChamferCard, NotchedImage, Tabs | Component preview page |
 | 4 | Header + mobile menu | Sticky nav |
 | 5 | Hero | First screen done |
-| 6 | Verticals + FlowDiagram SVGs | Tabs/accordion with diagrams |
+| 6 | Verticals (tabs, notched photos, benefit box) | Tabs with all four verticals |
 | 7 | Process + Why us | Middle sections done |
 | 8 | Contact form + WhatsApp + footer | Working form sending email |
 | 9 | Cases placeholder (content collection) | Hidden section, ready for demos |
