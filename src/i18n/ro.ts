@@ -7,6 +7,7 @@ export const ro = {
       'Sisteme inteligente la cheie: proiectare PCB, firmware, IoT industrial, computer vision și aplicații cloud. Echipă completă de ingineri hardware & software.',
   },
   nav: {
+    home: 'Acasă',
     solutions: 'Soluții',
     process: 'Proces',
     whyUs: 'De ce noi',
@@ -159,7 +160,10 @@ export const ro = {
   },
   contact: {
     title: 'Programează o discuție tehnică',
-    intro: 'Spune-ne ce vrei să automatizezi sau să construiești. Răspunde un inginer, nu un agent de vânzări.',
+    kicker: 'Răspunde un inginer, nu un agent de vânzări',
+    intro: 'Spune-ne ce vrei să automatizezi sau să construiești. Primești un răspuns tehnic, cu pașii următori.',
+    imageAlt: 'Prim-plan cu microcipuri pe o placă electronică',
+    formLabel: 'Răspuns într-o zi lucrătoare',
     form: {
       name: 'Nume',
       company: 'Firmă / domeniu',
@@ -170,16 +174,24 @@ export const ro = {
       success: 'Mulțumim! Te contactăm în cel mult o zi lucrătoare.',
       error: 'Nu am putut trimite mesajul. Încearcă din nou sau scrie-ne pe WhatsApp.',
       required: 'Câmp obligatoriu',
+      invalidReach: 'Scrie un număr de telefon sau o adresă de email validă',
+      subject: 'Mesaj nou de pe site',
     },
     direct: 'Sau direct',
     phone: 'Telefon',
     email: 'Email',
     whatsapp: 'WhatsApp',
     whatsappMessage: 'Bună ziua! Aș vrea să discut despre un proiect.',
+    whatsappFab: 'Scrie-ne pe WhatsApp',
   },
   footer: {
     rights: 'Toate drepturile rezervate.',
     cui: 'CUI',
+    tagline: 'Hardware, firmware, computer vision și software custom. Din Suceava, pentru toată țara.',
+    navTitle: 'Pagină',
+    contactTitle: 'Contact',
+    companyTitle: 'Firmă',
+    backToTop: 'Sus',
   },
 } as const;
 

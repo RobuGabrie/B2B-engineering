@@ -8,6 +8,7 @@ export const en: Dictionary = {
       'Turnkey intelligent systems: PCB design, firmware, industrial IoT, computer vision and cloud applications. A complete team of hardware & software engineers.',
   },
   nav: {
+    home: 'Home',
     solutions: 'Solutions',
     process: 'Process',
     whyUs: 'Why us',
@@ -159,7 +160,10 @@ export const en: Dictionary = {
   },
   contact: {
     title: 'Book a technical call',
-    intro: 'Tell us what you want to automate or build. An engineer replies, not a salesperson.',
+    kicker: 'An engineer replies, not a salesperson',
+    intro: 'Tell us what you want to automate or build. You get a technical answer with the next steps.',
+    imageAlt: 'Close-up of microchips on a circuit board',
+    formLabel: 'Reply within one business day',
     form: {
       name: 'Name',
       company: 'Company / industry',
@@ -170,15 +174,23 @@ export const en: Dictionary = {
       success: 'Thank you! We will get back to you within one business day.',
       error: "We couldn't send your message. Please try again or message us on WhatsApp.",
       required: 'Required field',
+      invalidReach: 'Enter a valid phone number or email address',
+      subject: 'New message from the website',
     },
     direct: 'Or directly',
     phone: 'Phone',
     email: 'Email',
     whatsapp: 'WhatsApp',
     whatsappMessage: "Hello! I'd like to discuss a project.",
+    whatsappFab: 'Message us on WhatsApp',
   },
   footer: {
     rights: 'All rights reserved.',
     cui: 'VAT ID',
+    tagline: 'Hardware, firmware, computer vision and custom software. Based in Suceava, Romania.',
+    navTitle: 'Page',
+    contactTitle: 'Contact',
+    companyTitle: 'Company',
+    backToTop: 'Top',
   },
 };

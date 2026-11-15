@@ -1,0 +1,241 @@
+---
+// "Programează o discuție tehnică": heading row, then a lab photo whose bottom-right notch holds the form
+// (fields boxed like the search inputs of the reference hero: tiny label inside, value under it).
+// Below the photo, the three direct channels as a spec strip: mono label, big value, hairline dividers.
+// The form posts to Web3Forms (key in src/config/site.ts) with a honeypot and inline validation.
+import SectionHeading from './ui/SectionHeading.astro';
+import NotchedImage from './ui/NotchedImage.astro';
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import { site } from '../config/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { mailHref, telHref, whatsappHref } from '../lib/contact';
+import pcb from '../assets/images/pcb-macro.jpg';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const f = t.contact.form;
+
+const fields = [
+  { name: 'name', label: f.name, autocomplete: 'name', span: false },
+  { name: 'company', label: f.company, autocomplete: 'organization', span: false },
+  { name: 'reach', label: f.reach, autocomplete: 'email', span: true },
+] as const;
+
+const channels = [
+  { icon: 'phone', label: t.contact.phone, value: site.phone, href: telHref, external: false },
+  { icon: 'mail', label: t.contact.email, value: site.email, href: mailHref, external: false },
+  { icon: 'chat', label: t.contact.whatsapp, value: site.phone, href: whatsappHref(lang), external: true },
+] as const;
+---
+
+<section id={t.anchors.contact} class="py-20 md:py-32" aria-labelledby="contact-title">
+  <div class="container-site">
+    <SectionHeading id="contact-title" title={t.contact.title} kicker={t.contact.kicker} intro={t.contact.intro} />
+
+    <NotchedImage
+      src={pcb}
+      alt={t.contact.imageAlt}
+      corner="br"
+      slant={48}
+      joint={36}
+      class="mt-12 md:mt-16"
+      imgClass="md:h-[46rem] md:object-[30%_50%]"
+    >
+      <p class="flex items-center gap-3 text-xs font-semibold whitespace-nowrap uppercase max-md:max-w-none! md:gap-4 md:text-[13px]">
+        <span class="size-1.5 bg-accent" aria-hidden="true"></span>{t.contact.formLabel}
+      </p>
+
+      <form
+        class="contact-form mt-5 grid w-full gap-3 text-left sm:grid-cols-2 md:w-[24rem] lg:w-[32rem] xl:w-[34rem]"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        novalidate
+        data-contact-form
+        data-msg-required={f.required}
+        data-msg-reach={f.invalidReach}
+        data-msg-sending={f.sending}
+      >
+        <input type="hidden" name="access_key" value={site.web3formsKey} />
+        <input type="hidden" name="subject" value={`${f.subject} (${lang.toUpperCase()})`} />
+        <input type="hidden" name="from_name" value={site.name} />
+        <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        {fields.map((field) => (
+          <div class:list={['field', field.span && 'sm:col-span-2']}>
+            <label for={`cf-${field.name}`}>{field.label}</label>
+            <input
+              id={`cf-${field.name}`}
+              name={field.name}
+              type="text"
+              autocomplete={field.autocomplete}
+              required
+              aria-describedby={`cf-${field.name}-err`}
+            />
+            <p id={`cf-${field.name}-err`} class="err" hidden></p>
+          </div>
+        ))}
+
+        <div class="field sm:col-span-2">
+          <label for="cf-message">{f.problem}</label>
+          <textarea id="cf-message" name="message" rows="4" required aria-describedby="cf-message-err"></textarea>
+          <p id="cf-message-err" class="err" hidden></p>
+        </div>
+
+        <div class="mt-2 flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center">
+          <Button type="submit" size="lg" class="w-full sm:w-auto" data-submit>
+            <span data-submit-label>{f.submit}</span>
+            <svg viewBox="0 0 12 12" class="size-3" aria-hidden="true"><path d="M2 1l7 5-7 5z" fill="currentColor" /></svg>
+          </Button>
+          <p class="status text-sm" role="status" aria-live="polite" data-status data-ok={f.success} data-fail={f.error}></p>
+        </div>
+      </form>
+    </NotchedImage>
+
+    <ul class="mt-12 grid border-t border-line md:mt-16 xl:grid-cols-3">
+      {channels.map((c) => (
+        <li class="border-b border-line xl:border-b-0 xl:border-l xl:first:border-l-0">
+          <a
+            href={c.href}
+            class="channel group flex items-center gap-5 py-6 xl:px-8 xl:py-8 xl:[li:first-child_&]:pl-0"
+            target={c.external ? '_blank' : undefined}
+            rel={c.external ? 'noopener' : undefined}
+          >
+            <Icon name={c.icon} class="size-8" />
+            <span class="min-w-0">
+              <span class="block font-mono text-xs uppercase text-steel">{c.label}</span>
+              <span class="mt-1 block font-display text-base font-bold break-words md:text-lg">{c.value}</span>
+            </span>
+            <span class="ml-auto text-accent-ink transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Boxed field like the reference search inputs: tiny gray label inside the box, value underneath. */
+  .field {
+    position: relative;
+  }
+  .field label {
+    position: absolute;
+    top: 0.55rem;
+    left: 0.875rem;
+    right: 0.875rem;
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--color-steel);
+    pointer-events: none;
+  }
+  .field input,
+  .field textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    background: var(--color-paper);
+    padding: 1.6rem 0.875rem 0.55rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: border-color 0.15s;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 8.5rem;
+    padding-top: 2.6rem; /* the long label may wrap to two lines */
+  }
+  .field input:hover,
+  .field textarea:hover {
+    border-color: var(--color-steel);
+  }
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+  .field [aria-invalid='true'] {
+    border-color: var(--color-accent-ink);
+  }
+  .err {
+    margin-top: 0.35rem;
+    font-size: 13px;
+    color: var(--color-accent-ink);
+  }
+  .status[data-state='ok'] {
+    font-weight: 600;
+  }
+  .status[data-state='fail'] {
+    color: var(--color-accent-ink);
+  }
+</style>
+
+<script>
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const PHONE = /^\+?[\d\s().-]{6,}$/;
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-contact-form]')) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const idle = label.textContent ?? '';
+    const inputs = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[required], textarea[required]')];
+
+    const check = (el: HTMLInputElement | HTMLTextAreaElement) => {
+      const value = el.value.trim();
+      let msg = '';
+      if (!value) msg = form.dataset.msgRequired!;
+      else if (el.name === 'reach' && !EMAIL.test(value) && !PHONE.test(value)) msg = form.dataset.msgReach!;
+      const err = document.getElementById(`${el.id}-err`)!;
+      err.textContent = msg;
+      err.hidden = !msg;
+      el.setAttribute('aria-invalid', String(!!msg));
+      return !msg;
+    };
+
+    // Validate a field once the visitor leaves it, then live while they fix it.
+    for (const el of inputs) {
+      el.addEventListener('blur', () => el.value && check(el));
+      el.addEventListener('input', () => el.getAttribute('aria-invalid') === 'true' && check(el));
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const invalid = inputs.filter((el) => !check(el));
+      if (invalid.length) {
+        invalid[0].focus();
+        return;
+      }
+
+      button.disabled = true;
+      label.textContent = form.dataset.msgSending!;
+      status.textContent = '';
+      status.removeAttribute('data-state');
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => ({ success: false }));
+        if (!res.ok || !data.success) throw new Error(data.message ?? res.statusText);
+        form.reset();
+        status.dataset.state = 'ok';
+        status.textContent = status.dataset.ok!;
+      } catch {
+        status.dataset.state = 'fail';
+        status.textContent = status.dataset.fail!;
+      } finally {
+        button.disabled = false;
+        label.textContent = idle;
+      }
+    });
+  }
+</script>

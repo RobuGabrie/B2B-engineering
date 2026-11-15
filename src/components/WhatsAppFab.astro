@@ -1,0 +1,58 @@
+---
+// Floating WhatsApp button, phones/tablets only (the header carries WhatsApp on desktop).
+// Appears once the hero is out of view and hides again over the contact section and footer,
+// where the channels are already on screen.
+import Icon from './ui/Icon.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { whatsappHref } from '../lib/contact';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<a
+  href={whatsappHref(lang)}
+  target="_blank"
+  rel="noopener"
+  aria-label={t.contact.whatsappFab}
+  class="wa-fab fixed right-4 bottom-4 z-30 flex size-14 items-center justify-center rounded-[3px] bg-ink lg:hidden"
+  data-wa-fab
+>
+  <Icon name="chat" class="size-7" />
+</a>
+
+<style>
+  .wa-fab {
+    box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.5);
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+  .wa-fab:not(.is-on) {
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const fab = document.querySelector<HTMLElement>('[data-wa-fab]');
+  const hero = document.querySelector('main > section:first-child');
+  const covers = [...document.querySelectorAll('[aria-labelledby="contact-title"], footer')];
+
+  if (fab && hero) {
+    const visible = new Map<Element, boolean>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) visible.set(e.target, e.isIntersecting);
+      const show = !visible.get(hero) && !covers.some((c) => visible.get(c));
+      fab.classList.toggle('is-on', show);
+      // Keep it out of the tab order while hidden.
+      fab.tabIndex = show ? 0 : -1;
+    });
+    [hero, ...covers].forEach((el) => io.observe(el));
+  }
+</script>

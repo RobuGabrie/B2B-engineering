@@ -15,4 +15,6 @@ export const site = {
     country: 'RO',
   },
   cui: 'RO00000000',
+  /** Web3Forms access key (web3forms.com): submissions are emailed to the address it was created with. */
+  web3formsKey: 'YOUR_WEB3FORMS_ACCESS_KEY',
 } as const;
