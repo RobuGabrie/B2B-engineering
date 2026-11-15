@@ -1,0 +1,255 @@
+---
+// One page per vertical (src/pages/servicii/[slug].astro, src/pages/en/services/[slug].astro).
+// Same visual language as the home page, own layout:
+//   hero (breadcrumb, framed H1, lead, CTAs) beside a notched photo → problem / solution + benefit and outcomes
+//   → "how it works" as a signal trace through four nodes (orange, then cyan, like the logo S)
+//   → where it applies + technologies → FAQ (native <details>) → the other three services → contact form.
+// Shared copy comes from solutions.items[id]; page-only copy from services.items[id].
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import Contact from './Contact.astro';
+import WhatsAppFab from './WhatsAppFab.astro';
+import CornerTicks from './ui/CornerTicks.astro';
+import NotchedImage from './ui/NotchedImage.astro';
+import SectionHeading from './ui/SectionHeading.astro';
+import ChamferCard from './ui/ChamferCard.astro';
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import LiveDot from './ui/LiveDot.astro';
+import { homePath, pages, sectionHref, serviceIds, useTranslations, type Lang, type ServiceId } from '../i18n/utils';
+import { whatsappHref } from '../lib/contact';
+import { serviceJsonLd } from '../lib/schema';
+import iot from '../assets/images/iot-lathe.jpg';
+import vision from '../assets/images/vision-cameras.jpg';
+import rnd from '../assets/images/rnd-pcb-hand.jpg';
+import automation from '../assets/images/logistics-shelves.jpg';
+
+interface Props {
+  lang: Lang;
+  id: ServiceId;
+}
+
+const { lang, id } = Astro.props;
+const t = useTranslations(lang);
+const labels = t.services.labels;
+const page = t.services.items[id];
+const index = serviceIds.indexOf(id);
+const item = t.solutions.items[index];
+const images = { iot, vision, rnd, automation } as const;
+const icons = { iot: 'scale', vision: 'audit', rnd: 'chip', automation: 'integrate' } as const;
+const others = serviceIds.filter((s) => s !== id);
+const num = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<Base lang={lang} title={page.metaTitle} description={page.metaDescription} page={id} jsonLd={serviceJsonLd(lang, id, Astro.site!)}>
+  <Header lang={lang} page={id} />
+
+  <main>
+    <section class="container-site pt-8 pb-16 md:pt-14 md:pb-24" aria-labelledby="service-title">
+      <nav aria-label="Breadcrumb" class="font-mono text-xs uppercase text-steel">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href={homePath(lang)} class="hover:text-accent-ink">{t.nav.home}</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href={sectionHref(lang, 'solutions')} class="hover:text-accent-ink">{labels.breadcrumb}</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-ink">{item.tab}</li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 grid grid-cols-1 gap-10 lg:mt-10 lg:grid-cols-12 lg:gap-12">
+        <div class="flex flex-col lg:col-span-6 lg:py-4">
+          <CornerTicks class="-mx-3 px-3 py-5 md:-mx-6 md:px-6 md:py-6" offset={0} size={5}>
+            <h1 id="service-title" class="text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] sm:text-4xl xl:text-5xl">{item.title}</h1>
+          </CornerTicks>
+          <p class="mt-6 max-w-xl text-[17px] leading-relaxed text-graphite">{page.lead}</p>
+          <div class="mt-8 grid gap-3 sm:flex sm:flex-wrap">
+            <Button href="#contact" class="min-h-12 md:min-h-11">{t.hero.primary}</Button>
+            <Button href={whatsappHref(lang)} variant="outline" class="min-h-12 md:min-h-11" target="_blank" rel="noopener">{labels.whatsapp}</Button>
+          </div>
+        </div>
+
+        <NotchedImage
+          src={images[id]}
+          alt={item.imageAlt}
+          corner="bl"
+          slant={36}
+          joint={30}
+          priority
+          class="lg:col-span-6"
+          imgClass="md:h-[28rem] lg:h-[32rem]"
+        >
+          <p class="flex items-center gap-4 text-[13px] font-semibold uppercase">
+            <span class="size-1.5 bg-accent" aria-hidden="true"></span>
+            <span class="font-mono text-accent-ink">{num(index)}</span>{item.tab}
+          </p>
+        </NotchedImage>
+      </div>
+    </section>
+
+    <section class="border-y border-line bg-mist">
+      <div class="container-site grid grid-cols-1 gap-10 py-16 md:grid-cols-2 md:gap-14 md:py-20">
+        <div data-reveal>
+          <p class="font-mono text-xs uppercase tracking-wider text-accent-ink">{labels.problem}</p>
+          <p class="mt-4 text-xl leading-snug font-semibold md:text-2xl">{item.problem}</p>
+        </div>
+        <div data-reveal class="[--reveal-delay:0.1s]">
+          <p class="font-mono text-xs uppercase tracking-wider text-accent-ink">{labels.solution}</p>
+          <p class="mt-4 text-[17px] leading-relaxed text-graphite">{item.solution}</p>
+        </div>
+        <div data-reveal class="md:col-span-2">
+          <p class="flex items-center gap-3 text-[13px] font-bold uppercase tracking-wide">
+            <span class="size-1.5 bg-accent" aria-hidden="true"></span>{t.solutions.labels.benefit}
+          </p>
+          <p class="mt-2 max-w-3xl text-[17px] font-semibold leading-snug">{item.benefit}</p>
+          <ol class="mt-6 grid border-t border-ink md:grid-cols-3">
+            {item.outcomes.map((o, n) => (
+              <li class="flex items-baseline gap-4 border-b border-line py-3 text-[15px] font-semibold md:border-r md:px-5 md:first:pl-0 md:last:border-r-0">
+                <span class="font-mono text-xs font-normal text-accent-ink">{num(n)}</span>{o}
+                {'live' in item && item.live === n && <LiveDot class="ml-auto self-center" />}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-site py-20 md:py-28" aria-labelledby="how-title">
+      <SectionHeading id="how-title" title={labels.how} intro={labels.howIntro} />
+      <ol data-stagger class="trace relative mt-12 grid grid-cols-1 gap-10 md:mt-16 lg:grid-cols-4 lg:gap-8">
+        {page.how.map((step, n) => (
+          <li class="relative pl-10 lg:pt-10 lg:pl-0">
+            <span aria-hidden="true" class:list={['node absolute top-1 left-0 size-4 rounded-full border-2 bg-paper lg:top-0', n < 2 ? 'border-accent' : 'border-brand-cyan-ink']}></span>
+            <span class="font-mono text-xs text-accent-ink">{num(n)}</span>
+            <h3 class="mt-2 text-lg leading-tight">{step.title}</h3>
+            <p class="mt-3 text-[15px] text-graphite">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="container-site pb-20 md:pb-28">
+      <div class="grid grid-cols-1 gap-14 lg:grid-cols-12">
+        <div data-reveal class="lg:col-span-7">
+          <h2 class="text-2xl md:text-3xl">{labels.uses}</h2>
+          <ul class="mt-6 grid border-t border-ink sm:grid-cols-2 sm:gap-x-8">
+            {page.uses.map((u, n) => (
+              <li class="flex items-baseline gap-4 border-b border-line py-3.5 text-[15px] font-semibold">
+                <span class="font-mono text-xs font-normal text-accent-ink">{num(n)}</span>{u}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div data-reveal class="[--reveal-delay:0.1s] lg:col-span-5">
+          <h2 class="text-2xl md:text-3xl">{labels.tech}</h2>
+          <ul class="mt-6 flex flex-wrap gap-2 border-t border-ink pt-6">
+            {page.tech.map((tech) => (
+              <li class="rounded-[3px] border border-line px-3 py-1.5 font-mono text-[13px]">{tech}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-site pb-20 md:pb-28" aria-labelledby="faq-title">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+        <h2 id="faq-title" data-reveal class="text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] sm:text-4xl lg:col-span-4">{labels.faq}</h2>
+        <div data-reveal class="border-t border-ink lg:col-span-8">
+          {page.faq.map((f) => (
+            <details class="faq group border-b border-line">
+              <summary class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[17px] font-semibold [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <span aria-hidden="true" class="plus relative mt-1.5 size-3.5 shrink-0"></span>
+              </summary>
+              <p class="max-w-2xl pb-6 text-[15px] text-graphite">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="container-site pb-20 md:pb-28" aria-labelledby="others-title">
+      <h2 id="others-title" data-reveal class="text-2xl md:text-3xl">{labels.others}</h2>
+      <ul data-stagger class="mt-10 grid gap-8 md:grid-cols-3 md:gap-6">
+        {others.map((o) => {
+          const other = t.solutions.items[serviceIds.indexOf(o)];
+          return (
+            <ChamferCard as="li" pad="px-7 py-7 md:px-8 md:py-8">
+              <a href={pages[o][lang]} class="group flex h-full flex-col">
+                <Icon name={icons[o]} class="size-8" />
+                <span class="mt-6 font-mono text-xs uppercase text-accent-ink">{other.tab}</span>
+                <span class="mt-2 text-[15px] leading-snug font-bold">{other.title}</span>
+                <span class="mt-5 inline-flex items-center gap-2 text-[13px] font-semibold uppercase underline decoration-accent underline-offset-8">
+                  {labels.more}<span aria-hidden="true" class="inline-block text-accent-ink transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </a>
+            </ChamferCard>
+          );
+        })}
+      </ul>
+    </section>
+
+    <Contact lang={lang} />
+  </main>
+
+  <Footer lang={lang} page={id} />
+  <WhatsAppFab lang={lang} />
+</Base>
+
+<style>
+  /* The trace through the four nodes: orange for the first half, cyan after, like the S in the logo. */
+  .trace::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(var(--color-accent) 0 50%, var(--color-brand-cyan-ink) 50%);
+  }
+  @media (min-width: 64rem) {
+    .trace::before {
+      left: 0.5rem;
+      right: 0.5rem;
+      top: 7px;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-accent) 0 50%, var(--color-brand-cyan-ink) 50%);
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .trace::before {
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 1.2s cubic-bezier(0.5, 0, 0.2, 1);
+    }
+    .trace.is-in::before {
+      transform: none;
+    }
+    @media (min-width: 64rem) {
+      .trace::before {
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+    }
+  }
+
+  /* + that turns into − when the answer is open. */
+  .plus::before,
+  .plus::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--color-accent);
+    transition: transform 0.2s;
+  }
+  .plus::after {
+    transform: rotate(90deg);
+  }
+  .faq[open] .plus::after {
+    transform: rotate(0deg);
+  }
+</style>

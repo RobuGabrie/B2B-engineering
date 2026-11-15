@@ -38,6 +38,11 @@ User asked for animations that keep the site fast, and a little of the logo cyan
 - `src/content/cases/exemplu.ro.md`: draft template case (never shown), which also silences the empty-collection build warning.
 - Lighthouse mobile: **100 / 100 / 100 / 100** on home RO/EN and privacy.
 
+## Service pages (2026-11-16)
+
+One page per vertical, RO + EN (8 pages), for SEO on specific searches. `Service.astro` + `src/pages/servicii/[slug].astro`, `src/pages/en/services/[slug].astro`; slugs in `pages` (`src/i18n/utils.ts`). Sections: breadcrumb + framed H1 + lead + CTAs beside a notched photo (`bl`), problem/solution + benefit/outcomes on mist, "how it works" as a 4-node orange→cyan trace, uses + technology tags, FAQ (native `<details>`), the other three services as cut-corner cards, the shared contact form. JSON-LD: Service + BreadcrumbList + FAQPage. Shared copy from `solutions.items`, page copy from `services.items` (**written by Claude, the company should review the technical claims and technology lists**).
+The user asked not to change the home page: the only home change is the shared footer, which gained a "Servicii" column (internal links). Optional later: a "Detalii" link from each home tab to its page.
+
 ## Form
 
 **Web3Forms** (user confirmed 2026-11-15). The key is a placeholder (`web3formsKey` in `src/config/site.ts`), so submitting currently shows the error message. To go live: create an access key at web3forms.com with the destination email and paste it there.

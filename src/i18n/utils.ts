@@ -20,8 +20,20 @@ export function useTranslations(lang: Lang): Dictionary {
 export const pages = {
   home: { ro: '/', en: '/en/' },
   privacy: { ro: '/confidentialitate/', en: '/en/privacy/' },
+  // One page per vertical; keys match the ids in solutions.items and services.items.
+  iot: { ro: '/servicii/monitorizare-productie-iot/', en: '/en/services/industrial-iot-monitoring/' },
+  vision: { ro: '/servicii/computer-vision/', en: '/en/services/computer-vision/' },
+  rnd: { ro: '/servicii/proiectare-pcb-firmware/', en: '/en/services/pcb-firmware-development/' },
+  automation: { ro: '/servicii/automatizari-logistica-agricultura/', en: '/en/services/logistics-agriculture-automation/' },
 } as const satisfies Record<string, Record<Lang, string>>;
 export type Page = keyof typeof pages;
+export const serviceIds = ['iot', 'vision', 'rnd', 'automation'] as const;
+export type ServiceId = (typeof serviceIds)[number];
+
+/** The last path segment of a page in a language (for getStaticPaths). */
+export function slugOf(page: Page, lang: Lang): string {
+  return pages[page][lang].split('/').filter(Boolean).at(-1)!;
+}
 
 /** Home path for a language: `/` for RO, `/en/` for EN. */
 export function homePath(lang: Lang): string {

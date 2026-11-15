@@ -1,0 +1,12 @@
+---
+import Service from '../../components/Service.astro';
+import { serviceIds, slugOf } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return serviceIds.map((id) => ({ params: { slug: slugOf(id, 'ro') }, props: { id } }));
+}
+
+const { id } = Astro.props;
+---
+
+<Service lang="ro" id={id} />

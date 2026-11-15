@@ -191,6 +191,223 @@ export const ro = {
     whatsappMessage: 'Bună ziua! Aș vrea să discut despre un proiect.',
     whatsappFab: 'Scrie-ne pe WhatsApp',
   },
+  services: {
+    labels: {
+      breadcrumb: 'Servicii',
+      how: 'Cum funcționează',
+      howIntro: 'De la semnalul fizic până la decizie, cu aceeași echipă.',
+      uses: 'Unde se aplică',
+      tech: 'Tehnologii',
+      faq: 'Întrebări frecvente',
+      others: 'Alte servicii',
+      more: 'Detalii',
+      whatsapp: 'Scrie pe WhatsApp',
+      problem: 'Problema',
+      solution: 'Soluția noastră',
+    },
+    items: {
+      iot: {
+        metaTitle: 'Monitorizare producție IoT și retrofitting utilaje',
+        metaDescription:
+          'Senzori industriali pe utilajele existente, OEE în timp real, alerte de mentenanță predictivă și dashboard în cloud. Proiectăm și instalăm din Suceava, în toată România.',
+        lead: 'Transformăm utilajele pe care le ai deja în surse de date: montăm senzori și unități de achiziție, fără să schimbi mașinile și fără opriri lungi de producție.',
+        how: [
+          {
+            title: 'Senzori pe utilaj',
+            text: 'Curent, vibrații, temperatură, senzori optici sau semnale din automatul existent (PLC). Montaj neinvaziv, de regulă fără modificări în schema electrică a mașinii.',
+          },
+          {
+            title: 'Achiziție & edge',
+            text: 'O unitate de achiziție proiectată de noi citește senzorii, filtrează datele local și le trimite securizat prin Ethernet, Wi-Fi sau LTE.',
+          },
+          {
+            title: 'Cloud & dashboard',
+            text: 'Datele ajung într-un dashboard web și mobil: starea utilajelor, timpi de funcționare și opriri, OEE, consum de energie.',
+          },
+          {
+            title: 'Alerte & rapoarte',
+            text: 'Praguri și tipare care anunță din timp o problemă: notificări pe telefon sau email și rapoarte periodice pentru management.',
+          },
+        ],
+        uses: [
+          'Strunguri, freze și centre CNC',
+          'Prese, injecție mase plastice, linii de ambalare',
+          'Compresoare, pompe, motoare și ventilatoare',
+          'Consumul de energie pe utilaj sau pe hală',
+          'Contorizarea pieselor bune și a rebuturilor',
+          'Integrare cu ERP / MES prin API',
+        ],
+        tech: ['Senzori de curent (CT)', 'Accelerometre MEMS', 'Modbus RTU / TCP', 'MQTT', 'OPC UA', 'ESP32 / STM32', 'Linux embedded', 'Dashboard web & mobil'],
+        faq: [
+          {
+            q: 'Trebuie să opresc producția pentru montaj?',
+            a: 'De obicei nu, sau doar pentru scurt timp. Majoritatea senzorilor se montează în exterior, iar instalarea se planifică în pauze sau în schimburi cu încărcare mică.',
+          },
+          {
+            q: 'Funcționează și pe utilaje vechi, fără PLC?',
+            a: 'Da, pentru asta e gândit retrofitting-ul: măsurăm direct mărimi fizice (curent, vibrații, temperatură), deci nu depindem de electronica mașinii.',
+          },
+          {
+            q: 'Cu ce începem?',
+            a: 'Cu un audit și un pilot pe unul sau câteva utilaje. Vezi datele reale înainte să decizi extinderea pe toată hala.',
+          },
+          {
+            q: 'Ale cui sunt datele?',
+            a: 'Ale tale. Platforma poate rula în cloud sau pe serverul tău, iar datele se pot exporta oricând.',
+          },
+        ],
+      },
+      vision: {
+        metaTitle: 'Soluții computer vision și Edge AI pentru industrie și orașe',
+        metaDescription:
+          'Control vizual automat pe linia de producție, recunoașterea numerelor de înmatriculare și treceri de pietoni cu avertizare activă. Procesare AI locală, fără dependență de internet.',
+        lead: 'Sisteme cu camere și inteligență artificială care rulează local, lângă cameră: decid în milisecunde, funcționează și fără internet, iar imaginile nu pleacă din locația ta.',
+        how: [
+          {
+            title: 'Camere & iluminare',
+            text: 'Alegem camera, obiectivul și iluminarea potrivite locului: bandă de producție, parcare sau intersecție. O imagine bună e jumătate din soluție.',
+          },
+          {
+            title: 'Model AI pe cazul tău',
+            text: 'Antrenăm și testăm modelul pe imagini din procesul tău real, nu pe exemple generice.',
+          },
+          {
+            title: 'Procesare edge',
+            text: 'Modelul rulează pe un calculator industrial compact, lângă cameră. Rezultatul vine în milisecunde, fără să trimiți video în cloud.',
+          },
+          {
+            title: 'Acțiune & raportare',
+            text: 'Sistemul acționează (respinge piesa, ridică bariera, aprinde avertizarea) și înregistrează evenimentele într-un dashboard.',
+          },
+        ],
+        uses: [
+          'Detecția defectelor pe linia de producție',
+          'Verificarea etichetelor, ambalajelor și a asamblării',
+          'Numărarea și sortarea produselor',
+          'Recunoașterea numerelor de înmatriculare (ANPR) pentru parcări și acces',
+          'Treceri de pietoni cu avertizare activă',
+          'Monitorizarea perimetrului și a zonelor periculoase',
+        ],
+        tech: ['Camere industriale & IP', 'Iluminare dedicată', 'NVIDIA Jetson', 'OpenCV', 'Modele YOLO', 'Python / C++', 'Integrare PLC / I/O', 'Dashboard & alerte'],
+        faq: [
+          {
+            q: 'De ce local și nu în cloud?',
+            a: 'Pentru viteză, cost și confidențialitate: decizia se ia în milisecunde, nu plătești transfer video continuu, iar imaginile rămân la tine.',
+          },
+          {
+            q: 'Cât de precis este?',
+            a: 'Depinde de caz. De aceea începem cu un test pe imagini reale și stabilim împreună pragul de acceptare înainte de implementare.',
+          },
+          {
+            q: 'Se poate integra cu linia existentă?',
+            a: 'Da. Sistemul poate comanda un actuator sau poate trimite un semnal către PLC (de exemplu pentru respingerea piesei) și poate transmite date către sistemele tale.',
+          },
+          {
+            q: 'Ce se întâmplă cu datele personale din imagini?',
+            a: 'Proiectăm sistemul să proceseze local și să păstreze doar ce e necesar (de exemplu evenimentul, nu tot video-ul), conform GDPR.',
+          },
+        ],
+      },
+      rnd: {
+        metaTitle: 'Proiectare PCB, firmware și prototipare hardware',
+        metaDescription:
+          'Dezvoltăm produse hardware de la idee la serie: schemă și PCB, firmware STM32, ESP32 sau Linux embedded, carcasă și aplicație web sau mobilă.',
+        lead: 'Ai o idee de produs fizic? O ducem de la schemă la un prototip funcțional și apoi spre producția de serie, cu o singură echipă pentru electronică, firmware și aplicație.',
+        how: [
+          {
+            title: 'Specificații & arhitectură',
+            text: 'Clarificăm ce trebuie să facă produsul, costul țintă, alimentarea, conectivitatea și certificările necesare.',
+          },
+          {
+            title: 'Schemă & PCB',
+            text: 'Alegem componentele (cu atenție la disponibilitate), proiectăm schema și cablajul și comandăm primele plăci.',
+          },
+          {
+            title: 'Firmware & aplicație',
+            text: 'Scriem firmware-ul pentru microcontroler sau Linux embedded și aplicația web sau mobilă care controlează dispozitivul.',
+          },
+          {
+            title: 'Prototip & pregătire de serie',
+            text: 'Asamblăm, testăm și îmbunătățim prototipul, apoi pregătim documentația de producție: BOM, fișiere Gerber, proceduri de test.',
+          },
+        ],
+        uses: [
+          'Dispozitive IoT conectate (Wi-Fi, BLE, LTE, LoRa)',
+          'Plăci de achiziție și control pentru utilaje',
+          'Senzori și noduri alimentate pe baterie',
+          'Interfețe și controlere pentru echipamente existente',
+          'Modernizarea unui produs vechi cu componente actuale',
+          'Kit-uri demo și proof-of-concept pentru investitori',
+        ],
+        tech: ['KiCad / Altium', 'STM32', 'ESP32', 'Linux embedded', 'C / C++', 'BLE · Wi-Fi · LTE · LoRa', 'Carcase printate 3D', 'Aplicații web & mobile'],
+        faq: [
+          {
+            q: 'Ce primesc la final?',
+            a: 'Toate fișierele: scheme, PCB, BOM, codul sursă al firmware-ului și al aplicației. Produsul e al tău, fără dependență de noi.',
+          },
+          {
+            q: 'Puteți porni de la un prototip existent?',
+            a: 'Da. Putem prelua un proiect început (de exemplu pe Arduino sau pe o placă de dezvoltare) și îl transformăm într-un produs robust, gata de serie.',
+          },
+          {
+            q: 'Vă ocupați și de producție?',
+            a: 'Pregătim documentația și lucrăm cu fabrici de PCB și asamblare pentru serii mici și medii. Pentru volume mari predăm pachetul complet producătorului ales de tine.',
+          },
+          {
+            q: 'Cât durează un prototip?',
+            a: 'Depinde de complexitate. După audit primești un plan pe etape, fiecare încheiată cu un rezultat pe care îl vezi funcționând.',
+          },
+        ],
+      },
+      automation: {
+        metaTitle: 'Automatizări logistică și agricultură: Pick-to-Light, telematică',
+        metaDescription:
+          'Sisteme Pick-to-Light pentru depozite, stații autonome de monitorizare meteo și sol, telematică custom pentru flote și utilaje agricole.',
+        lead: 'Automatizăm procesele din depozit și din teren acolo unde soluțiile standard nu se potrivesc: hardware robust, software adaptat și integrare cu ce folosești deja.',
+        how: [
+          {
+            title: 'Analiza fluxului',
+            text: 'Vedem cum se lucrează azi: unde se pierde timp, unde apar erori și ce date lipsesc.',
+          },
+          {
+            title: 'Hardware pentru teren',
+            text: 'Module de raft, stații alimentate solar sau trackere pentru utilaje, proiectate pentru praf, umezeală și temperaturi extreme.',
+          },
+          {
+            title: 'Conectare & software',
+            text: 'Dispozitivele comunică prin rețeaua locală, LTE sau LoRa cu o aplicație care centralizează datele și comenzile.',
+          },
+          {
+            title: 'Integrare & instruire',
+            text: 'Conectăm sistemul la WMS, ERP sau alte aplicații existente și instruim echipa să-l folosească din prima zi.',
+          },
+        ],
+        uses: [
+          'Pick-to-Light și Put-to-Light pentru pregătirea comenzilor',
+          'Inventarul și localizarea mărfii pe rafturi',
+          'Stații meteo și senzori de umiditate a solului',
+          'Monitorizarea serelor, silozurilor și depozitelor frigorifice',
+          'Telematică pentru flote și utilaje agricole',
+          'Alerte de la distanță pentru pompe, generatoare și echipamente izolate',
+        ],
+        tech: ['Module LED de raft', 'Energie solară & baterii', 'LoRaWAN', 'LTE / NB-IoT', 'GPS / GNSS', 'Modbus', 'Integrare WMS / ERP', 'Aplicații web & mobile'],
+        faq: [
+          {
+            q: 'Se poate integra cu WMS-ul sau ERP-ul pe care îl avem?',
+            a: 'De cele mai multe ori da, prin API, baze de date sau fișiere de schimb. Verificăm asta încă din etapa de audit.',
+          },
+          {
+            q: 'Funcționează unde nu este internet?',
+            a: 'Da. Stațiile din teren pot comunica prin LoRa sau LTE, păstrează datele local și le transmit când conexiunea revine.',
+          },
+          {
+            q: 'Putem începe cu un singur raft sau o singură stație?',
+            a: 'Da, recomandăm un pilot mic. Vezi rezultatele concret și apoi extindem.',
+          },
+        ],
+      },
+    },
+  },
   privacy: {
     title: 'Politica de confidențialitate',
     description: 'Ce date personale colectăm prin site, de ce, cât timp le păstrăm și ce drepturi ai.',
@@ -253,6 +470,7 @@ export const ro = {
     rights: 'Toate drepturile rezervate.',
     cui: 'CUI',
     tagline: 'Hardware, firmware, computer vision și software custom. Din Suceava, pentru toată țara.',
+    servicesTitle: 'Servicii',
     navTitle: 'Pagină',
     contactTitle: 'Contact',
     companyTitle: 'Firmă',
