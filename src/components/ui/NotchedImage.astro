@@ -2,7 +2,7 @@
 // Photo cut into a non-rectangular shape, as in the reference:
 // - md+: the notch content (slot) bites into the top-left corner; the step between them is slanted
 //   and every joint is rounded. The notch size follows the content, measured live.
-// - mobile: content sits above; the photo keeps the top-right 45° cut of the cards.
+// - mobile: same cut, smaller: content stacks above, only its last element sits in the notch.
 // `bleed`: photo runs edge to edge with square outer corners (hero); otherwise outer corners are rounded.
 // The outline is applied as a clip-path computed from the real size (src/lib/shape.ts).
 import { Image } from 'astro:assets';
@@ -83,6 +83,17 @@ const hasNotch = Astro.slots.has('default');
   .notched.is-shaped .shape {
     border-radius: 0;
   }
+
+  /* Mobile: only the last element of the notch content sits inside the cut, so keep it narrow. */
+  @media (max-width: 47.99rem) {
+    .notch > :global(:last-child) {
+      width: fit-content;
+      max-width: 64%;
+    }
+    .notched.is-shaped .notch {
+      background: transparent;
+    }
+  }
 </style>
 
 <script>
@@ -100,6 +111,7 @@ const hasNotch = Astro.slots.has('default');
 
     let d: string;
     if (desktop.matches && notch) {
+      shape.style.marginTop = '';
       d = notchPath({
         width: W,
         height: H,
@@ -109,12 +121,28 @@ const hasNotch = Astro.slots.has('default');
         radius: r,
         joint: 28,
       });
+    } else if (notch?.lastElementChild) {
+      // Mobile: same cut, smaller. The content stacks above the photo and only its last element
+      // (badge, label) sits in the notch; the photo rises beside it.
+      const tail = notch.lastElementChild.getBoundingClientRect();
+      const box = notch.getBoundingClientRect();
+      const notchH = Math.round(box.bottom - tail.top + 10);
+      shape.style.marginTop = `-${notchH}px`;
+      d = notchPath({
+        width: W,
+        height: H,
+        notchW: Math.round(tail.right - box.left + 16),
+        notchH,
+        slant: Math.min(slant, 20),
+        radius: bleed ? 0 : 20,
+        joint: 18,
+      });
     } else {
-      // Mobile: the card language — rounded corners, top-right cut at 45°.
+      // No notch content: rounded corners with the cards' top-right 45° cut.
       const c = Math.min(56, W / 4);
       d = roundedPolygon(
         [[0, 0], [W - c, 0], [W, c], [W, H], [0, H]],
-        [r || 0, 10, 10, r, r],
+        [bleed ? 0 : 20, 10, 10, bleed ? 0 : 20, bleed ? 0 : 20],
       );
     }
 
