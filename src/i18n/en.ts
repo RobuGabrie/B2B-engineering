@@ -55,11 +55,7 @@ export const en: Dictionary = {
       problem: 'The problem',
       solution: 'Our solution',
       benefit: 'Key benefit',
-      input: 'Input',
-      processing: 'Processing',
-      diagram: 'System diagram',
       outcomes: 'What you get',
-      result: 'Result',
     },
     items: [
       {
@@ -71,20 +67,6 @@ export const en: Dictionary = {
         solution:
           'We fit industrial sensors (vibration, current, temperature, optical) and data-acquisition units to your existing machines, connected to a live cloud dashboard.',
         benefit: 'See your OEE in real time on your phone and get alerts before a machine breaks down.',
-        stages: [
-          {
-            title: 'Sensors on the machine',
-            items: ['Vibration and temperature', 'Current and energy use', 'Optical sensors for cycles and scrap'],
-          },
-          {
-            title: 'Acquisition & cloud',
-            items: ['Industrial gateway (ESP32 / Linux)', 'Encrypted data (MQTT) to the cloud', 'Works on old machines, no PLC needed'],
-          },
-          {
-            title: 'Live OEE + alerts',
-            items: ['OEE dashboard on your phone', 'Alerts before a breakdown', 'Energy and scrap reports'],
-          },
-        ],
         outcomes: ['Real-time OEE', 'Predictive maintenance', 'No machine replacement'],
       },
       {
@@ -97,20 +79,6 @@ export const en: Dictionary = {
         solution:
           'Camera systems with on-site (edge) AI processing that detect defects on the production line, read licence plates or protect pedestrian crossings with active warnings.',
         benefit: 'Decisions in milliseconds, with no internet dependency and no human error.',
-        stages: [
-          {
-            title: 'Video camera',
-            items: ['Industrial or IP cameras', 'Controlled lighting on the line', 'Works day and night (IR)'],
-          },
-          {
-            title: 'On-site AI (edge)',
-            items: ['Models trained on your images', 'Processing on a local edge computer', 'Images never leave the site'],
-          },
-          {
-            title: 'Decision in ms',
-            items: ['Defective parts rejected automatically', 'Licence plates read', 'Active warnings at pedestrian crossings'],
-          },
-        ],
         outcomes: ['Decisions in milliseconds', 'Works offline', 'Your data stays with you'],
       },
       {
@@ -123,20 +91,6 @@ export const en: Dictionary = {
         solution:
           'PCB design, component selection, firmware (STM32, ESP32, embedded Linux), enclosures and the mobile/web control app.',
         benefit: 'One technical partner for the whole product, ready for testing and series production.',
-        stages: [
-          {
-            title: 'Idea & specs',
-            items: ['Requirements workshop', 'Hardware + software architecture', 'Component selection and BOM cost'],
-          },
-          {
-            title: 'PCB + firmware',
-            items: ['Schematic and PCB layout', 'Firmware for STM32 / ESP32 / embedded Linux', 'Enclosure designed and 3D printed'],
-          },
-          {
-            title: 'Working prototype',
-            items: ['Prototype tested in real conditions', 'Mobile / web control app', 'Documentation for series production'],
-          },
-        ],
         outcomes: ['One technical partner', 'From schematic to series', 'Code and files fully handed over'],
       },
       {
@@ -148,20 +102,6 @@ export const en: Dictionary = {
         solution:
           'Pick-to-Light systems for shelving, autonomous weather/soil monitoring stations and custom telematics for fleets and machinery.',
         benefit: 'Lower operating costs and full control over what happens in the field.',
-        stages: [
-          {
-            title: 'Shelves, fields, fleet',
-            items: ['Orders from your WMS / ERP', 'Weather and soil sensors', 'GPS and CAN data from machinery'],
-          },
-          {
-            title: 'Automation',
-            items: ['Pick-to-Light on every shelf', 'Autonomous solar stations, LoRa / 4G', 'Custom fleet telematics'],
-          },
-          {
-            title: 'Lower costs',
-            items: ['Fewer order-picking errors', 'Real-time data from the field', 'Full control over your fleet'],
-          },
-        ],
         outcomes: ['Fewer picking errors', 'Remote monitoring', 'Works with what you already have'],
       },
     ],

@@ -1,11 +1,10 @@
 ---
 // "Ce rezolvăm concret": the four verticals as tabs. Photos alternate side and notch corner per vertical. Each panel: notched photo + problem / solution / benefit,
-// a benefit box with concrete outcomes and the CTA; below, the full-width system diagram.
+// a benefit box with concrete outcomes and the CTA.
 import SectionHeading from './ui/SectionHeading.astro';
 import Tabs from './ui/Tabs.astro';
 import NotchedImage from './ui/NotchedImage.astro';
 import Button from './ui/Button.astro';
-import SystemDiagram from './SystemDiagram.astro';
 import { sectionHref, useTranslations, type Lang } from '../i18n/utils';
 import iot from '../assets/images/iot-lathe.jpg';
 import vision from '../assets/images/vision-cameras.jpg';
@@ -83,12 +82,6 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
           </div>
         </div>
 
-        <SystemDiagram
-          class="mt-14 md:mt-16"
-          title={labels.diagram}
-          labels={[labels.input, labels.processing, labels.result]}
-          stages={item.stages}
-        />
       </article>
     ))}
   </Tabs>
