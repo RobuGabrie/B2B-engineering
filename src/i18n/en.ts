@@ -180,6 +180,8 @@ export const en: Dictionary = {
       error: "We couldn't send your message. Please try again or message us on WhatsApp.",
       required: 'Required field',
       invalidReach: 'Enter a valid phone number or email address',
+      consent: 'We only use your details to reply to you. See our',
+      consentLink: 'privacy policy',
       subject: 'New message from the website',
     },
     direct: 'Or directly',
@@ -189,6 +191,64 @@ export const en: Dictionary = {
     whatsappMessage: "Hello! I'd like to discuss a project.",
     whatsappFab: 'Message us on WhatsApp',
   },
+  privacy: {
+    title: 'Privacy policy',
+    description: 'What personal data we collect through this website, why, how long we keep it and your rights.',
+    updated: 'Last updated: 15 November 2026',
+    sections: [
+      {
+        title: 'Who we are',
+        body: [
+          'The data controller is COVALIOV VICTOR PFA (trading as SYNAPSE Tech), tax ID 55693416, based in Suceava, Romania. You can reach us at any time at contact@synapsetech.ro.',
+        ],
+      },
+      {
+        title: 'What we collect',
+        body: [
+          'Only what you send us through the contact form: name, company or industry, phone or email and your project description. If you email us, message us on WhatsApp or call, we receive the details in that message.',
+          'This website uses no cookies, no tracking or advertising tools and builds no visitor profiles.',
+        ],
+      },
+      {
+        title: 'Why we use it',
+        body: [
+          'To reply to you and discuss your project, i.e. to take steps at your request before a possible contract (Art. 6(1)(b) GDPR). We send no newsletters and never sell or rent your data.',
+        ],
+      },
+      {
+        title: 'Who else sees it',
+        body: [
+          'Form messages reach our inbox through the Web3Forms service, which forwards them without using them for anything else. Our website host and email provider may technically store this data on our behalf. If you contact us on WhatsApp, the WhatsApp (Meta) privacy policy also applies.',
+          'Some of these providers may process data outside the European Economic Area, under the safeguards set by the GDPR (such as standard contractual clauses).',
+        ],
+      },
+      {
+        title: 'How long we keep it',
+        body: [
+          'For as long as we discuss the project. If we do not end up working together, we delete your message within 2 years at most. If we do, the data becomes part of the contract records for the period required by law.',
+        ],
+      },
+      {
+        title: 'Your rights',
+        body: [
+          'You can ask at any time to access, correct or delete your data, restrict or object to its processing, or receive it in a portable format. Write to contact@synapsetech.ro and we will reply within one month.',
+          'You may also lodge a complaint with the Romanian data protection authority (ANSPDCP), www.dataprotection.ro.',
+        ],
+      },
+      {
+        title: 'External content',
+        body: [
+          'Fonts are hosted on our own server. YouTube demo videos only load when you press play, in privacy-enhanced mode (youtube-nocookie.com).',
+        ],
+      },
+    ],
+    back: 'Back to the home page',
+  },
+  notFound: {
+    title: 'Page not found',
+    text: 'The link is wrong or the page has moved.',
+    home: 'Back to the home page',
+  },
   footer: {
     rights: 'All rights reserved.',
     cui: 'VAT ID',
@@ -197,6 +257,7 @@ export const en: Dictionary = {
     contactTitle: 'Contact',
     companyTitle: 'Company',
     country: 'Romania',
+    privacy: 'Privacy',
     backToTop: 'Top',
   },
 };

@@ -21,7 +21,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<Base lang={lang} title={t.meta.title} description={t.meta.description} jsonLd={homeJsonLd(lang, Astro.site!)}>
+<Base lang={lang} title={t.meta.title} description={t.meta.description} jsonLd={homeJsonLd(lang, Astro.site!)} page="home">
   <Header lang={lang} />
 
   <main>

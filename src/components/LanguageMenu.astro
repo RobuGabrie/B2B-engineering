@@ -1,12 +1,14 @@
 ---
 // "RO ⌄" dropdown next to the wordmark, as "EN ⌄" in the reference. Native <details>, no JS needed.
-import { homePath, languages, useTranslations, type Lang } from '../i18n/utils';
+import { languages, pages, useTranslations, type Lang, type Page } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
+  /** Current page, so the language links go to the same page in the other language. */
+  page?: Page;
 }
 
-const { lang } = Astro.props;
+const { lang, page = 'home' } = Astro.props;
 const t = useTranslations(lang);
 const codes = Object.keys(languages) as Lang[];
 ---
@@ -25,7 +27,7 @@ const codes = Object.keys(languages) as Lang[];
     {codes.map((code) => (
       <li>
         <a
-          href={homePath(code)}
+          href={pages[page][code]}
           hreflang={code}
           lang={code}
           aria-current={code === lang ? 'page' : undefined}

@@ -2,6 +2,8 @@
 
 The "Studii de caz & demo-uri" section appears on a page as soon as there is at least one case in that language.
 
+Start from `exemplu.ro.md` (a draft template, never shown):
+
 1. Put the cover photo next to the file, e.g. `pick-to-light.jpg`.
 2. Create `pick-to-light.ro.md` (and `pick-to-light.en.md` for the English page):
 
@@ -18,6 +20,7 @@ results:
   - Erori de picking -80%
   - Instalat în 3 săptămâni
 order: 1                    # the lowest number is the big featured case
+draft: false                # true hides it
 ---
 ```
 

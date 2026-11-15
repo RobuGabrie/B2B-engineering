@@ -180,6 +180,8 @@ export const ro = {
       error: 'Nu am putut trimite mesajul. Încearcă din nou sau scrie-ne pe WhatsApp.',
       required: 'Câmp obligatoriu',
       invalidReach: 'Scrie un număr de telefon sau o adresă de email validă',
+      consent: 'Folosim datele doar ca să-ți răspundem. Detalii în',
+      consentLink: 'Politica de confidențialitate',
       subject: 'Mesaj nou de pe site',
     },
     direct: 'Sau direct',
@@ -189,6 +191,64 @@ export const ro = {
     whatsappMessage: 'Bună ziua! Aș vrea să discut despre un proiect.',
     whatsappFab: 'Scrie-ne pe WhatsApp',
   },
+  privacy: {
+    title: 'Politica de confidențialitate',
+    description: 'Ce date personale colectăm prin site, de ce, cât timp le păstrăm și ce drepturi ai.',
+    updated: 'Ultima actualizare: 15 noiembrie 2026',
+    sections: [
+      {
+        title: 'Cine suntem',
+        body: [
+          'Operatorul datelor este COVALIOV VICTOR PFA (marca SYNAPSE Tech), CUI 55693416, cu sediul în Suceava, România. Ne poți scrie oricând la contact@synapsetech.ro.',
+        ],
+      },
+      {
+        title: 'Ce date colectăm',
+        body: [
+          'Doar ce ne trimiți tu prin formularul de contact: nume, firmă sau domeniu, telefon sau email și descrierea proiectului. Dacă ne scrii pe email, WhatsApp sau ne suni, primim datele din acel mesaj.',
+          'Site-ul nu folosește cookie-uri, nu are instrumente de urmărire sau reclame și nu creează profiluri ale vizitatorilor.',
+        ],
+      },
+      {
+        title: 'De ce le folosim',
+        body: [
+          'Ca să-ți răspundem și să discutăm proiectul tău, adică pentru demersuri înainte de un eventual contract, la cererea ta (art. 6 alin. 1 lit. b din GDPR). Nu trimitem newslettere și nu vindem sau închiriem datele.',
+        ],
+      },
+      {
+        title: 'Cine le mai vede',
+        body: [
+          'Mesajele din formular ajung la noi pe email prin serviciul Web3Forms, care le transmite fără să le folosească în alt scop. Găzduirea site-ului și furnizorul de email pot stoca tehnic aceste date, în numele nostru. Dacă ne contactezi pe WhatsApp, se aplică și politica de confidențialitate WhatsApp (Meta).',
+          'Unii dintre acești furnizori pot procesa date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR (de exemplu clauze contractuale standard).',
+        ],
+      },
+      {
+        title: 'Cât timp le păstrăm',
+        body: [
+          'Cât durează discuția despre proiect. Dacă nu ajungem la o colaborare, ștergem mesajul în cel mult 2 ani. Dacă lucrăm împreună, datele intră în evidența contractului, pe durata impusă de lege.',
+        ],
+      },
+      {
+        title: 'Drepturile tale',
+        body: [
+          'Poți cere oricând acces la datele tale, corectarea sau ștergerea lor, restricționarea prelucrării, portabilitatea lor sau te poți opune prelucrării. Scrie-ne la contact@synapsetech.ro și îți răspundem în cel mult o lună.',
+          'Dacă ești nemulțumit, poți depune o plângere la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP), www.dataprotection.ro.',
+        ],
+      },
+      {
+        title: 'Conținut extern',
+        body: [
+          'Fonturile sunt găzduite pe serverul nostru. Videoclipurile demo de pe YouTube se încarcă doar când apeși play, în modul cu confidențialitate sporită (youtube-nocookie.com).',
+        ],
+      },
+    ],
+    back: 'Înapoi la pagina principală',
+  },
+  notFound: {
+    title: 'Pagina nu există',
+    text: 'Linkul e greșit sau pagina a fost mutată.',
+    home: 'Înapoi la pagina principală',
+  },
   footer: {
     rights: 'Toate drepturile rezervate.',
     cui: 'CUI',
@@ -197,6 +257,7 @@ export const ro = {
     contactTitle: 'Contact',
     companyTitle: 'Firmă',
     country: 'România',
+    privacy: 'Confidențialitate',
     backToTop: 'Sus',
   },
 } as const;

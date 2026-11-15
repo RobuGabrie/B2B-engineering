@@ -28,6 +28,16 @@ Logo redrawn as SVG (`scripts/build-logo.py`: Montserrat outlines fitted to the 
 
 User asked for animations that keep the site fast, and a little of the logo cyan: all implemented as listed in `RULES.md` (Visual → Motion / Accent colors). Mobile hero: 64px between the buttons and the badge row in the photo notch (user asked twice for more space there).
 
+## Pre-launch hardening (2026-11-15)
+
+- **Privacy policy** RO `/confidentialitate/`, EN `/en/privacy/` (`Privacy.astro`, copy in `privacy` in the dictionaries; written by Claude from the real data, **should be reviewed by the company**). Linked under the form and in the footer. No cookies, so no cookie banner.
+- **404** (`src/pages/404.astro`), RO with an EN line, noindex.
+- **Pages map** in `src/i18n/utils.ts` (`pages`): section links are `/#anchor` so they work from any page; the language switch goes to the same page in the other language.
+- `/preview` and the OG source pages are dev-only routes (`astro.config.mjs`), not in the build.
+- **Fonts:** Unbounded, Manrope and IBM Plex Mono are self-hosted subsets (`scripts/subset-font.sh`); Fontsource removed. Total ≈ 82 KB of fonts.
+- `src/content/cases/exemplu.ro.md`: draft template case (never shown), which also silences the empty-collection build warning.
+- Lighthouse mobile: **100 / 100 / 100 / 100** on home RO/EN and privacy.
+
 ## Form
 
 **Web3Forms** (user confirmed 2026-11-15). The key is a placeholder (`web3formsKey` in `src/config/site.ts`), so submitting currently shows the error message. To go live: create an access key at web3forms.com with the destination email and paste it there.
@@ -46,7 +56,7 @@ Other open items (not blocking): confirm the domain, real photos, who reviews th
 - **Studii de caz** (`Cases.astro`, between Proces and De ce noi): hidden until `src/content/cases/` has a case in that language (how-to in `_README.md`). First case = the reference "WATCH OUR VIDEO" block (notch **top-right**, orange play button, video in a dialog: YouTube or .mp4); the rest as an index list (number, vertical, title, thumbnail).
 8. **WhatsApp FAB** (`WhatsAppFab.astro`): below `lg` only, shows after the hero and hides over contact/footer.
 
-`/preview` and `/og/<lang>/` are internal pages showing the UI primitives (noindex, not in sitemap).
+`/preview` and `/og-<lang>` are dev-only pages (injected in `astro.config.mjs`, never built) showing the UI primitives (noindex, not in sitemap).
 
 ## Decisions & user feedback (keep honoring these)
 

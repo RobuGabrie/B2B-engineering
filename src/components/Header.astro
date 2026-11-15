@@ -5,14 +5,15 @@ import LanguageMenu from './LanguageMenu.astro';
 import Button from './ui/Button.astro';
 import Logo from './ui/Logo.astro';
 import { site } from '../config/site';
-import { homePath, sectionHref, useTranslations, type Lang } from '../i18n/utils';
+import { homePath, sectionHref, useTranslations, type Lang, type Page } from '../i18n/utils';
 import { whatsappHref, telHref } from '../lib/contact';
 
 interface Props {
   lang: Lang;
+  page?: Page;
 }
 
-const { lang } = Astro.props;
+const { lang, page = 'home' } = Astro.props;
 const t = useTranslations(lang);
 
 const links = [
@@ -29,7 +30,7 @@ const links = [
       <a href={homePath(lang)} class="flex min-h-11 items-center" aria-label={site.name}>
         <Logo animate class="h-[18px] lg:h-5" />
       </a>
-      <LanguageMenu lang={lang} />
+      <LanguageMenu lang={lang} page={page} />
     </div>
 
     <nav aria-label={t.nav.menu} class="mx-auto hidden lg:block">

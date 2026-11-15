@@ -16,7 +16,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const cases = (await getCollection('cases', ({ data }) => data.lang === lang)).sort((a, b) => a.data.order - b.data.order);
+const cases = (await getCollection('cases', ({ data }) => data.lang === lang && !data.draft)).sort((a, b) => a.data.order - b.data.order);
 const [featured, ...rest] = cases;
 const verticalName = (id: string) => t.solutions.items.find((i) => i.id === id)?.tab ?? id;
 

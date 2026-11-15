@@ -3,9 +3,9 @@ import '../styles/global.css';
 // Fonts the first screen needs (headline + body): preloaded so the hero text doesn't re-render late.
 // The URLs resolve to the same hashed files the @font-face rules point to.
 import unbounded from '../assets/fonts/unbounded-ro-wght.woff2?url';
-import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import manrope from '../assets/fonts/manrope-ro-wght.woff2?url';
 import { site } from '../config/site';
-import { defaultLang, homePath, languages, type Lang } from '../i18n/utils';
+import { defaultLang, languages, pages, type Lang, type Page } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
@@ -14,11 +14,13 @@ interface Props {
   noindex?: boolean;
   /** Schema.org JSON-LD object, rendered as a script tag. */
   jsonLd?: object;
+  /** Which page this is, for canonical and hreflang links (omit on pages outside `pages`, e.g. 404). */
+  page?: Page;
 }
 
-const { lang, title, description, noindex = false, jsonLd } = Astro.props;
+const { lang, title, description, noindex = false, jsonLd, page } = Astro.props;
 const fullTitle = `${title} | ${site.name}`;
-const canonical = new URL(homePath(lang), Astro.site);
+const canonical = new URL(page ? pages[page][lang] : Astro.url.pathname, Astro.site);
 const codes = Object.keys(languages) as Lang[];
 const ogImage = new URL(`/og-${lang}.png`, Astro.site);
 const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
@@ -35,7 +37,7 @@ const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
-    {[unbounded, manropeLatin].map((href) => (
+    {[unbounded, manrope].map((href) => (
       <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
     ))}
 
@@ -43,10 +45,10 @@ const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
-    {codes.map((code) => (
-      <link rel="alternate" hreflang={code} href={new URL(homePath(code), Astro.site)} />
+    {page && codes.map((code) => (
+      <link rel="alternate" hreflang={code} href={new URL(pages[page][code], Astro.site)} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={new URL(homePath(defaultLang), Astro.site)} />
+    {page && <link rel="alternate" hreflang="x-default" href={new URL(pages[page][defaultLang], Astro.site)} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />

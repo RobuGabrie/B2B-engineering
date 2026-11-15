@@ -22,8 +22,18 @@ export default defineConfig({
   },
 
   integrations: [
+    // Internal pages (component preview, OG image source) exist only under `astro dev`, never in the build.
+    {
+      name: 'dev-pages',
+      hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+          if (command !== 'dev') return;
+          injectRoute({ pattern: '/preview', entrypoint: './src/dev/preview.astro' });
+          injectRoute({ pattern: '/og-[lang]', entrypoint: './src/dev/og.astro' });
+        },
+      },
+    },
     sitemap({
-      filter: (page) => !page.includes('/preview') && !page.includes('/og/'),
       i18n: { defaultLocale: 'ro', locales: { ro: 'ro', en: 'en' } },
     }),
   ]

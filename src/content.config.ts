@@ -22,6 +22,8 @@ const cases = defineCollection({
       results: z.array(z.string()).default([]),
       /** Lower comes first; the first case is the big featured one. */
       order: z.number().default(0),
+      /** Drafts are never shown (e.g. the example template). */
+      draft: z.boolean().default(false),
     }),
 });
 

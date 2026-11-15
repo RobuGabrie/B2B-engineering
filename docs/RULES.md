@@ -41,5 +41,6 @@ Rules for anyone (human or AI) working on this site. When in doubt, the brief (`
 - **Images** go through `astro:assets` (`<Image />` / `<Picture />`) with proper `alt` text in both languages.
 - **Accessibility:** semantic HTML, visible focus states, keyboard-usable tabs, contrast AA minimum, `prefers-reduced-motion` respected.
 - **Performance targets** (Lighthouse, mobile): Performance ≥ 95, Accessibility ≥ 95, SEO 100.
+- **New pages** go into `pages` in `src/i18n/utils.ts` (RO + EN slug) and pass `page` to `Base`, `Header`, `Footer`.
 - **SEO:** each page has a title, description, canonical, hreflang (ro/en/x-default), Open Graph tags and JSON-LD (`Organization`, `LocalBusiness`, `Service`).
 - Design tokens (colors, fonts, spacing) are defined once in `src/styles/global.css` (`@theme`). Don't use raw hex values in components.

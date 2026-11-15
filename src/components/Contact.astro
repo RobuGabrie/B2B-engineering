@@ -9,7 +9,7 @@ import Button from './ui/Button.astro';
 import Icon from './ui/Icon.astro';
 import LiveDot from './ui/LiveDot.astro';
 import { site } from '../config/site';
-import { useTranslations, type Lang } from '../i18n/utils';
+import { pages, useTranslations, type Lang } from '../i18n/utils';
 import { mailHref, telHref, whatsappHref } from '../lib/contact';
 import pcb from '../assets/images/pcb-macro.jpg';
 
@@ -94,6 +94,10 @@ const channels = [
           </Button>
           <p class="status text-sm" role="status" aria-live="polite" data-status data-ok={f.success} data-fail={f.error}></p>
         </div>
+
+        <p class="text-[13px] text-steel sm:col-span-2">
+          {f.consent} <a href={pages.privacy[lang]} class="text-ink underline decoration-accent underline-offset-4 hover:text-accent-ink">{f.consentLink}</a>.
+        </p>
       </form>
     </NotchedImage>
 

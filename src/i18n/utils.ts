@@ -16,12 +16,19 @@ export function useTranslations(lang: Lang): Dictionary {
   return dictionaries[lang];
 }
 
+/** Every page in both languages. Slugs are translated, so the language switch maps page to page. */
+export const pages = {
+  home: { ro: '/', en: '/en/' },
+  privacy: { ro: '/confidentialitate/', en: '/en/privacy/' },
+} as const satisfies Record<string, Record<Lang, string>>;
+export type Page = keyof typeof pages;
+
 /** Home path for a language: `/` for RO, `/en/` for EN. */
 export function homePath(lang: Lang): string {
-  return lang === defaultLang ? '/' : `/${lang}/`;
+  return pages.home[lang];
 }
 
-/** Link to a section anchor on the home page of a language. */
+/** Link to a section of the home page. Includes the path, so it also works from other pages. */
 export function sectionHref(lang: Lang, section: keyof Dictionary['anchors']): string {
-  return `#${dictionaries[lang].anchors[section]}`;
+  return `${homePath(lang)}#${dictionaries[lang].anchors[section]}`;
 }
