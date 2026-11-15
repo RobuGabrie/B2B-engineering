@@ -1,8 +1,10 @@
 ---
-// Photo with a white notch cut into its top-left corner; the notch holds content (e.g. the hero buttons).
-// The rounded inverse corners are drawn with radial gradients, so this assumes a paper-colored page behind it.
-// `bleed`: the photo runs edge to edge (hero in the reference); otherwise it is a rounded block (video in the reference).
-// On small screens the notch content sits above the photo instead.
+// Photo cut into a non-rectangular shape, as in the reference:
+// - md+: the notch content (slot) bites into the top-left corner; the step between them is slanted
+//   and every joint is rounded. The notch size follows the content, measured live.
+// - mobile: content sits above; the photo keeps the top-right 45° cut of the cards.
+// `bleed`: photo runs edge to edge with square outer corners (hero); otherwise outer corners are rounded.
+// The outline is applied as a clip-path computed from the real size (src/lib/shape.ts).
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -10,22 +12,38 @@ interface Props {
   src: ImageMetadata;
   alt: string;
   bleed?: boolean;
+  /** Horizontal run of the slanted step, px. */
+  slant?: number;
   /** Rendered as the LCP image — loads eagerly with high priority. */
   priority?: boolean;
   class?: string;
+  imgClass?: string;
 }
 
-const { src, alt, bleed = false, priority = false, class: className } = Astro.props;
+const {
+  src,
+  alt,
+  bleed = false,
+  slant = 32,
+  priority = false,
+  class: className,
+  imgClass = 'md:min-h-[34rem]',
+} = Astro.props;
 const hasNotch = Astro.slots.has('default');
 ---
 
-<div class:list={['notched', bleed && 'is-bleed', className]}>
+<div
+  class:list={['notched relative', bleed && 'is-bleed', className]}
+  data-notched
+  data-bleed={bleed ? '' : undefined}
+  data-slant={slant}
+>
   {hasNotch && (
-    <div class="notch relative z-10 bg-paper pb-6 md:absolute md:top-0 md:left-0 md:rounded-br-(--r) md:pr-8 md:pb-8">
+    <div class="notch relative z-10 bg-paper pb-6 md:absolute md:top-0 md:left-0 md:pr-10 md:pb-8" data-notch>
       <slot />
     </div>
   )}
-  <div class:list={['relative overflow-hidden', !bleed && 'rounded-(--r) md:rounded-tl-none']}>
+  <div class:list={['shape relative overflow-hidden', bleed ? 'rounded-none' : 'rounded-[28px]']} data-shape>
     <Image
       src={src}
       alt={alt}
@@ -33,17 +51,13 @@ const hasNotch = Astro.slots.has('default');
       sizes={bleed ? '100vw' : '(min-width: 1200px) 1200px, 100vw'}
       loading={priority ? 'eager' : 'lazy'}
       fetchpriority={priority ? 'high' : 'auto'}
-      class="aspect-4/3 h-full w-full object-cover md:aspect-auto md:min-h-[34rem]"
+      class:list={['aspect-4/3 h-full w-full object-cover md:aspect-auto', imgClass]}
     />
+    <slot name="overlay" />
   </div>
 </div>
 
 <style>
-  .notched {
-    --r: 28px;
-    position: relative;
-  }
-
   /* Bleed: the notch content lines up with the page container while the photo spans the full width. */
   .is-bleed .notch {
     padding-left: max(1.25rem, calc((100vw - 75rem) / 2 + 1.25rem));
@@ -56,31 +70,63 @@ const hasNotch = Astro.slots.has('default');
     }
     .is-bleed .notch {
       max-width: none;
-      width: max(52%, calc((100vw - 75rem) / 2 + 40rem));
+      width: max(50%, calc((100vw - 75rem) / 2 + 38rem));
       padding-left: max(2.5rem, calc((100vw - 75rem) / 2 + 2.5rem));
       padding-right: 2.5rem;
     }
-
-    /* Inverse rounded corners where the notch meets the photo: right of the notch and below it. */
-    .notch::before,
-    .notch::after {
-      content: '';
-      position: absolute;
-      width: var(--r);
-      height: var(--r);
-      background: radial-gradient(circle at 100% 100%, transparent var(--r), var(--color-paper) calc(var(--r) + 0.5px));
-    }
-    .notch::before {
-      top: 0;
-      left: 100%;
-    }
-    .notch::after {
-      top: 100%;
-      left: 0;
-    }
-    /* With bleed the photo touches the page edge, so there's no corner below the notch to round. */
-    .is-bleed .notch::after {
-      display: none;
+    /* Once the clip-path is applied the photo itself leaves the notch empty. */
+    .notched.is-shaped .notch {
+      background: transparent;
     }
   }
+
+  .notched.is-shaped .shape {
+    border-radius: 0;
+  }
 </style>
+
+<script>
+  import { notchPath, roundedPolygon } from '../../lib/shape';
+
+  const desktop = window.matchMedia('(min-width: 48rem)');
+
+  function apply(root: HTMLElement) {
+    const shape = root.querySelector<HTMLElement>('[data-shape]')!;
+    const notch = root.querySelector<HTMLElement>('[data-notch]');
+    const bleed = root.hasAttribute('data-bleed');
+    const slant = Number(root.dataset.slant ?? 32);
+    const { width: W, height: H } = shape.getBoundingClientRect();
+    const r = bleed ? 0 : 28;
+
+    let d: string;
+    if (desktop.matches && notch) {
+      d = notchPath({
+        width: W,
+        height: H,
+        notchW: notch.offsetWidth,
+        notchH: notch.offsetHeight,
+        slant,
+        radius: r,
+        joint: 28,
+      });
+    } else {
+      // Mobile: the card language — rounded corners, top-right cut at 45°.
+      const c = Math.min(56, W / 4);
+      d = roundedPolygon(
+        [[0, 0], [W - c, 0], [W, c], [W, H], [0, H]],
+        [r || 0, 10, 10, r, r],
+      );
+    }
+
+    shape.style.clipPath = `path('${d}')`;
+    root.classList.add('is-shaped');
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-notched]')) {
+    const ro = new ResizeObserver(() => apply(root));
+    ro.observe(root);
+    const notch = root.querySelector('[data-notch]');
+    if (notch) ro.observe(notch);
+    desktop.addEventListener('change', () => apply(root));
+  }
+</script>
