@@ -135,8 +135,11 @@ export const ro = {
   },
   cases: {
     title: 'Studii de caz & demo-uri',
+    kicker: 'Sisteme care funcționează deja',
     intro: 'Kit-uri demo și proiecte livrate, cu poze și video.',
     watch: 'Vezi demo-ul',
+    featured: 'Proiect recent',
+    results: 'Rezultate',
   },
   whyUs: {
     title: 'De ce noi?',

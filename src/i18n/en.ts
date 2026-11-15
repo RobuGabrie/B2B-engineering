@@ -135,8 +135,11 @@ export const en: Dictionary = {
   },
   cases: {
     title: 'Case studies & demos',
+    kicker: 'Systems already at work',
     intro: 'Demo kits and delivered projects, with photos and video.',
     watch: 'Watch the demo',
+    featured: 'Recent project',
+    results: 'Results',
   },
   whyUs: {
     title: 'Why us?',

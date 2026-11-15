@@ -1,0 +1,160 @@
+---
+// "Studii de caz & demo-uri", driven by the `cases` collection; renders nothing while a language has none.
+// The first case is the "WATCH OUR VIDEO" block of the reference: a rounded photo with the notch cut
+// top-right holding the label, and an orange play button that opens the video in a dialog.
+// The other cases follow as an index: number, vertical tag, title, summary — no cards.
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import SectionHeading from './ui/SectionHeading.astro';
+import NotchedImage from './ui/NotchedImage.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const cases = (await getCollection('cases', ({ data }) => data.lang === lang)).sort((a, b) => a.data.order - b.data.order);
+const [featured, ...rest] = cases;
+const verticalName = (id: string) => t.solutions.items.find((i) => i.id === id)?.tab ?? id;
+
+/** YouTube links become privacy-friendly embeds; anything else is played as a file. */
+function videoSource(url?: string) {
+  if (!url) return undefined;
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/);
+  return yt
+    ? { kind: 'youtube', src: `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0` }
+    : { kind: 'file', src: url };
+}
+---
+
+{featured && (
+  <section id={t.anchors.cases} class="container-site py-20 md:py-32" aria-labelledby="cases-title">
+    <SectionHeading id="cases-title" title={t.cases.title} kicker={t.cases.kicker} intro={t.cases.intro} />
+
+    <article class="mt-12 md:mt-16">
+      <NotchedImage
+        src={featured.data.cover}
+        alt={featured.data.coverAlt}
+        corner="tr"
+        slant={40}
+        joint={32}
+        imgClass="md:h-[38rem]"
+      >
+        <p class="flex items-center gap-4 text-[13px] font-semibold uppercase">
+          <span class="size-1.5 bg-accent" aria-hidden="true"></span>
+          {featured.data.video ? t.cases.watch : t.cases.featured}
+        </p>
+
+        {featured.data.video && (
+          <button
+            slot="overlay"
+            type="button"
+            class="play absolute inset-0 m-auto flex h-12 w-16 items-center justify-center rounded-[6px] bg-accent text-ink transition-transform hover:scale-105"
+            aria-label={`${t.cases.watch}: ${featured.data.title}`}
+            data-video={JSON.stringify(videoSource(featured.data.video))}
+          >
+            <svg viewBox="0 0 12 12" class="size-4" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>
+          </button>
+        )}
+      </NotchedImage>
+
+      <div class="mt-8 grid gap-8 md:mt-10 lg:grid-cols-12">
+        <div class="lg:col-span-7">
+          <p class="font-mono text-xs uppercase text-accent-ink">{verticalName(featured.data.vertical)}</p>
+          <h3 class="mt-3 text-xl leading-tight md:text-3xl">{featured.data.title}</h3>
+          <p class="mt-4 max-w-xl text-[15px] text-graphite">{featured.data.summary}</p>
+        </div>
+        {featured.data.results.length > 0 && (
+          <div class="lg:col-span-4 lg:col-start-9">
+            <p class="text-[13px] font-bold uppercase tracking-wide">{t.cases.results}</p>
+            <ul class="mt-3 border-t border-line">
+              {featured.data.results.map((r) => (
+                <li class="flex items-center gap-3 border-b border-line py-3 text-[15px]">
+                  <span class="size-1.5 shrink-0 bg-accent" aria-hidden="true"></span>{r}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </article>
+
+    {rest.length > 0 && (
+      <ol class="mt-16 border-t border-ink md:mt-20">
+        {rest.map((c, i) => (
+          <li class="grid grid-cols-[2.5rem_1fr] gap-x-4 gap-y-3 border-b border-line py-6 md:grid-cols-[4rem_10rem_1fr_9rem] md:items-center md:gap-x-8">
+            <span class="font-mono text-xs text-steel">{String(i + 2).padStart(2, '0')}</span>
+            <span class="font-mono text-xs uppercase text-accent-ink md:order-none">{verticalName(c.data.vertical)}</span>
+            <div class="col-start-2 md:col-start-auto">
+              <h3 class="text-base leading-snug md:text-lg">{c.data.title}</h3>
+              <p class="mt-2 text-[15px] text-graphite">{c.data.summary}</p>
+            </div>
+            <div class="col-start-2 max-w-60 md:col-start-auto md:max-w-none">
+              {c.data.video ? (
+                <button
+                  type="button"
+                  class="group relative block w-full overflow-hidden rounded-[10px]"
+                  aria-label={`${t.cases.watch}: ${c.data.title}`}
+                  data-video={JSON.stringify(videoSource(c.data.video))}
+                >
+                  <Image src={c.data.cover} alt={c.data.coverAlt} widths={[320, 480]} sizes="9rem" class="aspect-4/3 w-full object-cover" />
+                  <span class="absolute inset-0 m-auto flex h-7 w-10 items-center justify-center rounded-[4px] bg-accent text-ink" aria-hidden="true">
+                    <svg viewBox="0 0 12 12" class="size-3"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>
+                  </span>
+                </button>
+              ) : (
+                <Image src={c.data.cover} alt={c.data.coverAlt} widths={[320, 480]} sizes="9rem" class="aspect-4/3 w-full rounded-[10px] object-cover" />
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    )}
+
+    <dialog class="video-dialog w-[min(64rem,calc(100vw-2rem))] max-w-none bg-transparent p-0" data-video-dialog>
+      <div class="relative">
+        <button type="button" class="absolute -top-12 right-0 flex min-h-11 items-center gap-2 text-[13px] font-semibold uppercase text-paper" data-close>
+          {t.nav.close}<span aria-hidden="true" class="text-accent">✕</span>
+        </button>
+        <div class="aspect-video w-full overflow-hidden rounded-[12px] bg-ink" data-player></div>
+      </div>
+    </dialog>
+  </section>
+)}
+
+<style>
+  .play {
+    box-shadow: 0 10px 30px -8px rgb(0 0 0 / 0.5);
+  }
+  .video-dialog::backdrop {
+    background: rgb(13 13 14 / 0.88);
+  }
+</style>
+
+<script>
+  // Builds the player only when opened and tears it down on close, so nothing loads or keeps playing in the background.
+  const dialog = document.querySelector<HTMLDialogElement>('[data-video-dialog]');
+  if (dialog) {
+    const player = dialog.querySelector<HTMLElement>('[data-player]')!;
+
+    for (const trigger of document.querySelectorAll<HTMLButtonElement>('[data-video]')) {
+      trigger.addEventListener('click', () => {
+        const { kind, src } = JSON.parse(trigger.dataset.video!) as { kind: string; src: string };
+        const el =
+          kind === 'youtube'
+            ? Object.assign(document.createElement('iframe'), { src, allow: 'autoplay; encrypted-media; fullscreen', allowFullscreen: true, title: trigger.getAttribute('aria-label') ?? '' })
+            : Object.assign(document.createElement('video'), { src, controls: true, autoplay: true, playsInline: true });
+        el.className = 'size-full';
+        player.replaceChildren(el);
+        dialog.showModal();
+      });
+    }
+
+    dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+    dialog.addEventListener('close', () => player.replaceChildren());
+  }
+</script>

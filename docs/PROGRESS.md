@@ -14,7 +14,7 @@ Last updated: 2026-11-15. **Read this first when resuming in a new terminal/sess
 | 6 | Ce rezolvăm concret (4 verticals) | ✅ done |
 | 7 | Cum lucrăm + De ce noi | ✅ done |
 | 8 | Contact form + WhatsApp + footer | ✅ done (Web3Forms key still a placeholder) |
-| 9 | Case studies placeholder (content collection, hidden while empty) | todo |
+| 9 | Case studies placeholder (content collection, hidden while empty) | ✅ done |
 | 10 | SEO: Open Graph image, JSON-LD, robots.txt (sitemap + hreflang already done) | todo |
 | 11 | Polish: mobile QA, accessibility, Lighthouse ≥ 95 | todo |
 | 12 | Deploy + domain | todo |
@@ -34,6 +34,7 @@ Other open items (not blocking): real company name/logo/contacts/domain, real ph
 5. **De ce noi?** (`WhyUs.astro`): 3 `ChamferCard`s like "YOUR BENEFITS" in the reference (middle one **dark**), centered underlined link to contact.
 6. **Contact** (`Contact.astro`): `SectionHeading`; PCB photo with the notch **bottom-right** (slanted step) holding the form (boxed fields with a tiny label inside, like the reference search inputs); below, the three direct channels as a spec strip (mono label, big value, hairlines; 3 columns from `xl`). Layout chosen by the user.
 7. **Footer** (`Footer.astro`): the only dark block: rounded top-left, 45° cut top-right, huge wordmark, 3 columns (page, contact, company), © + RO/EN + back to top.
+- **Studii de caz** (`Cases.astro`, between Proces and De ce noi): hidden until `src/content/cases/` has a case in that language (how-to in `_README.md`). First case = the reference "WATCH OUR VIDEO" block (notch **top-right**, orange play button, video in a dialog: YouTube or .mp4); the rest as an index list (number, vertical, title, thumbnail).
 8. **WhatsApp FAB** (`WhatsAppFab.astro`): below `lg` only, shows after the hero and hides over contact/footer.
 
 `/preview` is an internal page showing the UI primitives (noindex, not in sitemap).
