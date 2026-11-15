@@ -83,6 +83,7 @@ const notchPos = {
   <div
     class:list={['shape relative overflow-hidden', bleed ? 'rounded-none' : 'rounded-[28px]', fill && 'lg:min-h-[30rem] lg:flex-1', shapeClass]}
     data-shape
+    data-zoom={src ? '' : undefined}
   >
     {src ? (
       <Image

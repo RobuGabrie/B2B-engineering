@@ -1,0 +1,149 @@
+---
+// IoT demo: a machine card as it would appear in the dashboard. On reveal the OEE ring fills and counts up,
+// the three OEE factors fill, the production line chart draws itself and the alert slides in.
+import DemoFrame from './DemoFrame.astro';
+
+interface Props {
+  demo: { caption: string; machine: string; oee: string; bars: readonly string[]; chart: string; alert: string; alertTime: string };
+}
+
+const { demo } = Astro.props;
+const oee = 87;
+const bars = [92, 96, 98];
+// Parts per hour over 8 hours (illustrative), as chart points in a 320×90 box.
+const series = [41, 44, 43, 47, 38, 46, 49, 48, 52];
+const pts = series.map((v, i) => [i * 40, 90 - ((v - 30) / 25) * 80] as const);
+const line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y.toFixed(1)}`).join(' ');
+const area = `${line} L320 90 L0 90 Z`;
+const R = 46;
+const C = 2 * Math.PI * R;
+---
+
+<DemoFrame title={demo.machine} caption={demo.caption} live>
+  <div class="grid gap-6 p-5 sm:grid-cols-[auto_1fr] sm:items-center md:p-7">
+    <div class="relative mx-auto size-36 sm:mx-0">
+      <svg viewBox="0 0 120 120" class="size-full -rotate-90" aria-hidden="true">
+        <circle cx="60" cy="60" r={R} fill="none" stroke="var(--color-line)" stroke-width="10" />
+        <circle class="ring" cx="60" cy="60" r={R} fill="none" stroke="var(--color-accent)" stroke-width="10" stroke-linecap="round"
+          stroke-dasharray={C} style={`--off: ${C * (1 - oee / 100)}px; --len: ${C}px`} />
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <span class="font-display text-3xl font-bold"><span data-count={oee}>{oee}</span>%</span>
+        <span class="font-mono text-[11px] uppercase text-steel">{demo.oee}</span>
+      </div>
+    </div>
+
+    <ul class="grid gap-3.5">
+      {demo.bars.map((label, i) => (
+        <li>
+          <div class="flex justify-between text-[13px] font-semibold"><span>{label}</span><span class="font-mono font-normal text-graphite">{bars[i]}%</span></div>
+          <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-mist">
+            <div class="bar h-full origin-left rounded-full bg-ink" style={`--w: ${bars[i] / 100}; --d: ${0.25 + i * 0.12}s`}></div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="border-t border-line px-5 pt-4 pb-5 md:px-7">
+    <p class="font-mono text-[11px] uppercase text-steel">{demo.chart}</p>
+    <svg viewBox="0 -6 330 100" class="mt-3 w-full overflow-visible" aria-hidden="true">
+      {[10, 50, 90].map((y) => <line x1="0" x2="320" y1={y} y2={y} stroke="var(--color-line)" stroke-dasharray="2 4" />)}
+      <path class="area" d={area} fill="var(--color-accent)" opacity="0.08" />
+      <path class="line" d={line} pathLength="1" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linejoin="round" />
+      <circle class="end" cx={pts.at(-1)![0]} cy={pts.at(-1)![1]} r="5" fill="var(--color-brand-cyan-ink)" />
+    </svg>
+  </div>
+
+  <div class="alert flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-line bg-mist px-5 py-3.5 text-[13px] md:px-7">
+    <span class="size-2 shrink-0 bg-accent" aria-hidden="true"></span>
+    <span class="font-semibold">{demo.alert}</span>
+    <span class="ml-auto shrink-0 font-mono text-[11px] text-steel">{demo.alertTime}</span>
+  </div>
+</DemoFrame>
+
+<style>
+  /* Final state (also what reduced-motion visitors see); the motion block below starts from empty. */
+  .ring {
+    stroke-dashoffset: var(--off);
+  }
+  .bar {
+    transform: scaleX(var(--w));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ring {
+      stroke-dashoffset: var(--len);
+      transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+    }
+    .bar {
+      transform: scaleX(0);
+      transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) var(--d);
+    }
+    .line {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 1.8s cubic-bezier(0.45, 0, 0.2, 1) 0.4s;
+    }
+    .area,
+    .end {
+      opacity: 0;
+      transition: opacity 0.8s ease 1.6s;
+    }
+    .alert {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.6s ease 2s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2s;
+    }
+    :global(.is-in) .ring {
+      stroke-dashoffset: var(--off);
+    }
+    :global(.is-in) .bar {
+      transform: scaleX(var(--w));
+    }
+    :global(.is-in) .line {
+      stroke-dashoffset: 0;
+    }
+    :global(.is-in) .area {
+      opacity: 0.08;
+    }
+    :global(.is-in) .end,
+    :global(.is-in) .alert {
+      opacity: 1;
+      transform: none;
+    }
+    .end {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    :global(.is-in) .end {
+      animation: pulse 2s ease-in-out 2.4s infinite;
+    }
+  }
+  @keyframes pulse {
+    50% {
+      transform: scale(1.5);
+    }
+  }
+</style>
+
+<script>
+  // Count the OEE number up when its frame is revealed (the frame gets .is-in from the observer in Base.astro).
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (const el of document.querySelectorAll<HTMLElement>('[data-count]')) {
+    const frame = el.closest('[data-reveal]');
+    if (!frame || reduce) continue;
+    const target = Number(el.dataset.count);
+    el.textContent = '0';
+    new MutationObserver((_, mo) => {
+      if (!frame.classList.contains('is-in')) return;
+      mo.disconnect();
+      const start = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - start) / 1600);
+        el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }).observe(frame, { attributes: true, attributeFilter: ['class'] });
+  }
+</script>

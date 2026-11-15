@@ -2,7 +2,8 @@
 // One page per vertical (src/pages/servicii/[slug].astro, src/pages/en/services/[slug].astro).
 // Same visual language as the home page, own layout:
 //   hero (breadcrumb, framed H1, lead, CTAs) beside a notched photo → problem / solution + benefit and outcomes
-//   → "how it works" as a signal trace through four nodes (orange, then cyan, like the logo S)
+//   → "how it works": the steps on a vertical signal trace (orange, then cyan, like the logo S) beside the page's
+//     own animated demo (IoT dashboard, vision viewfinder, PCB, Pick-to-Light); sides alternate from page to page
 //   → where it applies + technologies → FAQ (native <details>) → the other three services → contact form.
 // Shared copy comes from solutions.items[id]; page-only copy from services.items[id].
 import Base from '../layouts/Base.astro';
@@ -17,6 +18,10 @@ import ChamferCard from './ui/ChamferCard.astro';
 import Button from './ui/Button.astro';
 import Icon from './ui/Icon.astro';
 import LiveDot from './ui/LiveDot.astro';
+import IotDashboard from './demo/IotDashboard.astro';
+import VisionViewfinder from './demo/VisionViewfinder.astro';
+import PcbTrace from './demo/PcbTrace.astro';
+import PickToLight from './demo/PickToLight.astro';
 import { homePath, pages, sectionHref, serviceIds, useTranslations, type Lang, type ServiceId } from '../i18n/utils';
 import { whatsappHref } from '../lib/contact';
 import { serviceJsonLd } from '../lib/schema';
@@ -39,6 +44,9 @@ const item = t.solutions.items[index];
 const images = { iot, vision, rnd, automation } as const;
 const icons = { iot: 'scale', vision: 'audit', rnd: 'chip', automation: 'integrate' } as const;
 const others = serviceIds.filter((s) => s !== id);
+// Every other page mirrors the layout, and the photo notch moves to another corner.
+const flip = index % 2 === 1;
+const corner = (['bl', 'br', 'tl', 'tr'] as const)[index];
 const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
@@ -58,7 +66,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       </nav>
 
       <div class="mt-8 grid grid-cols-1 gap-10 lg:mt-10 lg:grid-cols-12 lg:gap-12">
-        <div class="flex flex-col lg:col-span-6 lg:py-4">
+        <div class:list={['flex flex-col lg:col-span-6 lg:py-4', flip && 'lg:order-last']}>
           <CornerTicks class="-mx-3 px-3 py-5 md:-mx-6 md:px-6 md:py-6" offset={0} size={5}>
             <h1 id="service-title" class="text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] sm:text-4xl xl:text-5xl">{item.title}</h1>
           </CornerTicks>
@@ -72,7 +80,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
         <NotchedImage
           src={images[id]}
           alt={item.imageAlt}
-          corner="bl"
+          corner={corner}
           slant={36}
           joint={30}
           priority
@@ -114,18 +122,26 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       </div>
     </section>
 
-    <section class="container-site py-20 md:py-28" aria-labelledby="how-title">
+    <section class="container-site py-14 md:py-28" aria-labelledby="how-title">
       <SectionHeading id="how-title" title={labels.how} intro={labels.howIntro} />
-      <ol data-stagger class="trace relative mt-12 grid grid-cols-1 gap-10 md:mt-16 lg:grid-cols-4 lg:gap-8">
-        {page.how.map((step, n) => (
-          <li class="relative pl-10 lg:pt-10 lg:pl-0">
-            <span aria-hidden="true" class:list={['node absolute top-1 left-0 size-4 rounded-full border-2 bg-paper lg:top-0', n < 2 ? 'border-accent' : 'border-brand-cyan-ink']}></span>
-            <span class="font-mono text-xs text-accent-ink">{num(n)}</span>
-            <h3 class="mt-2 text-lg leading-tight">{step.title}</h3>
-            <p class="mt-3 text-[15px] text-graphite">{step.text}</p>
-          </li>
-        ))}
-      </ol>
+      <div class="mt-10 grid grid-cols-1 gap-12 md:mt-16 lg:grid-cols-12 lg:items-center lg:gap-16">
+        <ol data-stagger class:list={['trace relative grid grid-cols-1 gap-9 lg:col-span-5', flip && 'lg:order-last']}>
+          {page.how.map((step, n) => (
+            <li class="relative pl-10">
+              <span aria-hidden="true" class:list={['node absolute top-1 left-0 size-4 rounded-full border-2 bg-paper', n < 2 ? 'border-accent' : 'border-brand-cyan-ink']}></span>
+              <span class="font-mono text-xs text-accent-ink">{num(n)}</span>
+              <h3 class="mt-1.5 text-lg leading-tight">{step.title}</h3>
+              <p class="mt-2.5 text-[15px] text-graphite">{step.text}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="lg:col-span-7">
+          {id === 'iot' && <IotDashboard demo={t.services.items.iot.demo} />}
+          {id === 'vision' && <VisionViewfinder demo={t.services.items.vision.demo} alt={item.imageAlt} />}
+          {id === 'rnd' && <PcbTrace demo={t.services.items.rnd.demo} />}
+          {id === 'automation' && <PickToLight demo={t.services.items.automation.demo} />}
+        </div>
+      </div>
     </section>
 
     <section class="container-site pb-20 md:pb-28">
@@ -197,7 +213,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
 </Base>
 
 <style>
-  /* The trace through the four nodes: orange for the first half, cyan after, like the S in the logo. */
+  /* The vertical trace through the four nodes: orange for the first half, cyan after, like the S in the logo. */
   .trace::before {
     content: '';
     position: absolute;
@@ -207,17 +223,6 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     width: 2px;
     background: linear-gradient(var(--color-accent) 0 50%, var(--color-brand-cyan-ink) 50%);
   }
-  @media (min-width: 64rem) {
-    .trace::before {
-      left: 0.5rem;
-      right: 0.5rem;
-      top: 7px;
-      bottom: auto;
-      width: auto;
-      height: 2px;
-      background: linear-gradient(90deg, var(--color-accent) 0 50%, var(--color-brand-cyan-ink) 50%);
-    }
-  }
   @media (prefers-reduced-motion: no-preference) {
     .trace::before {
       transform: scaleY(0);
@@ -226,12 +231,6 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     }
     .trace.is-in::before {
       transform: none;
-    }
-    @media (min-width: 64rem) {
-      .trace::before {
-        transform: scaleX(0);
-        transform-origin: left;
-      }
     }
   }
 

@@ -29,9 +29,9 @@ export const en: Dictionary = {
     contact: 'contact',
   },
   hero: {
-    title: 'Turnkey intelligent systems: from hardware and sensors to AI and the cloud.',
+    title: 'Turnkey intelligent systems.',
     subtitle:
-      'We design and build custom solutions for industry, smart cities and hardware products. No middlemen — a complete team of software & hardware engineers.',
+      'From hardware and sensors to AI and the cloud: we build custom solutions for industry, smart cities and hardware products. No middlemen, one complete engineering team.',
     primary: 'Talk to an engineer',
     secondary: 'See what we do',
     badge: 'Award-winning team at the Hard&Soft international engineering competition (USV)',
@@ -210,6 +210,15 @@ export const en: Dictionary = {
     },
     items: {
       iot: {
+        demo: {
+          caption: 'Example dashboard',
+          machine: 'CNC lathe 02 · Line 3',
+          oee: 'OEE',
+          bars: ['Availability', 'Performance', 'Quality'],
+          chart: 'Parts / hour, last 8 hours',
+          alert: 'Vibration above threshold on spindle bearing 2',
+          alertTime: '3 min ago',
+        },
         metaTitle: 'Industrial IoT production monitoring and machine retrofitting',
         metaDescription:
           'Industrial sensors on your existing machines, real-time OEE, predictive maintenance alerts and a cloud dashboard. Designed and installed from Suceava, across Romania.',
@@ -261,6 +270,13 @@ export const en: Dictionary = {
         ],
       },
       vision: {
+        demo: {
+          caption: 'Example detection',
+          cam: 'CAM 01 · 1080p · 30 FPS',
+          labels: ['IP camera', 'IP camera', 'Pole'],
+          inference: 'On-site inference',
+          objects: 'objects',
+        },
         metaTitle: 'Computer vision and edge AI solutions for industry and cities',
         metaDescription:
           'Automated visual inspection on the production line, licence plate recognition and pedestrian crossings with active warnings. On-site AI processing, no internet dependency.',
@@ -312,6 +328,10 @@ export const en: Dictionary = {
         ],
       },
       rnd: {
+        demo: {
+          caption: 'Example board',
+          layers: 'Layer 1 / 4 · copper',
+        },
         metaTitle: 'PCB design, firmware development and hardware prototyping',
         metaDescription:
           'We develop hardware products from idea to series: schematic and PCB, STM32, ESP32 or embedded Linux firmware, enclosure and web or mobile app.',
@@ -363,6 +383,12 @@ export const en: Dictionary = {
         ],
       },
       automation: {
+        demo: {
+          caption: 'Pick-to-Light example',
+          order: 'Order #1042',
+          lines: 'lines',
+          shelf: 'Shelf A',
+        },
         metaTitle: 'Logistics and agriculture automation: Pick-to-Light, telematics',
         metaDescription:
           'Pick-to-Light systems for warehouses, autonomous weather and soil monitoring stations, custom telematics for fleets and farm machinery.',

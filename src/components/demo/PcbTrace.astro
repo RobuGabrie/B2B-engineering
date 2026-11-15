@@ -1,0 +1,120 @@
+---
+// R&D demo: a small board seen from above. On reveal the copper traces route themselves out of the
+// microcontroller to the connector, crystal, sensor header and antenna (the RF line in cyan), then the vias
+// and the status LED light up. Pure SVG + CSS.
+import DemoFrame from './DemoFrame.astro';
+
+interface Props {
+  demo: { caption: string; layers: string };
+}
+
+const { demo } = Astro.props;
+
+// Traces: [path, delay s, rf?]. Board is 480×300; MCU at 200..280 × 110..190.
+const traces: [string, number, boolean?][] = [
+  ['M200 130 H150 L130 110 H70', 0.2],
+  ['M200 145 H140 L125 160 H70', 0.3],
+  ['M200 160 H160 L140 180 V210 H70', 0.4],
+  ['M200 175 H175 L165 185 V245 H110', 0.5],
+  ['M225 190 V230 L240 245 H300', 0.6],
+  ['M255 190 V215 L270 230 H360 L375 245 V250', 0.7],
+  ['M280 130 H320 L340 110 H380', 0.45],
+  ['M280 150 H345 L360 165 H400', 0.55],
+  ['M280 170 H330 L345 185 V200 H400', 0.65],
+  ['M240 110 V80 L260 60 H330 L345 45 H420', 0.8, true],
+  ['M220 110 V70 L205 55 H150', 0.75],
+];
+const vias = [[150, 130], [125, 160], [165, 185], [240, 245], [360, 165], [330, 60], [205, 55]];
+const pins = Array.from({ length: 6 }, (_, i) => 120 + i * 13);
+---
+
+<DemoFrame title={demo.layers} caption={demo.caption}>
+  <svg viewBox="0 0 480 300" class="pcb block w-full" role="img" aria-label={demo.caption}>
+    <defs>
+      <pattern id="pcb-grid" width="12" height="12" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="var(--color-line)" />
+      </pattern>
+    </defs>
+    <rect width="480" height="300" fill="url(#pcb-grid)" />
+    <!-- Board outline with the brand's cut corner -->
+    <path d="M40 30 H400 L440 70 V270 H40 Z" fill="var(--color-mist)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round" />
+    {[[56, 46], [56, 254], [424, 254]].map(([x, y]) => <circle cx={x} cy={y} r="6" fill="var(--color-paper)" stroke="var(--color-steel)" />)}
+
+    {traces.map(([d, delay, rf]) => (
+      <path class="trace" d={d} pathLength="1" style={`--d:${delay}s`} fill="none" stroke={rf ? 'var(--color-brand-cyan-ink)' : 'var(--color-accent)'} stroke-width={rf ? 3.5 : 2.5} stroke-linecap="round" stroke-linejoin="round" />
+    ))}
+
+    <!-- MCU -->
+    {pins.map((y) => <><rect x="192" y={y - 2} width="8" height="4" fill="var(--color-steel)" /><rect x="280" y={y - 2} width="8" height="4" fill="var(--color-steel)" /></>)}
+    {[0, 1, 2, 3, 4].map((i) => <><rect x={214 + i * 12} y="102" width="4" height="8" fill="var(--color-steel)" /><rect x={214 + i * 12} y="190" width="4" height="8" fill="var(--color-steel)" /></>)}
+    <rect x="200" y="110" width="80" height="80" rx="3" fill="var(--color-ink)" />
+    <circle cx="210" cy="120" r="2.5" fill="var(--color-steel)" />
+    <text x="240" y="154" text-anchor="middle" class="silk-chip">STM32</text>
+
+    <!-- Connector, crystal, header, antenna, passives -->
+    <rect x="44" y="96" width="26" height="128" rx="3" fill="var(--color-paper)" stroke="var(--color-ink)" />
+    <text x="57" y="88" text-anchor="middle" class="silk">J1</text>
+    <rect x="96" y="236" width="28" height="18" rx="9" fill="var(--color-paper)" stroke="var(--color-ink)" />
+    <text x="110" y="268" text-anchor="middle" class="silk">Y1</text>
+    <rect x="300" y="236" width="10" height="18" fill="var(--color-steel)" /><text x="305" y="268" text-anchor="middle" class="silk">R4</text>
+    {[0, 1, 2].map((i) => <rect x="400" y={150 + i * 25} width="22" height="12" rx="2" fill="var(--color-paper)" stroke="var(--color-ink)" />)}
+    <text x="411" y="140" text-anchor="middle" class="silk">P2</text>
+    <path d="M420 45 h0 m-6 -8 h18 v6 h-14 v6 h14 v6 h-18" fill="none" stroke="var(--color-brand-cyan-ink)" stroke-width="2" class="trace" pathLength="1" style="--d:1.4s" />
+    <text x="380" y="34" class="silk">ANT</text>
+    <rect x="140" y="47" width="10" height="16" fill="var(--color-steel)" /><text x="128" y="44" class="silk">C1</text>
+    <rect x="380" y="98" width="30" height="24" rx="2" fill="var(--color-graphite)" />
+    <text x="395" y="92" text-anchor="middle" class="silk">U2</text>
+    <rect x="355" y="242" width="16" height="10" rx="2" class="led" />
+    <text x="363" y="268" text-anchor="middle" class="silk">D1</text>
+
+    {vias.map(([x, y], i) => <circle class="via" cx={x} cy={y} r="3.6" fill="var(--color-paper)" stroke="var(--color-ink)" stroke-width="1.6" style={`--d:${1.1 + i * 0.06}s`} />)}
+  </svg>
+</DemoFrame>
+
+<style>
+  .silk {
+    font: 500 10px var(--font-mono);
+    fill: var(--color-graphite);
+  }
+  .silk-chip {
+    font: 600 11px var(--font-mono);
+    fill: var(--color-paper);
+    letter-spacing: 0.04em;
+  }
+  .led {
+    fill: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trace {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.45, 0, 0.2, 1) var(--d);
+    }
+    :global(.is-in) .trace {
+      stroke-dashoffset: 0;
+    }
+    .via {
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(0);
+      transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d);
+    }
+    :global(.is-in) .via {
+      transform: none;
+    }
+    .led {
+      fill: var(--color-line);
+      transition: fill 0.3s ease 1.9s;
+    }
+    :global(.is-in) .led {
+      fill: var(--color-accent);
+      animation: blink 2.4s ease-in-out 2.4s infinite;
+    }
+  }
+  @keyframes blink {
+    50% {
+      fill: var(--color-line);
+    }
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+// Computer vision demo: the camera photo as a live feed. On reveal the viewfinder brackets settle,
+// a scan line sweeps once and the detection boxes snap on one by one with their labels and confidence.
+import { Image } from 'astro:assets';
+import DemoFrame from './DemoFrame.astro';
+import photo from '../../assets/images/vision-cameras.jpg';
+
+interface Props {
+  demo: { caption: string; cam: string; labels: readonly string[]; inference: string; objects: string };
+  alt: string;
+}
+
+const { demo, alt } = Astro.props;
+// Boxes in % of the 3:2 photo: left camera, right camera, pole.
+const boxes = [
+  { x: 4, y: 2, w: 30, h: 41, conf: '0.98' },
+  { x: 33, y: 24, w: 49, h: 26, conf: '0.96' },
+  { x: 16, y: 52, w: 11, h: 47, conf: '0.91' },
+];
+---
+
+<DemoFrame title={demo.cam} caption={demo.caption} live>
+  <div class="feed relative aspect-3/2 overflow-hidden bg-ink">
+    <Image src={photo} alt={alt} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 640px, 100vw" class="size-full object-cover" />
+
+    <span class="bracket top-3 left-3 border-t-2 border-l-2" aria-hidden="true"></span>
+    <span class="bracket top-3 right-3 border-t-2 border-r-2" aria-hidden="true"></span>
+    <span class="bracket bottom-3 left-3 border-b-2 border-l-2" aria-hidden="true"></span>
+    <span class="bracket right-3 bottom-3 border-r-2 border-b-2" aria-hidden="true"></span>
+    <span class="scan" aria-hidden="true"></span>
+
+    {boxes.map((b, i) => (
+      <span class="box" style={`left:${b.x}%;top:${b.y}%;width:${b.w}%;height:${b.h}%;--d:${0.9 + i * 0.35}s`} aria-hidden="true">
+        <span class="tag">{demo.labels[i]} · {b.conf}</span>
+      </span>
+    ))}
+  </div>
+  <div class="flex items-center gap-4 px-5 py-3 font-mono text-[11px] uppercase md:px-6">
+    <span class="text-steel">{demo.inference}</span>
+    <span class="text-ink">12 ms</span>
+    <span class="ml-auto text-ink">{boxes.length} {demo.objects}</span>
+  </div>
+</DemoFrame>
+
+<style>
+  .bracket {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-color: rgb(255 255 255 / 0.9);
+  }
+  .box {
+    position: absolute;
+    border: 2px solid var(--color-brand-cyan);
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.15);
+  }
+  .tag {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    white-space: nowrap;
+    border-radius: 3px;
+    background: var(--color-brand-cyan);
+    padding: 2px 6px;
+    font: 600 10px/1.3 var(--font-mono);
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  .scan {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: var(--color-brand-cyan);
+    box-shadow: 0 0 12px 2px rgb(23 229 252 / 0.6);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bracket {
+      transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+    }
+    .bracket:nth-of-type(1) { transform: translate(14px, 14px); }
+    .bracket:nth-of-type(2) { transform: translate(-14px, 14px); }
+    .bracket:nth-of-type(3) { transform: translate(14px, -14px); }
+    .bracket:nth-of-type(4) { transform: translate(-14px, -14px); }
+    :global(.is-in) .bracket {
+      transform: none;
+    }
+    .box {
+      opacity: 0;
+      transform: scale(1.12);
+      transition: opacity 0.35s ease var(--d), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--d);
+    }
+    :global(.is-in) .box {
+      opacity: 1;
+      transform: none;
+    }
+    :global(.is-in) .scan {
+      animation: scan 1.6s cubic-bezier(0.45, 0, 0.55, 1) 0.4s both;
+    }
+    .feed :global(img) {
+      transform: scale(1.06);
+      transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    :global(.is-in) .feed :global(img) {
+      transform: none;
+    }
+  }
+  @keyframes scan {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(var(--h, 400px)); opacity: 0; }
+  }
+</style>
+
+<script>
+  // The scan line travels the feed's real height.
+  for (const feed of document.querySelectorAll<HTMLElement>('.feed')) {
+    const set = () => feed.style.setProperty('--h', `${feed.offsetHeight}px`);
+    new ResizeObserver(set).observe(feed);
+  }
+</script>

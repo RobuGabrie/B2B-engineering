@@ -17,10 +17,10 @@ const t = useTranslations(lang);
 const icons = ['audit', 'prototype', 'integrate', 'scale'] as const;
 ---
 
-<section id={t.anchors.process} class="container-site py-20 md:py-32" aria-labelledby="process-title">
+<section id={t.anchors.process} class="container-site py-14 md:py-32" aria-labelledby="process-title">
   <SectionHeading id="process-title" title={t.process.title} kicker={t.process.kicker} intro={t.process.intro} />
 
-  <div class="mt-12 grid grid-cols-1 gap-12 md:mt-16 lg:grid-cols-12 lg:gap-16">
+  <div class="mt-8 grid grid-cols-1 gap-10 md:mt-16 lg:grid-cols-12 lg:gap-16">
     <NotchedImage
       src={bench}
       alt={t.process.imageAlt}

@@ -26,7 +26,7 @@ const links = [
 ];
 ---
 
-<header class="site-header sticky top-0 z-40 bg-paper transition-shadow" data-header>
+<header class="site-header sticky top-0 z-40 transition-shadow" data-header>
   <div class="container-site flex h-16 items-center gap-4 lg:h-20">
     <div class="flex items-center gap-3">
       <a href={homePath(lang)} class="flex min-h-11 items-center" aria-label={site.name}>
@@ -131,6 +131,17 @@ const links = [
 </header>
 
 <style>
+  /* Translucent, blurred bar (Apple-style). The blur lives on a pseudo-element: a backdrop-filter on the
+     header itself would become the containing block of the fixed mobile menu. */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--color-paper) 82%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    backdrop-filter: blur(20px) saturate(1.6);
+  }
   .site-header[data-scrolled] {
     box-shadow: 0 1px 0 var(--color-line);
   }

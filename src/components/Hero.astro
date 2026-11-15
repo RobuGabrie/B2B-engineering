@@ -18,12 +18,12 @@ const t = useTranslations(lang);
 const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
 ---
 
-<section id={t.anchors.home} class="pt-10 md:pt-16">
+<section id={t.anchors.home} class="pt-6 md:pt-16">
   <div class="container-site">
-    <CornerTicks class="mx-auto max-w-5xl px-3 py-7 text-center sm:px-10 md:py-12" offset={0} size={5}>
-      <h1 class="text-[clamp(1.6rem,7.6vw,2rem)] leading-[1.05] sm:text-5xl lg:text-[4rem]">{t.hero.title}</h1>
+    <CornerTicks animate class="mx-auto max-w-5xl px-3 py-6 text-center sm:px-10 md:py-12" offset={0} size={5}>
+      <h1 class="text-[clamp(1.9rem,9.2vw,2.6rem)] leading-[1.02] sm:text-6xl lg:text-[5rem] xl:text-[5.5rem]">{t.hero.title}</h1>
     </CornerTicks>
-    <p class="mx-auto mt-5 max-w-xl text-center text-[15px] text-graphite md:mt-8">{t.hero.subtitle}</p>
+    <p class="mx-auto mt-4 max-w-xl text-center text-[15px] text-graphite md:mt-8 md:text-base">{t.hero.subtitle}</p>
   </div>
 
   <NotchedImage
@@ -33,22 +33,23 @@ const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
     slant={0}
     joint={44}
     priority
-    class="mt-9 md:mt-16"
+    class="mt-8 md:mt-16"
     imgClass="md:h-[36rem] md:object-[50%_10%] xl:h-[40rem]"
   >
-    <Tabs id="hero-audience" label={t.hero.audiencesLabel} tabs={tabs} panelClass="pt-3" stretch>
+    <!-- Phones: the audience tabs repeat the subtitle, so they are left out to keep the first screen short. -->
+    <Tabs id="hero-audience" label={t.hero.audiencesLabel} tabs={tabs} panelClass="pt-3" class="max-md:hidden">
       {t.hero.audiences.map((a) => (
         <p slot={`panel-${a.id}`} class="max-w-md text-sm text-graphite">{a.text}</p>
       ))}
     </Tabs>
 
     <!-- Phones: the same pair as desktop (filled + outline), stacked at equal width with 48px touch targets. -->
-    <div class="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+    <div class="grid gap-3 sm:flex sm:flex-wrap md:mt-6">
       <Button href={sectionHref(lang, 'contact')} class="min-h-12 md:min-h-11">{t.hero.primary}</Button>
       <Button href={sectionHref(lang, 'solutions')} variant="outline" class="min-h-12 md:min-h-11">{t.hero.secondary}</Button>
     </div>
 
-    <p class="mt-16 flex max-w-md items-center gap-3 text-[13px] md:mt-6 leading-snug text-graphite">
+    <p class="mt-12 flex max-w-md items-center gap-3 text-[13px] leading-snug text-graphite md:mt-6">
       <Icon name="trophy" class="size-6" />
       {t.hero.badge}
     </p>

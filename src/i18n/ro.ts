@@ -28,9 +28,9 @@ export const ro = {
     contact: 'contact',
   },
   hero: {
-    title: 'Sisteme inteligente la cheie: de la hardware și senzori până la AI și Cloud.',
+    title: 'Sisteme inteligente la cheie.',
     subtitle:
-      'Proiectăm și dezvoltăm soluții custom pentru industrie, orașe inteligente și produse hardware. Fără intermediari — echipă completă de ingineri software & hardware.',
+      'De la hardware și senzori până la AI și cloud: proiectăm soluții custom pentru industrie, orașe inteligente și produse hardware. Fără intermediari, cu o echipă completă de ingineri.',
     primary: 'Discută cu un inginer',
     secondary: 'Vezi domeniile noastre',
     badge: 'Echipă premiată la competiția internațională de inginerie Hard&Soft (USV)',
@@ -210,6 +210,15 @@ export const ro = {
     },
     items: {
       iot: {
+        demo: {
+          caption: 'Exemplu de dashboard',
+          machine: 'Strung CNC 02 · Linia 3',
+          oee: 'OEE',
+          bars: ['Disponibilitate', 'Performanță', 'Calitate'],
+          chart: 'Piese / oră, ultimele 8 ore',
+          alert: 'Vibrații peste prag la rulmentul axului 2',
+          alertTime: 'acum 3 min',
+        },
         metaTitle: 'Monitorizare producție IoT și retrofitting utilaje',
         metaDescription:
           'Senzori industriali pe utilajele existente, OEE în timp real, alerte de mentenanță predictivă și dashboard în cloud. Proiectăm și instalăm din Suceava, în toată România.',
@@ -261,6 +270,13 @@ export const ro = {
         ],
       },
       vision: {
+        demo: {
+          caption: 'Exemplu de detecție',
+          cam: 'CAM 01 · 1080p · 30 FPS',
+          labels: ['Cameră IP', 'Cameră IP', 'Stâlp'],
+          inference: 'Inferență locală',
+          objects: 'obiecte',
+        },
         metaTitle: 'Soluții computer vision și Edge AI pentru industrie și orașe',
         metaDescription:
           'Control vizual automat pe linia de producție, recunoașterea numerelor de înmatriculare și treceri de pietoni cu avertizare activă. Procesare AI locală, fără dependență de internet.',
@@ -312,6 +328,10 @@ export const ro = {
         ],
       },
       rnd: {
+        demo: {
+          caption: 'Exemplu de placă',
+          layers: 'Strat 1 / 4 · cupru',
+        },
         metaTitle: 'Proiectare PCB, firmware și prototipare hardware',
         metaDescription:
           'Dezvoltăm produse hardware de la idee la serie: schemă și PCB, firmware STM32, ESP32 sau Linux embedded, carcasă și aplicație web sau mobilă.',
@@ -363,6 +383,12 @@ export const ro = {
         ],
       },
       automation: {
+        demo: {
+          caption: 'Exemplu Pick-to-Light',
+          order: 'Comanda #1042',
+          lines: 'linii',
+          shelf: 'Raft A',
+        },
         metaTitle: 'Automatizări logistică și agricultură: Pick-to-Light, telematică',
         metaDescription:
           'Sisteme Pick-to-Light pentru depozite, stații autonome de monitorizare meteo și sol, telematică custom pentru flote și utilaje agricole.',

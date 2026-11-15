@@ -43,6 +43,13 @@ User asked for animations that keep the site fast, and a little of the logo cyan
 One page per vertical, RO + EN (8 pages), for SEO on specific searches. `Service.astro` + `src/pages/servicii/[slug].astro`, `src/pages/en/services/[slug].astro`; slugs in `pages` (`src/i18n/utils.ts`). Sections: breadcrumb + framed H1 + lead + CTAs beside a notched photo (`bl`), problem/solution + benefit/outcomes on mist, "how it works" as a 4-node orange→cyan trace, uses + technology tags, FAQ (native `<details>`), the other three services as cut-corner cards, the shared contact form. JSON-LD: Service + BreadcrumbList + FAQPage. Shared copy from `solutions.items`, page copy from `services.items` (**written by Claude, the company should review the technical claims and technology lists**).
 The user asked not to change the home page: the only home change is the shared footer, which gained a "Servicii" column (internal links). Then (user agreed) the header "Soluții" became **"Servicii" with a dropdown** of the 4 pages (+ "Toate serviciile" → home section); in the mobile menu they're listed under Servicii; each home tab has a "Detalii despre serviciu →" link under its CTA.
 
+## Mobile, motion & service variety (2026-11-16)
+
+User found mobile weak and service pages samey. Agreed and done:
+- Hero title shortened everywhere to **"Sisteme inteligente la cheie."** (bigger); the rest moved into the subtitle. Phones: audience tabs hidden (they repeat the subtitle), buttons right under the subtitle, photo visible on the first screen. Sections are denser on phones (`py-14`).
+- **Apple-style motion**, still CSS-only: reveal with `cubic-bezier(.22,1,.36,1)`, photos settle 112% → 100% via scroll-driven `animation-timeline: view()` (`[data-zoom]`, compositor-only, skipped where unsupported), hero corner ticks slide in, translucent blurred header (blur on `::before` so the fixed mobile menu still works).
+- **Each service page has its own animated demo** (`src/components/demo/`, inside `DemoFrame`, all labelled "Exemplu…"): IoT dashboard (OEE ring counting up, bars, chart drawing, alert), vision viewfinder (detection boxes + scan line over the camera photo), PCB with traces routing out of the MCU, Pick-to-Light shelf playing an order on a loop. Layout alternates per page (photo side, notch corner, demo side).
+
 ## Form
 
 **Web3Forms** (user confirmed 2026-11-15). The key is a placeholder (`web3formsKey` in `src/config/site.ts`), so submitting currently shows the error message. To go live: create an access key at web3forms.com with the destination email and paste it there.

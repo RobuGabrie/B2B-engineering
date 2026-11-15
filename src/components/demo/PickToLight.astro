@@ -1,0 +1,116 @@
+---
+// Logistics demo: a 4×3 shelf with a light module on every bin. While in view, an order plays on a loop:
+// each pick location lights orange with its quantity, then turns cyan (done), and the order bar advances.
+// CSS-only keyframes on one shared 8s cycle; paused until the frame is revealed.
+import DemoFrame from './DemoFrame.astro';
+
+interface Props {
+  demo: { caption: string; order: string; lines: string; shelf: string };
+}
+
+const { demo } = Astro.props;
+const cols = 4;
+const rows = 3;
+// Pick sequence: bin index → [step, qty].
+const picks = new Map<number, [number, number]>([[5, [0, 2]], [2, [1, 1]], [11, [2, 4]], [8, [3, 3]]]);
+const bins = Array.from({ length: cols * rows }, (_, i) => i);
+
+// One shared 8s cycle: step k lights at k·20% (orange + quantity), turns cyan at k·20% + 15%,
+// and every light resets together at the end, in sync with the order bar.
+const keyframes = [...picks.values()]
+  .map(([k]) => {
+    const a = k * 20;
+    return `@keyframes ptl-light-${k}{0%,${a}%{background:var(--color-graphite)}${a + 2}%,${a + 13}%{background:var(--color-accent)}${a + 16}%,90%{background:var(--color-brand-cyan-ink)}96%,100%{background:var(--color-graphite)}}
+@keyframes ptl-qty-${k}{0%,${a}%{opacity:0}${a + 2}%,${a + 13}%{opacity:1}${a + 15}%,100%{opacity:0}}
+@keyframes ptl-ok-${k}{0%,${a + 14}%{opacity:0}${a + 16}%,90%{opacity:1}96%,100%{opacity:0}}`;
+  })
+  .join('\n');
+---
+
+<style is:inline set:html={keyframes}></style>
+
+<DemoFrame title={`${demo.order} · ${picks.size} ${demo.lines}`} caption={demo.caption} live>
+  <div class="ptl p-5 md:p-7">
+    <div class="flex items-center gap-3 font-mono text-[11px] uppercase text-steel">
+      <span>{demo.shelf}</span>
+      <div class="h-1 flex-1 overflow-hidden rounded-full bg-mist"><div class="progress h-full origin-left rounded-full bg-brand-cyan-ink"></div></div>
+      <span class="text-ink">{picks.size}</span>
+    </div>
+
+    <ul class="mt-5 grid grid-cols-4 gap-2 border-x-[6px] border-b-[6px] border-graphite/80 bg-mist p-2 md:gap-3 md:p-3">
+      {bins.map((i) => {
+        const pick = picks.get(i);
+        return (
+          <li class:list={['bin relative flex aspect-square flex-col justify-end sm:aspect-[4/3] rounded-[4px] border border-line bg-paper', pick && 'is-pick']} style={pick ? `--k:${pick[0]}` : undefined} data-step={pick?.[0]}>
+            <span class="absolute top-1 left-1.5 font-mono text-[9px] text-steel sm:top-1.5 sm:left-2 sm:text-[10px]">A-{String(i + 1).padStart(2, '0')}</span>
+            <span class="module m-1 flex h-5 items-center sm:m-1.5 sm:h-6 justify-center rounded-[3px] bg-graphite font-mono text-[12px] font-semibold text-paper md:h-7">
+              {pick && <><span class="qty">{pick[1]}</span><span class="ok" aria-hidden="true">✓</span></>}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</DemoFrame>
+
+<style>
+  .module {
+    position: relative;
+  }
+  .qty,
+  .ok {
+    position: absolute;
+  }
+  /* Static (reduced motion / before reveal): every pick shown done. */
+  .is-pick .module {
+    background: var(--color-brand-cyan-ink);
+  }
+  .is-pick .qty {
+    opacity: 0;
+  }
+  .progress {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .is-pick .module,
+    .is-pick .qty,
+    .is-pick .ok {
+      animation-duration: 8s;
+      animation-iteration-count: infinite;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+    }
+    [data-step='0'] .module { animation-name: ptl-light-0; }
+    [data-step='1'] .module { animation-name: ptl-light-1; }
+    [data-step='2'] .module { animation-name: ptl-light-2; }
+    [data-step='3'] .module { animation-name: ptl-light-3; }
+    [data-step='0'] .qty { animation-name: ptl-qty-0; }
+    [data-step='1'] .qty { animation-name: ptl-qty-1; }
+    [data-step='2'] .qty { animation-name: ptl-qty-2; }
+    [data-step='3'] .qty { animation-name: ptl-qty-3; }
+    [data-step='0'] .ok { animation-name: ptl-ok-0; }
+    [data-step='1'] .ok { animation-name: ptl-ok-1; }
+    [data-step='2'] .ok { animation-name: ptl-ok-2; }
+    [data-step='3'] .ok { animation-name: ptl-ok-3; }
+    .progress {
+      transform: scaleX(0);
+      animation: progress 8s infinite both paused;
+    }
+    :global(.is-in) .is-pick .module,
+    :global(.is-in) .is-pick .qty,
+    :global(.is-in) .is-pick .ok,
+    :global(.is-in) .progress {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes progress {
+    0%, 15% { transform: scaleX(0); }
+    17%, 35% { transform: scaleX(0.25); }
+    37%, 55% { transform: scaleX(0.5); }
+    57%, 75% { transform: scaleX(0.75); }
+    77%, 90% { transform: scaleX(1); }
+    96%, 100% { transform: scaleX(0); }
+  }
+</style>

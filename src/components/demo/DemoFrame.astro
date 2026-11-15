@@ -1,0 +1,26 @@
+---
+// Shared frame for the service-page demos: rounded panel with a hairline border, a mono status bar on top
+// (title on the left, "example" caption on the right) and the animated content below.
+// The content animates once the frame scrolls into view ([data-reveal] → .is-in), and only then.
+import LiveDot from '../ui/LiveDot.astro';
+
+interface Props {
+  title: string;
+  caption: string;
+  live?: boolean;
+  class?: string;
+}
+
+const { title, caption, live = false, class: className } = Astro.props;
+---
+
+<figure data-reveal class:list={['demo overflow-hidden rounded-[28px] border border-line bg-paper', className]}>
+  <figcaption class="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line px-5 py-3 font-mono text-[11px] uppercase md:px-6">
+    {live && <LiveDot />}
+    <span class="text-ink">{title}</span>
+    <span class="ml-auto text-steel">{caption}</span>
+  </figcaption>
+  <div class="relative">
+    <slot />
+  </div>
+</figure>

@@ -28,6 +28,8 @@ Rules for anyone (human or AI) working on this site. When in doubt, the brief (`
 - **Motion** (CSS + one IntersectionObserver in `Base.astro`, no animation libraries; transform/opacity/stroke only, never on the hero headline; everything off under `prefers-reduced-motion`):
   - `data-reveal` (element) / `data-stagger` (children one by one): rise 16px + fade in, once. Section headings, solution text, why-us cards, contact channels, cases.
   - `NotchedImage` (non-hero): reveals and traces its cut outline in orange once, then the line fades.
+  - `[data-zoom]` photos settle from 112% on scroll (CSS scroll-driven, `@supports`-guarded). Easing for reveals: `cubic-bezier(0.22, 1, 0.36, 1)`.
+  - Service demos (`src/components/demo/`) animate once revealed; anything that loops is paused until then.
   - Header logo draws its S on load (`<Logo animate>`); tabs have one sliding underline; link arrows nudge on hover; process numbers fill on scroll.
 - **Signature elements** (from the reference): orange corner tick marks, a notched photo (edge-to-edge in the hero, rounded block for the video), cards with rounded corners and the top-right corner cut at 45° (orange solid icon on top, ticks at all 4 corners; all light, like the reference: the user rejected a dark card), tabs with a gray line under the tab group and an orange underline on the active tab, an outline button in the nav.
 - **Photos:** real-looking hardware, PCBs, sensors, machines, labs. Free-licensed (Pexels; Unsplash blocks automated downloads) until real photos arrive; every image is listed in `CREDITS.md`.

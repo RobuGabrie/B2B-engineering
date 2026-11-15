@@ -23,10 +23,10 @@ const images = { iot, vision, rnd, automation } as const;
 const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
 ---
 
-<section id={t.anchors.solutions} class="container-site py-20 md:py-32" aria-labelledby="solutions-title">
+<section id={t.anchors.solutions} class="container-site py-14 md:py-32" aria-labelledby="solutions-title">
   <SectionHeading id="solutions-title" title={t.solutions.title} kicker={t.solutions.kicker} intro={t.solutions.intro} />
 
-  <Tabs id="solutions" label={t.solutions.title} tabs={tabs} class="mt-12 md:mt-16" panelClass="pt-8 md:pt-10">
+  <Tabs id="solutions" label={t.solutions.title} tabs={tabs} class="mt-8 md:mt-16" panelClass="pt-8 md:pt-10">
     {t.solutions.items.map((item, i) => (
       <article slot={`panel-${item.id}`}>
         <div class="grid gap-10 lg:grid-cols-12 lg:gap-12">
