@@ -26,6 +26,8 @@ interface Props {
   imgClass?: string;
   /** Classes for the shaped area (panel mode: background, padding). */
   shapeClass?: string;
+  /** From lg: fill the height of the parent grid row (e.g. match the text column) instead of a fixed height. */
+  fill?: boolean;
 }
 
 const {
@@ -39,6 +41,7 @@ const {
   class: className,
   imgClass = 'md:h-[34rem]',
   shapeClass,
+  fill = false,
 } = Astro.props;
 const hasNotch = Astro.slots.has('default');
 const top = corner === 'tl' || corner === 'tr';
@@ -53,7 +56,7 @@ const notchPos = {
 ---
 
 <div
-  class:list={['notched relative flex flex-col', bleed && 'is-bleed', `corner-${corner}`, className]}
+  class:list={['notched relative flex flex-col', bleed && 'is-bleed', fill && 'lg:self-stretch', `corner-${corner}`, className]}
   data-notched
   data-corner={corner}
   data-bleed={bleed ? '' : undefined}
@@ -74,7 +77,7 @@ const notchPos = {
     </div>
   )}
   <div
-    class:list={['shape relative overflow-hidden', bleed ? 'rounded-none' : 'rounded-[28px]', shapeClass]}
+    class:list={['shape relative overflow-hidden', bleed ? 'rounded-none' : 'rounded-[28px]', fill && 'lg:min-h-[30rem] lg:flex-1', shapeClass]}
     data-shape
   >
     {src ? (
@@ -85,7 +88,7 @@ const notchPos = {
         sizes={bleed ? '100vw' : '(min-width: 1200px) 1200px, 100vw'}
         loading={priority ? 'eager' : 'lazy'}
         fetchpriority={priority ? 'high' : 'auto'}
-        class:list={['aspect-4/3 w-full object-cover md:aspect-auto', imgClass]}
+        class:list={['aspect-4/3 w-full object-cover md:aspect-auto', fill && 'lg:absolute lg:inset-0 lg:h-full', imgClass]}
       />
     ) : (
       <slot name="body" />

@@ -20,10 +20,10 @@ const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
 
 <section id={t.anchors.home} class="pt-10 md:pt-16">
   <div class="container-site">
-    <CornerTicks class="-mx-3 max-w-5xl px-3 py-7 sm:mx-auto sm:px-10 sm:text-center md:py-12" offset={0} size={5}>
-      <h1 class="text-[clamp(1.6rem,7.9vw,2.1rem)] leading-[1.04] sm:text-5xl lg:text-[4rem]">{t.hero.title}</h1>
+    <CornerTicks class="mx-auto max-w-5xl px-3 py-7 text-center sm:px-10 md:py-12" offset={0} size={5}>
+      <h1 class="text-[clamp(1.6rem,7.6vw,2rem)] leading-[1.05] sm:text-5xl lg:text-[4rem]">{t.hero.title}</h1>
     </CornerTicks>
-    <p class="mt-5 max-w-xl text-[15px] text-graphite sm:mx-auto sm:text-center md:mt-8">{t.hero.subtitle}</p>
+    <p class="mx-auto mt-5 max-w-xl text-center text-[15px] text-graphite md:mt-8">{t.hero.subtitle}</p>
   </div>
 
   <NotchedImage
@@ -33,7 +33,7 @@ const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
     slant={0}
     joint={44}
     priority
-    class="mt-12 md:mt-16"
+    class="mt-9 md:mt-16"
     imgClass="md:h-[36rem] md:object-[50%_10%] xl:h-[40rem]"
   >
     <Tabs id="hero-audience" label={t.hero.audiencesLabel} tabs={tabs} panelClass="pt-3" stretch>
@@ -42,11 +42,10 @@ const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
       ))}
     </Tabs>
 
-    <!-- Phones: one compact button + a text link, so the headline stays the biggest thing on screen. -->
-    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <Button href={sectionHref(lang, 'contact')}>{t.hero.primary}</Button>
-      <Button href={sectionHref(lang, 'solutions')} variant="link" class="text-[13px] font-semibold md:hidden">{t.hero.secondary}</Button>
-      <Button href={sectionHref(lang, 'solutions')} variant="outline" class="max-md:hidden">{t.hero.secondary}</Button>
+    <!-- Phones: the same pair as desktop (filled + outline), stacked at equal width with 48px touch targets. -->
+    <div class="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+      <Button href={sectionHref(lang, 'contact')} class="min-h-12 md:min-h-11">{t.hero.primary}</Button>
+      <Button href={sectionHref(lang, 'solutions')} variant="outline" class="min-h-12 md:min-h-11">{t.hero.secondary}</Button>
     </div>
 
     <p class="mt-6 flex max-w-md items-center gap-3 text-[13px] leading-snug text-graphite">
