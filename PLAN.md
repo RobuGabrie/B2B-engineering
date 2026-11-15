@@ -144,6 +144,14 @@ EN: industrial automation · firmware and hardware development · computer visio
 
 JSON-LD: `Organization` + `LocalBusiness` (address, phone, area served) + one `Service` per vertical + `FAQPage` later if useful.
 
+## Placeholders (for now)
+
+- Company name: **NUMECOMPANIE** (wordmark set in the display font, no logo image)
+- Contacts: `+40 700 000 000`, `contact@example.com`, WhatsApp to the same placeholder number
+- Address/CUI: `Str. Exemplu nr. 1, Suceava` · `RO00000000`
+- Photos: free-licensed images from **Unsplash / Pexels** (PCBs, electronics bench, sensors, factory machines, cameras), saved in `src/assets/images/` with attribution listed in `CREDITS.md`. Swapped for real photos later.
+- All placeholders live in one file, `src/config/site.ts`, so swapping them is a single edit.
+
 ## Open questions
 
 - [ ] Company name + logo
