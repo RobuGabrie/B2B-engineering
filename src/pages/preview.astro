@@ -6,8 +6,10 @@ import CornerTicks from '../components/ui/CornerTicks.astro';
 import ChamferCard from '../components/ui/ChamferCard.astro';
 import NotchedImage from '../components/ui/NotchedImage.astro';
 import Tabs from '../components/ui/Tabs.astro';
+import Icon from '../components/ui/Icon.astro';
 import { useTranslations } from '../i18n/utils';
 import hero from '../assets/images/hero-soldering.jpg';
+import bench from '../assets/images/bench-soldering.jpg';
 
 const t = useTranslations('ro');
 const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
@@ -32,10 +34,14 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
       </CornerTicks>
     </section>
 
-    <section>
-      <h2 class="mb-8 text-2xl">Notched image</h2>
-      <NotchedImage src={hero} alt="Lipire cu ciocanul de lipit pe o placă electronică">
-        <p class="max-w-md text-graphite">{t.hero.subtitle}</p>
+    <section class="-mx-5 md:-mx-10 min-[75rem]:mx-[calc((75rem-100vw)/2)]">
+      <h2 class="container-site mb-8 text-2xl">Notched image — bleed (hero)</h2>
+      <NotchedImage src={hero} alt="Lipire cu ciocanul de lipit pe o placă electronică" bleed>
+        <div class="flex gap-6 font-display text-xs font-semibold uppercase">
+          <span class="border-b-2 border-accent pb-2">Proiecte</span>
+          <span class="pb-2 text-steel">Produse hardware</span>
+        </div>
+        <p class="mt-4 max-w-md text-graphite">{t.hero.subtitle}</p>
         <div class="mt-6 flex flex-wrap gap-3">
           <Button href="#">{t.hero.primary}</Button>
           <Button href="#" variant="outline">{t.hero.secondary}</Button>
@@ -44,12 +50,22 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
     </section>
 
     <section>
+      <h2 class="mb-8 text-2xl">Notched image — block (video)</h2>
+      <NotchedImage src={bench} alt="Inginer care lipește componente pe o placă în atelier">
+        <p class="flex items-center gap-4 pt-1 font-display text-xs font-semibold uppercase">
+          <span class="size-1.5 bg-accent" aria-hidden="true"></span>{t.cases.watch}
+        </p>
+      </NotchedImage>
+    </section>
+
+    <section>
       <h2 class="mb-8 text-2xl">Chamfer cards</h2>
-      <ul class="grid gap-6 md:grid-cols-3">
-        {t.whyUs.items.map((item) => (
-          <ChamferCard as="li" ticks>
-            <h3 class="text-sm">{item.title}</h3>
-            <p class="mt-3 text-graphite">{item.text}</p>
+      <ul class="grid gap-8 md:grid-cols-3 md:gap-6">
+        {t.whyUs.items.map((item, i) => (
+          <ChamferCard as="li">
+            <Icon name={(['chip', 'trophy', 'unlock'] as const)[i]} />
+            <h3 class="mt-8 font-sans text-sm font-bold tracking-wide">{item.title}</h3>
+            <p class="mt-3 text-sm text-graphite">{item.text}</p>
           </ChamferCard>
         ))}
       </ul>

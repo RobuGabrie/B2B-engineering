@@ -1,0 +1,35 @@
+---
+// Flat, solid orange pictograms in the style of the reference cards. 40×40 grid, square-ish shapes.
+interface Props {
+  name: keyof typeof icons;
+  class?: string;
+}
+
+const icons = {
+  // Chip with pins: full-stack hardware + software
+  chip: 'M12 12h16v16H12z M15 2h3v7h-3z M22 2h3v7h-3z M15 31h3v7h-3z M22 31h3v7h-3z M2 15h7v3H2z M2 22h7v3H2z M31 15h7v3h-7z M31 22h7v3h-7z M17 17v6h6v-6z',
+  // Trophy: competition winners
+  trophy: 'M10 4h20v4h6v6a8 8 0 0 1-8 8h-.6A8 8 0 0 1 22 26.7V31h6v5H12v-5h6v-4.3A8 8 0 0 1 12.6 22H12a8 8 0 0 1-8-8V8h6z M8 12v2a4 4 0 0 0 2 3.5V12z M32 12h-2v5.5a4 4 0 0 0 2-3.5z',
+  // Open padlock: no vendor lock-in
+  unlock: 'M8 18h24v18H8z M12 18v-6a8 8 0 0 1 15.5-2.8l-3.7 1.4A4 4 0 0 0 16 12v6z M18.5 24h3v6h-3z',
+  // Magnifier over a grid: technical audit
+  audit: 'M4 4h14v4H8v10H4z M17 10a9 9 0 1 1 0 18 9 9 0 0 1 0-18z M17 14a5 5 0 1 0 0 10 5 5 0 0 0 0-10z M24 25l3-3 10 10-3 3z',
+  // Breadboard / prototype
+  prototype: 'M4 8h32v24H4z M9 13v3h3v-3z M15 13v3h3v-3z M21 13v3h3v-3z M27 13v3h3v-3z M9 24v3h3v-3z M15 24v3h3v-3z M21 24v3h3v-3z M27 24v3h3v-3z M8 19h24v2H8z',
+  // Connected nodes: implementation & integration
+  integrate: 'M4 4h12v12H4z M24 24h12v12H24z M24 4h12v12H24z M8 16h4v8h12v4H8z M28 16h4v8h-4z',
+  // Rising bars: maintenance & scaling
+  scale: 'M4 26h8v10H4z M16 18h8v18h-8z M28 8h8v28h-8z M4 4h14v4H4z',
+} as const;
+
+const { name, class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 40 40"
+  aria-hidden="true"
+  class:list={['size-10 shrink-0 fill-accent', className]}
+  fill-rule="evenodd"
+>
+  <path d={icons[name]} />
+</svg>

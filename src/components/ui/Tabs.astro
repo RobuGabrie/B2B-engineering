@@ -16,7 +16,7 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
   <div
     role="tablist"
     aria-label={label}
-    class="-mx-5 flex overflow-x-auto border-b border-line px-5 [scrollbar-width:none] md:mx-0 md:px-0"
+    class="flex max-w-full overflow-x-auto [scrollbar-width:none] md:w-fit"
   >
     {tabs.map((tab, i) => (
       <button
@@ -26,7 +26,7 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
         aria-controls={`${id}-panel-${tab.id}`}
         aria-selected={i === 0 ? 'true' : 'false'}
         tabindex={i === 0 ? 0 : -1}
-        class="relative -mb-px shrink-0 border-b-2 border-transparent px-1 py-3 font-display text-xs font-semibold uppercase tracking-wide whitespace-nowrap text-steel transition-colors not-first:ml-6 focus-visible:-outline-offset-2 hover:text-ink aria-selected:border-accent aria-selected:text-ink md:text-sm"
+        class="relative shrink-0 border-b border-line px-1 pt-3 pb-2.5 pr-5 last:pr-1 aria-selected:border-b-2 aria-selected:pb-[9px] font-display text-xs font-semibold uppercase tracking-wide whitespace-nowrap text-steel transition-colors focus-visible:-outline-offset-2 hover:text-ink aria-selected:border-accent aria-selected:text-ink md:text-sm"
       >
         {tab.label}
       </button>

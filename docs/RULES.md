@@ -22,9 +22,10 @@ Rules for anyone (human or AI) working on this site. When in doubt, the brief (`
 - **Base:** light, technical-minimal. White background, near-black ink, graphite grays.
 - **One accent color:** industrial orange. Never add a second accent.
 - **Typography:** wide bold uppercase display font (Unbounded) for headings; a clean sans for text. Body text never below 16px on mobile.
-- **Signature elements** (from the reference): orange corner tick marks, a notched photo in the hero, cards with one 45° chamfered corner, tabs with an orange underline, an outline button in the nav.
+- **Match the Pinterest reference exactly** (`docs/reference.jpg`; the "PRO Improver" construction landing page) for shapes and details: card silhouette, notch, ticks, tabs, icons. Compare side by side before calling a component done.
+- **Signature elements** (from the reference): orange corner tick marks, a notched photo (edge-to-edge in the hero, rounded block for the video), cards with rounded corners and the top-right corner cut at 45° (orange solid icon on top, ticks at all 4 corners), tabs with a gray line under the tab group and an orange underline on the active tab, an outline button in the nav.
 - **Photos:** real-looking hardware, PCBs, sensors, machines, labs. Free-licensed (Pexels; Unsplash blocks automated downloads) until real photos arrive; every image is listed in `CREDITS.md`.
-- **Forbidden:** stock people in suits / handshakes, gradient glows, purple-blue gradients, 3D blobs, generic icon grids, emoji as icons, colored left-border stripes on cards.
+- **Forbidden:** stock people in suits / handshakes, gradient glows, purple-blue gradients, 3D blobs, generic outline-icon grids (only flat solid orange pictograms from `ui/Icon.astro`), emoji as icons, colored left-border stripes on cards.
 
 ## Technical
 

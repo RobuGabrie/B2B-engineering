@@ -1,47 +1,79 @@
 ---
-// Card with a thin border and one 45° cut corner (top-right), optionally with orange corner ticks.
-// Built from two clipped layers: the outer one is the border color, the inner one is inset by 1px.
+// Card from the reference: rounded corners, top-right corner cut at 45° (with softened joints),
+// thin gray outline and four orange ticks just outside the corners.
+// The outline is an SVG drawn as a 9-slice border-image, so the corners never stretch at any card size.
 interface Props {
-  cut?: number;
   ticks?: boolean;
   as?: 'div' | 'li' | 'article';
   class?: string;
 }
 
-const { cut = 32, ticks = false, as: Tag = 'div', class: className } = Astro.props;
+const { ticks = true, as: Tag = 'div', class: className } = Astro.props;
+
+// Geometry, in px: corner radius, chamfer length along each edge, joint softening, slice size.
+const R = 28;
+const C = 64;
+const J = 8;
+const S = 80;
+const W = 200;
+const H = 200;
+const d = J / Math.SQRT2;
+const e = 0.5; // half the stroke width, keeps the 1px line crisp inside the box
+
+const path = [
+  `M ${R} ${e}`,
+  `H ${W - C - J}`,
+  `Q ${W - C} ${e} ${W - C + d} ${e + d}`,
+  `L ${W - e - d} ${C - d}`,
+  `Q ${W - e} ${C} ${W - e} ${C + J}`,
+  `V ${H - R}`,
+  `A ${R - e} ${R - e} 0 0 1 ${W - R} ${H - e}`,
+  `H ${R}`,
+  `A ${R - e} ${R - e} 0 0 1 ${e} ${H - R}`,
+  `V ${R}`,
+  `A ${R - e} ${R - e} 0 0 1 ${R} ${e}`,
+  'Z',
+].join(' ');
+
+const outline = (stroke: string) =>
+  `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' viewBox='0 0 ${W} ${H}'><path d='${path}' fill='%23fff' stroke='${stroke}' stroke-width='1'/></svg>`,
+  ).replace(/%2523/g, '%23')}")`;
 ---
 
-<Tag class:list={['chamfer relative', className]} style={`--cut: ${cut}px;`}>
+<Tag
+  class:list={['chamfer-card relative', className]}
+  style={`--outline: ${outline('#e2e2de')}; --outline-hover: ${outline('#8a8a86')}; --slice: ${S};`}
+>
   {ticks && (
     <>
-      <span aria-hidden="true" class="absolute -top-2 -left-2 size-1.5 bg-accent" />
-      <span aria-hidden="true" class="absolute -bottom-2 -left-2 size-1.5 bg-accent" />
-      <span aria-hidden="true" class="absolute -right-2 -bottom-2 size-1.5 bg-accent" />
+      <span aria-hidden="true" class="tick -top-3 -left-3" />
+      <span aria-hidden="true" class="tick -top-3 -right-3" />
+      <span aria-hidden="true" class="tick -bottom-3 -left-3" />
+      <span aria-hidden="true" class="tick -right-3 -bottom-3" />
     </>
   )}
-  <div class="chamfer-shape absolute inset-0 bg-line transition-colors" aria-hidden="true">
-    <div class="chamfer-shape chamfer-inner absolute inset-px bg-paper"></div>
-  </div>
-  <div class="relative h-full p-6 md:p-8">
+  <div class="relative h-full px-7 py-8 md:px-9 md:py-10">
     <slot />
   </div>
 </Tag>
 
 <style>
-  .chamfer-shape {
-    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  .chamfer-card {
+    border: 1px solid transparent;
+    border-image-source: var(--outline);
+    border-image-slice: var(--slice) fill;
+    border-image-width: calc(var(--slice) * 1px);
+    min-height: calc(var(--slice) * 2px);
   }
-  /* The inner layer is 2px narrower, so its cut must shrink by ~0.41px to keep a 1px diagonal border. */
-  .chamfer-inner {
-    clip-path: polygon(
-      0 0,
-      calc(100% - var(--cut) + 0.41px) 0,
-      100% calc(var(--cut) - 0.41px),
-      100% 100%,
-      0 100%
-    );
+  .chamfer-card:hover {
+    border-image-source: var(--outline-hover);
   }
-  .chamfer:hover > .chamfer-shape {
-    background-color: var(--color-steel);
+  .tick {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--color-accent);
+    pointer-events: none;
   }
 </style>
