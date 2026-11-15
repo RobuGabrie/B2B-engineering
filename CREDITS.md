@@ -11,3 +11,8 @@ Placeholder photos from [Pexels](https://www.pexels.com/license/), free for comm
 | `logistics-shelves.jpg` | Vertical: logistics & agri | https://www.pexels.com/photo/ladder-on-construction-4487364/ |
 | `pcb-macro.jpg` | Contact | https://www.pexels.com/photo/close-up-of-electronic-microchips-on-circuit-board-36169774/ |
 | `bench-soldering.jpg` | Spare / case studies | https://www.pexels.com/photo/mechanical-engineer-soldering-in-workshop-3912983/ |
+
+## Fonts
+
+- Unbounded (OFL), self-hosted subset: `src/assets/fonts/` (license `OFL-Unbounded.txt`).
+- Montserrat (OFL): outlines used to redraw the SYNAPSE·TECH logo letters (`scripts/build-logo.py`).

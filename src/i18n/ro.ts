@@ -194,6 +194,7 @@ export const ro = {
     navTitle: 'Pagină',
     contactTitle: 'Contact',
     companyTitle: 'Firmă',
+    country: 'România',
     backToTop: 'Sus',
   },
 } as const;

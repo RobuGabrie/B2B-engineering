@@ -1,6 +1,6 @@
 ---
-// "Ce rezolvăm concret": the four verticals as tabs. Photos alternate side and notch corner per vertical. Each panel: notched photo + problem / solution / benefit,
-// a benefit box with concrete outcomes and the CTA.
+// "Ce rezolvăm concret": the four verticals as tabs. Photos alternate side and notch corner per vertical. Each panel: notched photo,
+// problem / solution / key benefit, the outcomes as a numbered hairline list, and an underlined CTA link (no boxes).
 import SectionHeading from './ui/SectionHeading.astro';
 import Tabs from './ui/Tabs.astro';
 import NotchedImage from './ui/NotchedImage.astro';
@@ -55,29 +55,27 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
                 <dt class="text-[13px] font-bold uppercase tracking-wide">{labels.solution}</dt>
                 <dd class="mt-2 text-[15px] text-graphite">{item.solution}</dd>
               </div>
+              <div>
+                <dt class="flex items-center gap-3 text-[13px] font-bold uppercase tracking-wide">
+                  <span class="size-1.5 bg-accent" aria-hidden="true"></span>{labels.benefit}
+                </dt>
+                <dd class="mt-2 text-[17px] font-semibold leading-snug">{item.benefit}</dd>
+              </div>
             </dl>
 
-            <div class="mt-8 rounded-[20px] bg-mist p-6 md:p-7">
-              <p class="flex items-center gap-3 text-[13px] font-bold uppercase tracking-wide">
-                <span class="size-1.5 bg-accent" aria-hidden="true"></span>{labels.benefit}
-              </p>
-              <p class="mt-3 text-[17px] font-semibold leading-snug">{item.benefit}</p>
-              <p class="mt-6 border-t border-line pt-5 font-mono text-[11px] uppercase tracking-wider text-steel">{labels.outcomes}</p>
-              <ul class="mt-3 grid gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-1 lg:gap-2.5">
-                {item.outcomes.map((o) => (
-                  <li class="flex items-start gap-2.5 text-sm font-semibold leading-snug">
-                    <svg viewBox="0 0 16 16" class="mt-px size-4 shrink-0" aria-hidden="true">
-                      <rect width="16" height="16" rx="3" class="fill-accent" />
-                      <path d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#0d0d0e" stroke-width="1.8" />
-                    </svg>
-                    {o}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <p class="mt-8 font-mono text-xs uppercase tracking-wider text-steel">{labels.outcomes}</p>
+            <ol class="mt-3 border-t border-ink">
+              {item.outcomes.map((o, n) => (
+                <li class="flex items-baseline gap-4 border-b border-line py-3 text-[15px] font-semibold">
+                  <span class="font-mono text-xs font-normal text-accent-ink">0{n + 1}</span>{o}
+                </li>
+              ))}
+            </ol>
 
-            <div class="mt-6">
-              <Button href={sectionHref(lang, 'contact')} class="w-full sm:w-auto">{t.solutions.cta}</Button>
+            <div class="mt-8">
+              <Button href={sectionHref(lang, 'contact')} variant="link" class="text-[13px] font-semibold">
+                {t.solutions.cta}<span aria-hidden="true" class="text-accent-ink">→</span>
+              </Button>
             </div>
           </div>
         </div>

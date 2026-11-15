@@ -1,7 +1,7 @@
 import { site } from '../config/site';
 import { useTranslations, type Lang } from '../i18n/utils';
 
-export const telHref = `tel:${site.phone.replace(/\s+/g, '')}`;
+export const telHref = `tel:${site.phoneIntl}`;
 export const mailHref = `mailto:${site.email}`;
 
 /** WhatsApp click-to-chat link with a prefilled greeting in the page language. */

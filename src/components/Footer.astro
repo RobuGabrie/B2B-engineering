@@ -1,7 +1,8 @@
 ---
 // Dark footer, the one ink block on the page. Its top edge is a sheet with a rounded top-left corner
-// and the cards' 45° cut on the top-right, at full scale. A huge wordmark, then three columns
+// and the cards' 45° cut on the top-right, at full scale. The logo spanning the container, then three columns
 // (page links, contact, company details) and a bottom line with ©, language links and back-to-top.
+import Logo from './ui/Logo.astro';
 import { site } from '../config/site';
 import { homePath, languages, sectionHref, useTranslations, type Lang } from '../i18n/utils';
 import { mailHref, telHref, whatsappHref } from '../lib/contact';
@@ -13,7 +14,6 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const codes = Object.keys(languages) as Lang[];
-const [bold, rest] = site.wordmark;
 const year = new Date().getFullYear();
 
 const pageLinks = [
@@ -27,9 +27,7 @@ const pageLinks = [
 
 <footer class="site-footer bg-ink text-paper">
   <div class="container-site pt-16 pb-8 md:pt-24">
-    <p class="wordmark font-display leading-none uppercase" aria-hidden="true">
-      <b class="font-extrabold">{bold}</b><span class="font-normal text-paper/40">{rest}</span>
-    </p>
+    <Logo onDark class="footer-logo" />
     <p class="mt-6 max-w-md text-[15px] text-paper/70">{t.footer.tagline}</p>
 
     <div class="mt-14 grid gap-10 border-t border-paper/15 pt-10 sm:grid-cols-2 md:grid-cols-3">
@@ -52,10 +50,9 @@ const pageLinks = [
       <div>
         <h2 class="col-title">{t.footer.companyTitle}</h2>
         <address class="mt-4 text-[15px] leading-relaxed text-paper/70 not-italic">
-          {site.name}<br />
-          {site.address.street}<br />
-          {site.address.postalCode} {site.address.city}<br />
-          {t.footer.cui}: {site.cui}
+          {site.legalName}<br />
+          {t.footer.cui}: {site.cui}<br />
+          {site.address.city}, {t.footer.country}
         </address>
       </div>
     </div>
@@ -96,10 +93,10 @@ const pageLinks = [
       border-top-left-radius: 44px;
     }
   }
-  /* Scales with the viewport so the wordmark always spans the container. */
-  .wordmark {
-    font-size: clamp(1.5rem, 7.4vw, 6.25rem);
-    letter-spacing: -0.02em;
+  /* The logo spans the container width; its height follows from the aspect ratio. */
+  .footer-logo :global(svg) {
+    width: 100%;
+    height: auto;
   }
   .col-title {
     font-family: var(--font-mono);

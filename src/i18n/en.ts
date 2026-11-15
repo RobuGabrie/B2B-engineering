@@ -194,6 +194,7 @@ export const en: Dictionary = {
     navTitle: 'Page',
     contactTitle: 'Contact',
     companyTitle: 'Company',
+    country: 'Romania',
     backToTop: 'Top',
   },
 };

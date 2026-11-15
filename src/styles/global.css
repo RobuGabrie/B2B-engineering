@@ -21,10 +21,14 @@
   --color-graphite: #4a4a48;
   --color-ink: #0d0d0e;
 
-  --color-accent: #ff5b14;
-  --color-accent-hover: #e84a06;
+  /* Brand orange, from the SYNAPSE·TECH logo. */
+  --color-accent: #ff7323;
+  --color-accent-hover: #e85f10;
   /* Darker orange for small text on white (passes AA) */
   --color-accent-ink: #c23d00;
+  /* Logo cyan: only inside the logo, never as a second UI accent. */
+  --color-brand-cyan: #17e5fc;
+  --color-brand-cyan-ink: #00a9cc;
 
   --font-display: "Unbounded Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;

@@ -87,7 +87,7 @@ const channels = [
         </div>
 
         <div class="mt-2 flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center">
-          <Button type="submit" size="lg" class="w-full sm:w-auto" data-submit>
+          <Button type="submit" size="lg" class="self-start" data-submit>
             <span data-submit-label>{f.submit}</span>
             <svg viewBox="0 0 12 12" class="size-3" aria-hidden="true"><path d="M2 1l7 5-7 5z" fill="currentColor" /></svg>
           </Button>
@@ -108,7 +108,7 @@ const channels = [
             <Icon name={c.icon} class="size-8" />
             <span class="min-w-0">
               <span class="block font-mono text-xs uppercase text-steel">{c.label}</span>
-              <span class="mt-1 block font-display text-base font-bold break-words md:text-lg">{c.value}</span>
+              <span class="mt-1 block font-display text-sm font-bold break-words sm:text-base md:text-lg">{c.value}</span>
             </span>
             <span class="ml-auto text-accent-ink transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
           </a>

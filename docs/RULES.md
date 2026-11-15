@@ -13,20 +13,20 @@ Rules for anyone (human or AI) working on this site. When in doubt, the brief (`
 
 - **No hardcoded copy in components.** Every string lives in `src/i18n/ro.ts` and `src/i18n/en.ts`. Both files must always have the same keys.
 - **Romanian is the primary language** (`/`), English is a full mirror (`/en/`). Never ship a section in only one language.
-- **Placeholders for now:** company name `NUMECOMPANIE`, phone `+40 700 000 000`, email `contact@example.com`, address `Str. Exemplu nr. 1, Suceava`, CUI `RO00000000`. All of these live only in `src/config/site.ts`.
-- **No logo image yet**: the name is a text wordmark in the display font.
+- **Company details** (SYNAPSE Tech, COVALIOV VICTOR PFA, CUI 55693416, Suceava, 0755 154 722, contact@synapsetech.ro) live only in `src/config/site.ts`.
+- **Logo**: `ui/Logo.astro` (inline SVG from `src/assets/brand/logo.svg`, rebuilt by `scripts/build-logo.py` from the client's raster). Never use the JPG.
 - Every section ends in, or links to, the single CTA: talk to an engineer / request a demo (`#contact`).
 
 ## Visual
 
 - **Base:** light, technical-minimal. White background, near-black ink, graphite grays.
-- **One accent color:** industrial orange. Never add a second accent.
+- **One accent color:** the brand orange from the logo (#ff7323). The logo's cyan stays inside the logo (and favicon); never use it as a second UI accent.
 - **Typography:** wide bold uppercase display font (Unbounded) for headings; a clean sans for text. Body text never below 16px on mobile.
 - **Match the Pinterest reference exactly** (`docs/reference.jpg`; the "PRO Improver" construction landing page) for shapes and details: card silhouette, notch, ticks, tabs, icons. Compare side by side before calling a component done.
 - **No plain rectangles for big blocks.** Photos and large panels are shapes that cut into each other: a notch bites into the photo, the step between them is slanted with rounded joints (`ui/NotchedImage.astro`, `src/lib/shape.ts`). On mobile the same cut is kept, smaller: content stacks above and only its last element (badge/label) sits in the notch.
-- **Variety, not repetition.** Notches come from different corners (`corner` prop: tl/tr/bl/br), photos alternate sides, and each section uses its own card language: reference cut-corner cards (why-us, one dark), a vertical timeline with outlined numbers (process), a gray benefit box. Don't reuse one card style for everything.
+- **Variety, not repetition.** Notches come from different corners (`corner` prop: tl/tr/bl/br), photos alternate sides, and each section uses its own card language: reference cut-corner cards (why-us), a vertical timeline with outlined numbers (process), hairline numbered lists (solutions outcomes, case results, contact channels). Don't reuse one card style for everything.
 - **Scroll motion** is allowed when it explains something (e.g. the process timeline filling); always respect `prefers-reduced-motion`.
-- **Signature elements** (from the reference): orange corner tick marks, a notched photo (edge-to-edge in the hero, rounded block for the video), cards with rounded corners and the top-right corner cut at 45° (orange solid icon on top, ticks at all 4 corners), tabs with a gray line under the tab group and an orange underline on the active tab, an outline button in the nav.
+- **Signature elements** (from the reference): orange corner tick marks, a notched photo (edge-to-edge in the hero, rounded block for the video), cards with rounded corners and the top-right corner cut at 45° (orange solid icon on top, ticks at all 4 corners; all light, like the reference: the user rejected a dark card), tabs with a gray line under the tab group and an orange underline on the active tab, an outline button in the nav.
 - **Photos:** real-looking hardware, PCBs, sensors, machines, labs. Free-licensed (Pexels; Unsplash blocks automated downloads) until real photos arrive; every image is listed in `CREDITS.md`.
 - **Forbidden:** stock people in suits / handshakes, gradient glows, purple-blue gradients, 3D blobs, generic outline-icon grids (only flat solid orange pictograms from `ui/Icon.astro`), emoji as icons, colored left-border stripes on cards.
 

@@ -1,6 +1,6 @@
 # Progress & handoff
 
-Last updated: 2026-11-15 (steps 8–11 done). **Read this first when resuming in a new terminal/session**, then `RULES.md`.
+Last updated: 2026-11-15 (steps 8–11 done, then mobile/brand fixes). **Read this first when resuming in a new terminal/session**, then `RULES.md`.
 
 ## Status
 
@@ -19,19 +19,24 @@ Last updated: 2026-11-15 (steps 8–11 done). **Read this first when resuming in
 | 11 | Polish: mobile QA, accessibility, Lighthouse ≥ 95 | ✅ done: mobile 99/100/100/100, desktop 100×4 |
 | 12 | Deploy + domain | ⏸ waiting: user chose to decide hosting later |
 
+## Brand & real data (2026-11-15)
+
+SYNAPSE Tech · COVALIOV VICTOR PFA · CUI 55693416 · Suceava · 0755 154 722 (also WhatsApp) · contact@synapsetech.ro. Domain assumed `synapsetech.ro` (from the email): set in `site.ts` and `astro.config.mjs`, change both if different.
+Logo redrawn as SVG (`scripts/build-logo.py`: Montserrat outlines fitted to the client's JPG + the S trace). Site accent switched to the logo orange #ff7323. On light backgrounds "TECH" uses a deeper cyan (#00a9cc) for legibility; on dark (footer, favicon) the original #17e5fc.
+
 ## Form
 
 **Web3Forms** (user confirmed 2026-11-15). The key is a placeholder (`web3formsKey` in `src/config/site.ts`), so submitting currently shows the error message. To go live: create an access key at web3forms.com with the destination email and paste it there.
 
-Other open items (not blocking): real company name/logo/contacts/domain, real photos, who reviews the EN copy, hosting (Cloudflare Pages vs own server).
+Other open items (not blocking): confirm the domain, real photos, who reviews the EN copy, hosting (Cloudflare Pages vs own server).
 
 ## What the page looks like now (top to bottom)
 
-1. **Header** (`Header.astro`, `LanguageMenu.astro`): wordmark **NUME**COMPANIE + `RO ⌄` dropdown on the left; Soluții · Proces · De ce noi · Contact centered; WhatsApp text link + outline "Cere un demo" on the right. Sticky. Full-screen menu below `lg`.
+1. **Header** (`Header.astro`, `LanguageMenu.astro`): SYNAPSE·TECH logo + `RO ⌄` dropdown on the left; Soluții · Proces · De ce noi · Contact centered; WhatsApp text link + outline "Cere un demo" on the right. Sticky. Full-screen menu below `lg`.
 2. **Hero** (`Hero.astro`): centered H1 framed by `CornerTicks`, subtitle; edge-to-edge photo (`NotchedImage bleed`, corner `tl`, **vertical 90° step, joint 44**) whose notch holds audience tabs (Industrie & orașe / Produse hardware), two CTAs, Hard&Soft badge. Mobile: buttons full width and equal, tabs split 50/50, badge sits in the notch.
-3. **Ce rezolvăm concret** (`Solutions.astro`): `SectionHeading`, 4 tabs. Each panel: notched photo (alternates: even = left/`tl`, odd = right/`br`), title, Problema, Soluția, gray **benefit box** with "Ce primești" (3 outcomes with orange checks), CTA directly under the box.
+3. **Ce rezolvăm concret** (`Solutions.astro`): `SectionHeading`, 4 tabs. Each panel: notched photo (alternates: even = left/`tl`, odd = right/`br`), title, Problema / Soluția / Beneficiu cheie, "Ce primești" as a numbered hairline list, underlined CTA link.
 4. **Cum lucrăm** (`Process.astro`): `SectionHeading`; left a tall sticky photo with notch **bottom-left** (`bl`, vertical step); right a **timeline** with big outlined numbers 01–04 that fill orange on scroll, and a vertical line that fills.
-5. **De ce noi?** (`WhyUs.astro`): 3 `ChamferCard`s like "YOUR BENEFITS" in the reference (middle one **dark**), centered underlined link to contact.
+5. **De ce noi?** (`WhyUs.astro`): 3 light `ChamferCard`s like "YOUR BENEFITS" in the reference, centered underlined link to contact.
 6. **Contact** (`Contact.astro`): `SectionHeading`; PCB photo with the notch **bottom-right** (slanted step) holding the form (boxed fields with a tiny label inside, like the reference search inputs); below, the three direct channels as a spec strip (mono label, big value, hairlines; 3 columns from `xl`). Layout chosen by the user.
 7. **Footer** (`Footer.astro`): the only dark block: rounded top-left, 45° cut top-right, huge wordmark, 3 columns (page, contact, company), © + RO/EN + back to top.
 - **Studii de caz** (`Cases.astro`, between Proces and De ce noi): hidden until `src/content/cases/` has a case in that language (how-to in `_README.md`). First case = the reference "WATCH OUR VIDEO" block (notch **top-right**, orange play button, video in a dialog: YouTube or .mp4); the rest as an index list (number, vertical, title, thumbnail).
@@ -46,6 +51,7 @@ Other open items (not blocking): real company name/logo/contacts/domain, real ph
 - **Mobile = same cut as desktop, scaled down.** The user rejected "only the top-right corner cut" on mobile. Content stacks above/below; only the element next to the photo sits in the notch.
 - **Variety:** the user found identical cards boring. Every section uses its own card language; notches change corners; photos alternate sides. Don't reuse one card style everywhere — make contact/footer different again.
 - **Removed on request:** the Input → Procesare → Rezultat flow and the dark scroll-driven "Schema sistemului" panel (user: redundant). Don't bring them back.
+- **Mobile feedback (2026-11-15):** hero headline was too small next to two full-width buttons. Now: bigger left-aligned H1 on phones, one compact primary button + text link (desktop unchanged: two buttons). Solutions: the gray "Beneficiu cheie" box and the filled CTA were rejected → benefit is a third row under Problema/Soluția, outcomes a numbered hairline list, CTA an underlined link. Why-us: the dark middle card was rejected → all three light. Keep phones compact: no full-width buttons.
 - Primary button text is **ink on orange** (not white) for contrast; offered to switch to white if the user insists.
 - The two hero audience texts and the 3 outcomes per vertical were written by Claude (not in the brief) — the user should review them in `src/i18n/ro.ts`.
 - **Performance (step 11):** CSS is inlined (`build.inlineStylesheets`), Unbounded is a self-hosted subset (`src/assets/fonts/unbounded-ro-wght.woff2`, Latin + Romanian diacritics, weights 400–800, 44 KB; rebuild with `scripts/subset-font.sh` if new characters appear, e.g. another language), and Unbounded + Manrope latin are preloaded. `steel` gray darkened to #6e6e6a for AA contrast. No horizontal overflow from 320 to 1440 px.
