@@ -1,0 +1,14 @@
+---
+// Small pulsing cyan dot: "live signal / real-time data". The only place the logo cyan appears in the UI
+// (orange = action, cyan = live data). The pulse stops for reduced motion.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={['relative inline-flex size-2 shrink-0', className]} aria-hidden="true">
+  <span class="absolute inset-0 animate-ping rounded-full bg-brand-cyan opacity-70 motion-reduce:hidden"></span>
+  <span class="relative size-2 rounded-full bg-brand-cyan-ink"></span>
+</span>

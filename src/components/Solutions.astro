@@ -5,6 +5,7 @@ import SectionHeading from './ui/SectionHeading.astro';
 import Tabs from './ui/Tabs.astro';
 import NotchedImage from './ui/NotchedImage.astro';
 import Button from './ui/Button.astro';
+import LiveDot from './ui/LiveDot.astro';
 import { sectionHref, useTranslations, type Lang } from '../i18n/utils';
 import iot from '../assets/images/iot-lathe.jpg';
 import vision from '../assets/images/vision-cameras.jpg';
@@ -44,7 +45,7 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
             </p>
           </NotchedImage>
 
-          <div class="flex flex-col lg:col-span-5">
+          <div data-reveal class="flex flex-col [--reveal-delay:0.12s] lg:col-span-5">
             <h3 class="text-xl leading-tight md:text-2xl">{item.title}</h3>
 
             <dl class="mt-8 space-y-6">
@@ -69,13 +70,14 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
               {item.outcomes.map((o, n) => (
                 <li class="flex items-baseline gap-4 border-b border-line py-3 text-[15px] font-semibold">
                   <span class="font-mono text-xs font-normal text-accent-ink">0{n + 1}</span>{o}
+                  {'live' in item && item.live === n && <LiveDot class="ml-auto self-center" />}
                 </li>
               ))}
             </ol>
 
             <div class="mt-8">
-              <Button href={sectionHref(lang, 'contact')} variant="link" class="text-[13px] font-semibold">
-                {t.solutions.cta}<span aria-hidden="true" class="text-accent-ink">→</span>
+              <Button href={sectionHref(lang, 'contact')} variant="link" class="group text-[13px] font-semibold">
+                {t.solutions.cta}<span aria-hidden="true" class="inline-block text-accent-ink transition-transform group-hover:translate-x-1">→</span>
               </Button>
             </div>
           </div>

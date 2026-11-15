@@ -28,6 +28,8 @@ const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
+    <!-- Scroll-reveal hides elements only when JS runs, so no-JS visitors and crawlers always see everything. -->
+    <script is:inline>document.documentElement.classList.add('js')</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -63,5 +65,19 @@ const locales: Record<Lang, string> = { ro: 'ro_RO', en: 'en_US' };
   </head>
   <body>
     <slot />
+    <script>
+      // One observer for every [data-reveal] / [data-stagger]: adds .is-in once, the first time it scrolls into view.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            e.target.classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('[data-reveal], [data-stagger]').forEach((el) => io.observe(el));
+    </script>
   </body>
 </html>

@@ -68,6 +68,8 @@ export const ro = {
           'Atașăm senzori industriali (vibrații, curent, temperatură, optic) și unități de achiziție pe utilajele existente, conectate la un dashboard live în cloud.',
         benefit:
           'Vezi randamentul (OEE) în timp real pe telefon și primești alerte înainte ca un utilaj să se defecteze.',
+        /** Index of the outcome that gets the cyan live dot. */
+        live: 0,
         outcomes: ['OEE în timp real', 'Mentenanță predictivă', 'Fără înlocuirea utilajelor'],
       },
       {

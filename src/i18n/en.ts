@@ -68,6 +68,8 @@ export const en: Dictionary = {
         solution:
           'We fit industrial sensors (vibration, current, temperature, optical) and data-acquisition units to your existing machines, connected to a live cloud dashboard.',
         benefit: 'See your OEE in real time on your phone and get alerts before a machine breaks down.',
+        /** Index of the outcome that gets the cyan live dot. */
+        live: 0,
         outcomes: ['Real-time OEE', 'Predictive maintenance', 'No machine replacement'],
       },
       {

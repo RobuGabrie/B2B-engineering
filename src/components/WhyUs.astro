@@ -19,7 +19,7 @@ const icons = ['chip', 'trophy', 'unlock'] as const;
 <section id={t.anchors.whyUs} class="container-site py-20 md:py-32" aria-labelledby="why-title">
   <SectionHeading id="why-title" title={t.whyUs.title} kicker={t.whyUs.kicker} intro={t.whyUs.intro} />
 
-  <ul class="mt-14 grid gap-8 md:mt-16 md:grid-cols-3 md:gap-6">
+  <ul data-stagger class="mt-14 grid gap-8 md:mt-16 md:grid-cols-3 md:gap-6">
     {t.whyUs.items.map((item, i) => (
       <ChamferCard as="li">
         <Icon name={icons[i]} />

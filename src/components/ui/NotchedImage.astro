@@ -7,6 +7,8 @@
 // `bleed`: photo runs edge to edge with square outer corners (hero); otherwise outer corners are rounded.
 // Without `src` it is a shaped panel: the `body` slot fills the shape (e.g. a dark card).
 // The outline is applied as a clip-path computed from the real size (src/lib/shape.ts).
+// Except in the hero (bleed/priority), the block fades in on scroll and the same outline is traced once in orange
+// along the cut, then fades: the "technical drawing" moment.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import type { Corner } from '../../lib/shape';
@@ -46,6 +48,7 @@ const {
 const hasNotch = Astro.slots.has('default');
 const top = corner === 'tl' || corner === 'tr';
 const right = corner === 'tr' || corner === 'br';
+const animated = !bleed && !priority;
 
 const notchPos = {
   tl: 'md:top-0 md:left-0 md:pr-10 md:pb-8',
@@ -62,6 +65,7 @@ const notchPos = {
   data-bleed={bleed ? '' : undefined}
   data-slant={slant}
   data-joint={joint}
+  data-reveal={animated ? '' : undefined}
 >
   {hasNotch && (
     <div
@@ -94,6 +98,9 @@ const notchPos = {
       <slot name="body" />
     )}
     <slot name="overlay" />
+    {animated && (
+      <svg class="trace" aria-hidden="true" data-trace><path pathLength="1" /></svg>
+    )}
   </div>
 </div>
 
@@ -122,6 +129,37 @@ const notchPos = {
 
   .notched.is-shaped .shape {
     border-radius: 0;
+  }
+
+  /* Outline traced once along the cut (clipped by the shape, so only its inner half shows). */
+  .trace {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .trace path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 4;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .notched.is-in.is-shaped .trace path {
+      animation: trace 1.6s cubic-bezier(0.55, 0, 0.25, 1) 0.2s forwards;
+    }
+  }
+  @keyframes trace {
+    75% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
   }
 
   /* Mobile: only the element nearest the photo sits inside the cut, so keep it narrow. */
@@ -189,6 +227,11 @@ const notchPos = {
     }
 
     shape.style.clipPath = `path('${d}')`;
+    const trace = shape.querySelector<SVGSVGElement>(':scope > [data-trace]');
+    if (trace) {
+      trace.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      trace.firstElementChild!.setAttribute('d', d);
+    }
     root.classList.add('is-shaped');
   }
 

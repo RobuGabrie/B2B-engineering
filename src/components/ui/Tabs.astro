@@ -1,5 +1,6 @@
 ---
 // Accessible tabs with an orange underline. Panels come from named slots: `panel-<id>`.
+// With JS, one underline slides between tabs instead of each tab drawing its own.
 // Without JS every panel stays visible, so content is never hidden from crawlers or no-JS visitors.
 interface Props {
   id: string;
@@ -19,7 +20,7 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
   <div
     role="tablist"
     aria-label={label}
-    class:list={['flex max-w-full overflow-x-auto [scrollbar-width:none] md:w-fit', stretch && 'max-md:[&>*]:flex-1']}
+    class:list={['relative flex max-w-full overflow-x-auto [scrollbar-width:none] md:w-fit', stretch && 'max-md:[&>button]:flex-1']}
   >
     {tabs.map((tab, i) => (
       <button
@@ -34,6 +35,7 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
         {tab.label}
       </button>
     ))}
+    <span class="ink" aria-hidden="true" data-ink></span>
   </div>
 
   {tabs.map((tab, i) => (
@@ -49,12 +51,46 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
   ))}
 </div>
 
+<style>
+  .ink {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--color-accent);
+  }
+  /* Transitions only after the first placement, so the underline doesn't grow in on page load. */
+  .ink-ready .ink {
+    transition:
+      transform 0.35s cubic-bezier(0.3, 0, 0.2, 1),
+      width 0.35s cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  .has-ink [role='tab'][aria-selected='true'] {
+    border-bottom-width: 1px;
+    border-color: var(--color-line);
+    padding-bottom: 10px;
+  }
+</style>
+
 <script>
   for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
     const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
 
     panels.forEach((p) => (p.hidden = p.hasAttribute('data-initial-hidden')));
+
+    const ink = root.querySelector<HTMLElement>('[data-ink]')!;
+    let current = 0;
+    const moveInk = () => {
+      const tab = tabs[current];
+      ink.style.width = `${tab.offsetWidth}px`;
+      ink.style.transform = `translateX(${tab.offsetLeft}px)`;
+    };
+    root.classList.add('has-ink');
+    moveInk();
+    requestAnimationFrame(() => root.classList.add('ink-ready'));
+    new ResizeObserver(moveInk).observe(ink.parentElement!);
 
     const select = (index: number, focus = false) => {
       tabs.forEach((tab, i) => {
@@ -63,6 +99,8 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
         tab.tabIndex = active ? 0 : -1;
         panels[i].hidden = !active;
       });
+      current = index;
+      moveInk();
       if (focus) tabs[index].focus();
       tabs[index].scrollIntoView({ block: 'nearest', inline: 'nearest' });
     };

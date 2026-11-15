@@ -1,6 +1,7 @@
 """Rebuilds src/assets/brand/logo.svg from the client's raster logo (SYNAPSE·TECH, 2048×676 JPG).
 The letters are Montserrat outlines placed at the positions measured on the original; the S is a trace
-(orange top, cyan below) redrawn from its measured geometry. Colors come from CSS:
+(orange top, cyan below) redrawn from its measured geometry. Classes s-a / s-b (trace halves, pathLength 1) and n-a / n-b (nodes) let ui/Logo.astro draw the S on load.
+Colors come from CSS:
   - letters "YNAPSE": currentColor
   - S top + top node: var(--logo-a)   (orange)
   - S bottom, dot, "TECH": var(--logo-b)  (cyan)
@@ -43,10 +44,10 @@ s_top = 'M373.5 275H212.3A31.25 31.25 0 0 0 181 306.3'
 s_bottom = 'M181 306.3A31.25 31.25 0 0 0 212.3 337.5H354A31.5 31.5 0 0 1 354 400.5H190.5'
 
 svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="160 252 1730 172" role="img">
-  <path d="{s_top}" {stroke} stroke="var(--logo-a, #ff7323)"/>
-  <circle cx="373.5" cy="274.5" r="17.5" fill="var(--logo-a, #ff7323)"/>
-  <path d="{s_bottom}" {stroke} stroke="var(--logo-b, #17e5fc)"/>
-  <circle cx="190.5" cy="400" r="18.5" fill="var(--logo-b, #17e5fc)"/>
+  <circle class="n-a" cx="373.5" cy="274.5" r="17.5" fill="var(--logo-a, #ff7323)"/>
+  <path class="s-a" pathLength="1" d="{s_top}" {stroke} stroke="var(--logo-a, #ff7323)"/>
+  <path class="s-b" pathLength="1" d="{s_bottom}" {stroke} stroke="var(--logo-b, #17e5fc)"/>
+  <circle class="n-b" cx="190.5" cy="400" r="18.5" fill="var(--logo-b, #17e5fc)"/>
   <path d="{''.join(paths['w'])}" fill="currentColor"/>
   <circle cx="1309.5" cy="337.5" r="12.5" fill="var(--logo-b, #17e5fc)"/>
   <path d="{''.join(paths['b'])}" fill="var(--logo-b, #17e5fc)"/>

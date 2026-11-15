@@ -37,7 +37,7 @@ const icons = ['audit', 'prototype', 'integrate', 'scale'] as const;
 
     <ol class="steps relative lg:col-span-7" data-steps>
       <span aria-hidden="true" class="absolute top-0 bottom-0 left-[1.5rem] w-0.5 -translate-x-1/2 bg-line md:left-[1.6rem]"></span>
-      <span aria-hidden="true" class="steps-fill absolute top-0 left-[1.5rem] w-0.5 -translate-x-1/2 bg-accent md:left-[1.6rem]"></span>
+      <span aria-hidden="true" class="steps-fill absolute top-0 left-[1.5rem] w-0.5 -translate-x-1/2 md:left-[1.6rem]"></span>
 
       {t.process.steps.map((step, i) => (
         <li class="step relative grid grid-cols-[3rem_minmax(0,1fr)] gap-x-4 pb-12 last:pb-0 md:grid-cols-[3.2rem_1fr] md:gap-x-8" data-step>
@@ -69,8 +69,10 @@ const icons = ['audit', 'prototype', 'integrate', 'scale'] as const;
     color: var(--color-accent);
     -webkit-text-stroke-color: var(--color-accent);
   }
+  /* The trace is two-tone like the S in the logo: orange first, cyan once the system is live. */
   .steps-fill {
     height: calc(var(--fill, 0) * 100%);
+    background: linear-gradient(var(--color-accent) 0 40%, var(--color-brand-cyan-ink) 40%);
   }
 </style>
 

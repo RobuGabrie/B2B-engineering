@@ -24,6 +24,10 @@ Last updated: 2026-11-15 (steps 8–11 done, then mobile/brand fixes). **Read th
 SYNAPSE Tech · COVALIOV VICTOR PFA · CUI 55693416 · Suceava · 0755 154 722 (also WhatsApp) · contact@synapsetech.ro. Domain assumed `synapsetech.ro` (from the email): set in `site.ts` and `astro.config.mjs`, change both if different.
 Logo redrawn as SVG (`scripts/build-logo.py`: Montserrat outlines fitted to the client's JPG + the S trace). Site accent switched to the logo orange #ff7323. On light backgrounds "TECH" uses a deeper cyan (#00a9cc) for legibility; on dark (footer, favicon) the original #17e5fc.
 
+## Motion & cyan (2026-11-15)
+
+User asked for animations that keep the site fast, and a little of the logo cyan: all implemented as listed in `RULES.md` (Visual → Motion / Accent colors). Mobile hero: 64px between the buttons and the badge row in the photo notch (user asked twice for more space there).
+
 ## Form
 
 **Web3Forms** (user confirmed 2026-11-15). The key is a placeholder (`web3formsKey` in `src/config/site.ts`), so submitting currently shows the error message. To go live: create an access key at web3forms.com with the destination email and paste it there.
