@@ -1,0 +1,54 @@
+---
+// Hero as in the reference: centered H1 framed by corner ticks, subtitle under it,
+// then an edge-to-edge photo with a notch holding audience tabs, the two CTAs and the Hard&Soft badge.
+import CornerTicks from './ui/CornerTicks.astro';
+import NotchedImage from './ui/NotchedImage.astro';
+import Tabs from './ui/Tabs.astro';
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import { sectionHref, useTranslations, type Lang } from '../i18n/utils';
+import heroImage from '../assets/images/hero-soldering.jpg';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const tabs = t.hero.audiences.map(({ id, tab }) => ({ id, label: tab }));
+---
+
+<section id={t.anchors.home} class="pt-10 md:pt-16">
+  <div class="container-site">
+    <CornerTicks class="mx-auto max-w-5xl px-2 py-8 text-center sm:px-10 md:py-12" offset={0} size={5}>
+      <h1 class="text-[1.625rem] leading-[1.05] sm:text-5xl lg:text-[4rem]">{t.hero.title}</h1>
+    </CornerTicks>
+    <p class="mx-auto mt-6 max-w-xl text-center text-[15px] text-graphite md:mt-8">{t.hero.subtitle}</p>
+  </div>
+
+  <NotchedImage
+    src={heroImage}
+    alt={t.hero.imageAlt}
+    bleed
+    slant={24}
+    priority
+    class="mt-12 md:mt-16"
+    imgClass="md:h-[36rem] md:object-[50%_10%] xl:h-[40rem]"
+  >
+    <Tabs id="hero-audience" label={t.hero.audiencesLabel} tabs={tabs} panelClass="pt-3">
+      {t.hero.audiences.map((a) => (
+        <p slot={`panel-${a.id}`} class="max-w-md text-sm text-graphite">{a.text}</p>
+      ))}
+    </Tabs>
+
+    <div class="mt-5 flex flex-wrap gap-3">
+      <Button href={sectionHref(lang, 'contact')}>{t.hero.primary}</Button>
+      <Button href={sectionHref(lang, 'solutions')} variant="outline">{t.hero.secondary}</Button>
+    </div>
+
+    <p class="mt-6 flex max-w-md items-center gap-3 text-[13px] leading-snug text-graphite">
+      <Icon name="trophy" class="size-6" />
+      {t.hero.badge}
+    </p>
+  </NotchedImage>
+</section>

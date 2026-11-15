@@ -2,6 +2,7 @@
 // The single page, rendered once per language by src/pages/index.astro and src/pages/en/index.astro.
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
+import Hero from './Hero.astro';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -23,11 +24,8 @@ const placeholders = [
 <Base lang={lang} title={t.meta.title} description={t.meta.description}>
   <Header lang={lang} />
 
-  <main id={t.anchors.home}>
-    <section class="container-site py-16 md:py-24">
-      <h1 class="max-w-5xl text-3xl sm:text-5xl md:text-6xl">{t.hero.title}</h1>
-      <p class="mt-6 max-w-2xl text-lg text-graphite">{t.hero.subtitle}</p>
-    </section>
+  <main>
+    <Hero lang={lang} />
 
     {placeholders.map((p) => (
       <section id={p.id} class="container-site min-h-[70vh] border-t border-line py-16">

@@ -6,9 +6,10 @@ interface Props {
   label: string;
   tabs: readonly { id: string; label: string }[];
   class?: string;
+  panelClass?: string;
 }
 
-const { id, label, tabs, class: className } = Astro.props;
+const { id, label, tabs, class: className, panelClass = 'pt-8' } = Astro.props;
 const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${tab.id}`)));
 ---
 
@@ -39,7 +40,7 @@ const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${t
       id={`${id}-panel-${tab.id}`}
       aria-labelledby={`${id}-tab-${tab.id}`}
       tabindex="0"
-      class="pt-8 focus-visible:outline-offset-4"
+      class:list={[panelClass, 'focus-visible:outline-offset-4']}
       data-initial-hidden={i === 0 ? undefined : ''}
       set:html={panels[i]}
     />

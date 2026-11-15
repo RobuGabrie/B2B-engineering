@@ -32,6 +32,20 @@ export const en: Dictionary = {
     primary: 'Talk to an engineer',
     secondary: 'See what we do',
     badge: 'Award-winning team at the Hard&Soft international engineering competition (USV)',
+    imageAlt: 'Engineer soldering components onto a circuit board',
+    audiencesLabel: 'Who we work with',
+    audiences: [
+      {
+        id: 'industry',
+        tab: 'Industry & cities',
+        text: 'Factories, warehouses, municipalities: monitoring, computer vision and automation on the equipment you already have.',
+      },
+      {
+        id: 'product',
+        tab: 'Hardware products',
+        text: 'Startups and companies with an idea for a physical product: from schematic to a prototype ready for production.',
+      },
+    ],
   },
   solutions: {
     title: 'What we solve',

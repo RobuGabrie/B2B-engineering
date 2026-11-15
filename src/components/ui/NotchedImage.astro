@@ -27,7 +27,7 @@ const {
   slant = 32,
   priority = false,
   class: className,
-  imgClass = 'md:min-h-[34rem]',
+  imgClass = 'md:h-[34rem]',
 } = Astro.props;
 const hasNotch = Astro.slots.has('default');
 ---
@@ -51,7 +51,7 @@ const hasNotch = Astro.slots.has('default');
       sizes={bleed ? '100vw' : '(min-width: 1200px) 1200px, 100vw'}
       loading={priority ? 'eager' : 'lazy'}
       fetchpriority={priority ? 'high' : 'auto'}
-      class:list={['aspect-4/3 h-full w-full object-cover md:aspect-auto', imgClass]}
+      class:list={['aspect-4/3 w-full object-cover md:aspect-auto', imgClass]}
     />
     <slot name="overlay" />
   </div>

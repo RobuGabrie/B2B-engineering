@@ -31,6 +31,20 @@ export const ro = {
     primary: 'Discută cu un inginer',
     secondary: 'Vezi domeniile noastre',
     badge: 'Echipă premiată la competiția internațională de inginerie Hard&Soft (USV)',
+    imageAlt: 'Inginer care lipește componente pe o placă electronică',
+    audiencesLabel: 'Pentru cine lucrăm',
+    audiences: [
+      {
+        id: 'industry',
+        tab: 'Industrie & orașe',
+        text: 'Fabrici, depozite, primării: monitorizare, computer vision și automatizări pe ce aveți deja.',
+      },
+      {
+        id: 'product',
+        tab: 'Produse hardware',
+        text: 'Startup-uri și companii cu o idee de produs fizic: de la schemă la prototip gata de serie.',
+      },
+    ],
   },
   solutions: {
     title: 'Ce rezolvăm concret',
