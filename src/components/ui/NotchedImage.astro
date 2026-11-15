@@ -12,8 +12,10 @@ interface Props {
   src: ImageMetadata;
   alt: string;
   bleed?: boolean;
-  /** Horizontal run of the slanted step, px. */
+  /** Horizontal run of the slanted step, px (0 = vertical, 90° step). */
   slant?: number;
+  /** Radius of the two joints of the step; larger = more wave. */
+  joint?: number;
   /** Rendered as the LCP image — loads eagerly with high priority. */
   priority?: boolean;
   class?: string;
@@ -25,6 +27,7 @@ const {
   alt,
   bleed = false,
   slant = 32,
+  joint = 28,
   priority = false,
   class: className,
   imgClass = 'md:h-[34rem]',
@@ -37,6 +40,7 @@ const hasNotch = Astro.slots.has('default');
   data-notched
   data-bleed={bleed ? '' : undefined}
   data-slant={slant}
+  data-joint={joint}
 >
   {hasNotch && (
     <div class="notch relative z-10 bg-paper pb-6 md:absolute md:top-0 md:left-0 md:pr-10 md:pb-8" data-notch>
@@ -106,6 +110,7 @@ const hasNotch = Astro.slots.has('default');
     const notch = root.querySelector<HTMLElement>('[data-notch]');
     const bleed = root.hasAttribute('data-bleed');
     const slant = Number(root.dataset.slant ?? 32);
+    const joint = Number(root.dataset.joint ?? 28);
     const { width: W, height: H } = shape.getBoundingClientRect();
     const r = bleed ? 0 : 28;
 
@@ -119,7 +124,7 @@ const hasNotch = Astro.slots.has('default');
         notchH: notch.offsetHeight,
         slant,
         radius: r,
-        joint: 28,
+        joint,
       });
     } else if (notch?.lastElementChild) {
       // Mobile: same cut, smaller. The content stacks above the photo and only its last element
@@ -135,7 +140,7 @@ const hasNotch = Astro.slots.has('default');
         notchH,
         slant: Math.min(slant, 20),
         radius: bleed ? 0 : 20,
-        joint: 18,
+        joint: Math.round(joint * 0.65),
       });
     } else {
       // No notch content: rounded corners with the cards' top-right 45° cut.
