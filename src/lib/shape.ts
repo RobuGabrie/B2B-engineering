@@ -33,6 +33,8 @@ export function roundedPolygon(points: readonly Pt[], radii: readonly number[]):
 const K = 0.5523;
 const f = (v: number) => Math.round(v * 100) / 100;
 
+export type Corner = 'tl' | 'tr' | 'bl' | 'br';
+
 export interface NotchOptions {
   width: number;
   height: number;
@@ -45,11 +47,24 @@ export interface NotchOptions {
   radius?: number;
   /** Radius of the two joints of the step. */
   joint?: number;
+  /** Which corner the notch is cut from. */
+  corner?: Corner;
 }
 
-/** Photo outline with a notch taken out of its top-left corner. */
-export function notchPath({ width: W, height: H, notchW, notchH, slant = 0, radius = 28, joint = 28 }: NotchOptions): string {
-  const points: Pt[] = [
+/** Photo outline with a notch taken out of one corner (drawn top-left, then mirrored). */
+export function notchPath({
+  width: W,
+  height: H,
+  notchW,
+  notchH,
+  slant = 0,
+  radius = 28,
+  joint = 28,
+  corner = 'tl',
+}: NotchOptions): string {
+  const flipX = corner === 'tr' || corner === 'br';
+  const flipY = corner === 'bl' || corner === 'br';
+  const base: Pt[] = [
     [0, notchH],
     [notchW, notchH],
     [notchW + slant, 0],
@@ -57,5 +72,6 @@ export function notchPath({ width: W, height: H, notchW, notchH, slant = 0, radi
     [W, H],
     [0, H],
   ];
+  const points = base.map(([x, y]): Pt => [flipX ? W - x : x, flipY ? H - y : y]);
   return roundedPolygon(points, [radius, joint, joint, radius, radius, radius]);
 }

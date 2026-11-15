@@ -1,16 +1,20 @@
 ---
-// Photo cut into a non-rectangular shape, as in the reference:
-// - md+: the notch content (slot) bites into the top-left corner; the step between them is slanted
+// Photo (or panel) cut into a non-rectangular shape, as in the reference:
+// - md+: the notch content (default slot) bites into one corner; the step between them can be slanted
 //   and every joint is rounded. The notch size follows the content, measured live.
-// - mobile: same cut, smaller: content stacks above, only its last element sits in the notch.
+// - mobile: same cut, smaller: content stacks above (top corners) or below (bottom corners) and only
+//   the element nearest the photo sits in the notch.
 // `bleed`: photo runs edge to edge with square outer corners (hero); otherwise outer corners are rounded.
+// Without `src` it is a shaped panel: the `body` slot fills the shape (e.g. the dark system diagram).
 // The outline is applied as a clip-path computed from the real size (src/lib/shape.ts).
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import type { Corner } from '../../lib/shape';
 
 interface Props {
-  src: ImageMetadata;
-  alt: string;
+  src?: ImageMetadata;
+  alt?: string;
+  corner?: Corner;
   bleed?: boolean;
   /** Horizontal run of the slanted step, px (0 = vertical, 90° step). */
   slant?: number;
@@ -20,43 +24,72 @@ interface Props {
   priority?: boolean;
   class?: string;
   imgClass?: string;
+  /** Classes for the shaped area (panel mode: background, padding). */
+  shapeClass?: string;
 }
 
 const {
   src,
-  alt,
+  alt = '',
+  corner = 'tl',
   bleed = false,
   slant = 32,
   joint = 28,
   priority = false,
   class: className,
   imgClass = 'md:h-[34rem]',
+  shapeClass,
 } = Astro.props;
 const hasNotch = Astro.slots.has('default');
+const top = corner === 'tl' || corner === 'tr';
+const right = corner === 'tr' || corner === 'br';
+
+const notchPos = {
+  tl: 'md:top-0 md:left-0 md:pr-10 md:pb-8',
+  tr: 'md:top-0 md:right-0 md:pl-10 md:pb-8',
+  bl: 'md:bottom-0 md:left-0 md:pr-10 md:pt-8',
+  br: 'md:bottom-0 md:right-0 md:pl-10 md:pt-8',
+}[corner];
 ---
 
 <div
-  class:list={['notched relative', bleed && 'is-bleed', className]}
+  class:list={['notched relative flex flex-col', bleed && 'is-bleed', `corner-${corner}`, className]}
   data-notched
+  data-corner={corner}
   data-bleed={bleed ? '' : undefined}
   data-slant={slant}
   data-joint={joint}
 >
   {hasNotch && (
-    <div class="notch relative z-10 bg-paper pb-6 md:absolute md:top-0 md:left-0 md:pr-10 md:pb-8" data-notch>
+    <div
+      class:list={[
+        'notch relative z-10 bg-paper md:absolute',
+        top ? 'order-first pb-6' : 'order-last pt-6',
+        right && 'flex flex-col items-end text-right md:items-start md:text-left',
+        notchPos,
+      ]}
+      data-notch
+    >
       <slot />
     </div>
   )}
-  <div class:list={['shape relative overflow-hidden', bleed ? 'rounded-none' : 'rounded-[28px]']} data-shape>
-    <Image
-      src={src}
-      alt={alt}
-      widths={[640, 960, 1280, 1920, 2400]}
-      sizes={bleed ? '100vw' : '(min-width: 1200px) 1200px, 100vw'}
-      loading={priority ? 'eager' : 'lazy'}
-      fetchpriority={priority ? 'high' : 'auto'}
-      class:list={['aspect-4/3 w-full object-cover md:aspect-auto', imgClass]}
-    />
+  <div
+    class:list={['shape relative overflow-hidden', bleed ? 'rounded-none' : 'rounded-[28px]', shapeClass]}
+    data-shape
+  >
+    {src ? (
+      <Image
+        src={src}
+        alt={alt}
+        widths={[640, 960, 1280, 1920, 2400]}
+        sizes={bleed ? '100vw' : '(min-width: 1200px) 1200px, 100vw'}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : 'auto'}
+        class:list={['aspect-4/3 w-full object-cover md:aspect-auto', imgClass]}
+      />
+    ) : (
+      <slot name="body" />
+    )}
     <slot name="overlay" />
   </div>
 </div>
@@ -88,9 +121,12 @@ const hasNotch = Astro.slots.has('default');
     border-radius: 0;
   }
 
-  /* Mobile: only the last element of the notch content sits inside the cut, so keep it narrow. */
+  /* Mobile: only the element nearest the photo sits inside the cut, so keep it narrow. */
   @media (max-width: 47.99rem) {
-    .notch > :global(:last-child) {
+    .corner-tl .notch > :global(:last-child),
+    .corner-tr .notch > :global(:last-child),
+    .corner-bl .notch > :global(:first-child),
+    .corner-br .notch > :global(:first-child) {
       width: fit-content;
       max-width: 64%;
     }
@@ -101,13 +137,16 @@ const hasNotch = Astro.slots.has('default');
 </style>
 
 <script>
-  import { notchPath, roundedPolygon } from '../../lib/shape';
+  import { notchPath, roundedPolygon, type Corner } from '../../lib/shape';
 
   const desktop = window.matchMedia('(min-width: 48rem)');
 
   function apply(root: HTMLElement) {
-    const shape = root.querySelector<HTMLElement>('[data-shape]')!;
-    const notch = root.querySelector<HTMLElement>('[data-notch]');
+    const shape = root.querySelector<HTMLElement>(':scope > [data-shape]')!;
+    const notch = root.querySelector<HTMLElement>(':scope > [data-notch]');
+    const corner = (root.dataset.corner ?? 'tl') as Corner;
+    const top = corner === 'tl' || corner === 'tr';
+    const right = corner === 'tr' || corner === 'br';
     const bleed = root.hasAttribute('data-bleed');
     const slant = Number(root.dataset.slant ?? 32);
     const joint = Number(root.dataset.joint ?? 28);
@@ -115,41 +154,35 @@ const hasNotch = Astro.slots.has('default');
     const r = bleed ? 0 : 28;
     if (!W || !H) return; // hidden (e.g. inactive tab); the observer fires again once shown
 
+    shape.style.marginTop = '';
+    shape.style.marginBottom = '';
+
     let d: string;
     if (desktop.matches && notch) {
-      shape.style.marginTop = '';
-      d = notchPath({
-        width: W,
-        height: H,
-        notchW: notch.offsetWidth,
-        notchH: notch.offsetHeight,
-        slant,
-        radius: r,
-        joint,
-      });
-    } else if (notch?.lastElementChild) {
-      // Mobile: same cut, smaller. The content stacks above the photo and only its last element
-      // (badge, label) sits in the notch; the photo rises beside it.
-      const tail = notch.lastElementChild.getBoundingClientRect();
+      d = notchPath({ width: W, height: H, notchW: notch.offsetWidth, notchH: notch.offsetHeight, slant, radius: r, joint, corner });
+    } else if (notch && notch.children.length) {
+      // Mobile: same cut, smaller. Only the element next to the photo sits in the notch; the photo rises beside it.
+      const el = (top ? notch.lastElementChild : notch.firstElementChild)!.getBoundingClientRect();
       const box = notch.getBoundingClientRect();
-      const notchH = Math.round(box.bottom - tail.top + 10);
-      shape.style.marginTop = `-${notchH}px`;
+      const notchH = Math.round(top ? box.bottom - el.top + 10 : el.bottom - box.top + 10);
+      const notchW = Math.round(right ? box.right - el.left + 16 : el.right - box.left + 16);
+      if (top) shape.style.marginTop = `-${notchH}px`;
+      else shape.style.marginBottom = `-${notchH}px`;
       d = notchPath({
         width: W,
         height: H,
-        notchW: Math.round(tail.right - box.left + 16),
+        notchW,
         notchH,
         slant: Math.min(slant, 20),
         radius: bleed ? 0 : 20,
         joint: Math.round(joint * 0.65),
+        corner,
       });
     } else {
       // No notch content: rounded corners with the cards' top-right 45° cut.
       const c = Math.min(56, W / 4);
-      d = roundedPolygon(
-        [[0, 0], [W - c, 0], [W, c], [W, H], [0, H]],
-        [bleed ? 0 : 20, 10, 10, bleed ? 0 : 20, bleed ? 0 : 20],
-      );
+      const rr = bleed ? 0 : 20;
+      d = roundedPolygon([[0, 0], [W - c, 0], [W, c], [W, H], [0, H]], [rr, 10, 10, rr, rr]);
     }
 
     shape.style.clipPath = `path('${d}')`;
@@ -159,7 +192,7 @@ const hasNotch = Astro.slots.has('default');
   for (const root of document.querySelectorAll<HTMLElement>('[data-notched]')) {
     const ro = new ResizeObserver(() => apply(root));
     ro.observe(root);
-    const notch = root.querySelector('[data-notch]');
+    const notch = root.querySelector(':scope > [data-notch]');
     if (notch) ro.observe(notch);
     desktop.addEventListener('change', () => apply(root));
   }

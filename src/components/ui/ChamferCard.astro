@@ -6,13 +6,15 @@ interface Props {
   ticks?: boolean;
   /** Orange outline instead of gray (e.g. the result step). */
   accent?: boolean;
+  /** Dark fill with light text, to break up a row of cards. */
+  dark?: boolean;
   /** Inner padding classes. */
   pad?: string;
   as?: 'div' | 'li' | 'article';
   class?: string;
 }
 
-const { ticks = true, accent = false, pad = 'px-7 py-8 md:px-9 md:py-10', as: Tag = 'div', class: className } = Astro.props;
+const { ticks = true, accent = false, dark = false, pad = 'px-7 py-8 md:px-9 md:py-10', as: Tag = 'div', class: className } = Astro.props;
 
 // Geometry, in px: corner radius, chamfer length along each edge, joint softening, slice size.
 const R = 28;
@@ -39,15 +41,17 @@ const path = [
   'Z',
 ].join(' ');
 
-const outline = (stroke: string) =>
+const outline = (stroke: string, fill = '#fff') =>
   `url("data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' viewBox='0 0 ${W} ${H}'><path d='${path}' fill='%23fff' stroke='${stroke}' stroke-width='1'/></svg>`,
+    `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' viewBox='0 0 ${W} ${H}'><path d='${path}' fill='${fill}' stroke='${stroke}' stroke-width='1'/></svg>`,
   ).replace(/%2523/g, '%23')}")`;
 ---
 
 <Tag
-  class:list={['chamfer-card relative', className]}
-  style={`--outline: ${outline(accent ? '#ff5b14' : '#e2e2de')}; --outline-hover: ${outline(accent ? '#ff5b14' : '#8a8a86')}; --slice: ${S};`}
+  class:list={['chamfer-card relative', dark && 'text-paper', className]}
+  style={dark
+    ? `--outline: ${outline('#0d0d0e', '#0d0d0e')}; --outline-hover: ${outline('#0d0d0e', '#0d0d0e')}; --slice: ${S};`
+    : `--outline: ${outline(accent ? '#ff5b14' : '#e2e2de')}; --outline-hover: ${outline(accent ? '#ff5b14' : '#8a8a86')}; --slice: ${S};`}
 >
   {ticks && (
     <>
