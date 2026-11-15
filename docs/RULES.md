@@ -23,7 +23,7 @@ Rules for anyone (human or AI) working on this site. When in doubt, the brief (`
 - **One accent color:** industrial orange. Never add a second accent.
 - **Typography:** wide bold uppercase display font (Unbounded) for headings; a clean sans for text. Body text never below 16px on mobile.
 - **Signature elements** (from the reference): orange corner tick marks, a notched photo in the hero, cards with one 45° chamfered corner, tabs with an orange underline, an outline button in the nav.
-- **Photos:** real-looking hardware, PCBs, sensors, machines, labs. Free-licensed (Unsplash/Pexels) until real photos arrive; every image is listed in `CREDITS.md`.
+- **Photos:** real-looking hardware, PCBs, sensors, machines, labs. Free-licensed (Pexels; Unsplash blocks automated downloads) until real photos arrive; every image is listed in `CREDITS.md`.
 - **Forbidden:** stock people in suits / handshakes, gradient glows, purple-blue gradients, 3D blobs, generic icon grids, emoji as icons, colored left-border stripes on cards.
 
 ## Technical

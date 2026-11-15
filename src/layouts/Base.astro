@@ -7,9 +7,10 @@ interface Props {
   lang: Lang;
   title: string;
   description: string;
+  noindex?: boolean;
 }
 
-const { lang, title, description } = Astro.props;
+const { lang, title, description, noindex = false } = Astro.props;
 const fullTitle = `${title} | ${site.name}`;
 const canonical = new URL(homePath(lang), Astro.site);
 const codes = Object.keys(languages) as Lang[];
@@ -27,6 +28,7 @@ const codes = Object.keys(languages) as Lang[];
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     {codes.map((code) => (
       <link rel="alternate" hreflang={code} href={new URL(homePath(code), Astro.site)} />

@@ -1,0 +1,78 @@
+---
+// Accessible tabs with an orange underline. Panels come from named slots: `panel-<id>`.
+// Without JS every panel stays visible, so content is never hidden from crawlers or no-JS visitors.
+interface Props {
+  id: string;
+  label: string;
+  tabs: readonly { id: string; label: string }[];
+  class?: string;
+}
+
+const { id, label, tabs, class: className } = Astro.props;
+const panels = await Promise.all(tabs.map((tab) => Astro.slots.render(`panel-${tab.id}`)));
+---
+
+<div class:list={['tabs', className]} data-tabs>
+  <div
+    role="tablist"
+    aria-label={label}
+    class="-mx-5 flex overflow-x-auto border-b border-line px-5 [scrollbar-width:none] md:mx-0 md:px-0"
+  >
+    {tabs.map((tab, i) => (
+      <button
+        type="button"
+        role="tab"
+        id={`${id}-tab-${tab.id}`}
+        aria-controls={`${id}-panel-${tab.id}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? 0 : -1}
+        class="relative -mb-px shrink-0 border-b-2 border-transparent px-1 py-3 font-display text-xs font-semibold uppercase tracking-wide whitespace-nowrap text-steel transition-colors not-first:ml-6 focus-visible:-outline-offset-2 hover:text-ink aria-selected:border-accent aria-selected:text-ink md:text-sm"
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+
+  {tabs.map((tab, i) => (
+    <div
+      role="tabpanel"
+      id={`${id}-panel-${tab.id}`}
+      aria-labelledby={`${id}-tab-${tab.id}`}
+      tabindex="0"
+      class="pt-8 focus-visible:outline-offset-4"
+      data-initial-hidden={i === 0 ? undefined : ''}
+      set:html={panels[i]}
+    />
+  ))}
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
+
+    panels.forEach((p) => (p.hidden = p.hasAttribute('data-initial-hidden')));
+
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => {
+        const active = i === index;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        panels[i].hidden = !active;
+      });
+      if (focus) tabs[index].focus();
+      tabs[index].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (e) => {
+        const last = tabs.length - 1;
+        const next = { ArrowRight: i === last ? 0 : i + 1, ArrowLeft: i === 0 ? last : i - 1, Home: 0, End: last }[e.key];
+        if (next === undefined) return;
+        e.preventDefault();
+        select(next, true);
+      });
+    });
+  }
+</script>

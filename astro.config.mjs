@@ -20,6 +20,7 @@ export default defineConfig({
 
   integrations: [
     sitemap({
+      filter: (page) => !page.includes('/preview'),
       i18n: { defaultLocale: 'ro', locales: { ro: 'ro', en: 'en' } },
     }),
   ]

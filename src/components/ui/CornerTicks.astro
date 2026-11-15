@@ -1,0 +1,27 @@
+---
+// Four small orange squares at the corners of the wrapped content, like crop marks on a technical drawing.
+interface Props {
+  /** Distance of the ticks outside the content box, in px. */
+  offset?: number;
+  size?: number;
+  class?: string;
+}
+
+const { offset = 12, size = 5, class: className } = Astro.props;
+const positions = [
+  'top-(--tick-o) left-(--tick-o)',
+  'top-(--tick-o) right-(--tick-o)',
+  'bottom-(--tick-o) left-(--tick-o)',
+  'bottom-(--tick-o) right-(--tick-o)',
+];
+---
+
+<div
+  class:list={['relative', className]}
+  style={`--tick-o: ${-offset}px; --tick-s: ${size}px;`}
+>
+  {positions.map((pos) => (
+    <span aria-hidden="true" class:list={['pointer-events-none absolute size-(--tick-s) bg-accent', pos]} />
+  ))}
+  <slot />
+</div>

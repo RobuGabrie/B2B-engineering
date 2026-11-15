@@ -1,0 +1,47 @@
+---
+// Card with a thin border and one 45° cut corner (top-right), optionally with orange corner ticks.
+// Built from two clipped layers: the outer one is the border color, the inner one is inset by 1px.
+interface Props {
+  cut?: number;
+  ticks?: boolean;
+  as?: 'div' | 'li' | 'article';
+  class?: string;
+}
+
+const { cut = 32, ticks = false, as: Tag = 'div', class: className } = Astro.props;
+---
+
+<Tag class:list={['chamfer relative', className]} style={`--cut: ${cut}px;`}>
+  {ticks && (
+    <>
+      <span aria-hidden="true" class="absolute -top-2 -left-2 size-1.5 bg-accent" />
+      <span aria-hidden="true" class="absolute -bottom-2 -left-2 size-1.5 bg-accent" />
+      <span aria-hidden="true" class="absolute -right-2 -bottom-2 size-1.5 bg-accent" />
+    </>
+  )}
+  <div class="chamfer-shape absolute inset-0 bg-line transition-colors" aria-hidden="true">
+    <div class="chamfer-shape chamfer-inner absolute inset-px bg-paper"></div>
+  </div>
+  <div class="relative h-full p-6 md:p-8">
+    <slot />
+  </div>
+</Tag>
+
+<style>
+  .chamfer-shape {
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  /* The inner layer is 2px narrower, so its cut must shrink by ~0.41px to keep a 1px diagonal border. */
+  .chamfer-inner {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cut) + 0.41px) 0,
+      100% calc(var(--cut) - 0.41px),
+      100% 100%,
+      0 100%
+    );
+  }
+  .chamfer:hover > .chamfer-shape {
+    background-color: var(--color-steel);
+  }
+</style>

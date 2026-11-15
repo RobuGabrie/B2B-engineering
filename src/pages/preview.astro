@@ -1,0 +1,70 @@
+---
+// Internal page showing the UI building blocks. Not indexed, not in the sitemap.
+import Base from '../layouts/Base.astro';
+import Button from '../components/ui/Button.astro';
+import CornerTicks from '../components/ui/CornerTicks.astro';
+import ChamferCard from '../components/ui/ChamferCard.astro';
+import NotchedImage from '../components/ui/NotchedImage.astro';
+import Tabs from '../components/ui/Tabs.astro';
+import { useTranslations } from '../i18n/utils';
+import hero from '../assets/images/hero-soldering.jpg';
+
+const t = useTranslations('ro');
+const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
+---
+
+<Base lang="ro" title="Preview componente" description="Componente UI" noindex>
+  <main class="container-site space-y-24 py-16">
+    <section>
+      <h2 class="mb-8 text-2xl">Butoane</h2>
+      <div class="flex flex-wrap items-center gap-4">
+        <Button href="#">{t.hero.primary}</Button>
+        <Button href="#" size="lg">{t.hero.primary}</Button>
+        <Button href="#" variant="outline">{t.nav.cta}</Button>
+        <Button href="#" variant="link">{t.hero.secondary}</Button>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-8 text-2xl">Corner ticks</h2>
+      <CornerTicks class="mx-auto max-w-3xl px-6 py-10 text-center">
+        <h1 class="text-3xl md:text-5xl">Sisteme inteligente la cheie</h1>
+      </CornerTicks>
+    </section>
+
+    <section>
+      <h2 class="mb-8 text-2xl">Notched image</h2>
+      <NotchedImage src={hero} alt="Lipire cu ciocanul de lipit pe o placă electronică">
+        <p class="max-w-md text-graphite">{t.hero.subtitle}</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <Button href="#">{t.hero.primary}</Button>
+          <Button href="#" variant="outline">{t.hero.secondary}</Button>
+        </div>
+      </NotchedImage>
+    </section>
+
+    <section>
+      <h2 class="mb-8 text-2xl">Chamfer cards</h2>
+      <ul class="grid gap-6 md:grid-cols-3">
+        {t.whyUs.items.map((item) => (
+          <ChamferCard as="li" ticks>
+            <h3 class="text-sm">{item.title}</h3>
+            <p class="mt-3 text-graphite">{item.text}</p>
+          </ChamferCard>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="mb-8 text-2xl">Tabs</h2>
+      <Tabs id="preview" label={t.solutions.title} tabs={tabs}>
+        {t.solutions.items.map((item) => (
+          <div slot={`panel-${item.id}`}>
+            <p class="font-semibold">{item.title}</p>
+            <p class="mt-2 max-w-2xl text-graphite">{item.solution}</p>
+          </div>
+        ))}
+      </Tabs>
+    </section>
+  </main>
+</Base>
