@@ -8,6 +8,8 @@ export const ro = {
   },
   nav: {
     home: 'Acasă',
+    services: 'Servicii',
+    allServices: 'Toate serviciile',
     solutions: 'Soluții',
     process: 'Proces',
     whyUs: 'De ce noi',
@@ -200,6 +202,7 @@ export const ro = {
       tech: 'Tehnologii',
       faq: 'Întrebări frecvente',
       others: 'Alte servicii',
+      details: 'Detalii despre serviciu',
       more: 'Detalii',
       whatsapp: 'Scrie pe WhatsApp',
       problem: 'Problema',

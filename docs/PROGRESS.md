@@ -41,7 +41,7 @@ User asked for animations that keep the site fast, and a little of the logo cyan
 ## Service pages (2026-11-16)
 
 One page per vertical, RO + EN (8 pages), for SEO on specific searches. `Service.astro` + `src/pages/servicii/[slug].astro`, `src/pages/en/services/[slug].astro`; slugs in `pages` (`src/i18n/utils.ts`). Sections: breadcrumb + framed H1 + lead + CTAs beside a notched photo (`bl`), problem/solution + benefit/outcomes on mist, "how it works" as a 4-node orange→cyan trace, uses + technology tags, FAQ (native `<details>`), the other three services as cut-corner cards, the shared contact form. JSON-LD: Service + BreadcrumbList + FAQPage. Shared copy from `solutions.items`, page copy from `services.items` (**written by Claude, the company should review the technical claims and technology lists**).
-The user asked not to change the home page: the only home change is the shared footer, which gained a "Servicii" column (internal links). Optional later: a "Detalii" link from each home tab to its page.
+The user asked not to change the home page: the only home change is the shared footer, which gained a "Servicii" column (internal links). Then (user agreed) the header "Soluții" became **"Servicii" with a dropdown** of the 4 pages (+ "Toate serviciile" → home section); in the mobile menu they're listed under Servicii; each home tab has a "Detalii despre serviciu →" link under its CTA.
 
 ## Form
 

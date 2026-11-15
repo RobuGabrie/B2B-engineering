@@ -1,11 +1,12 @@
 ---
 // Layout from the reference: logo + language on the left, nav centered, text link + outline button on the right.
-// Sticky; gains a hairline once the page scrolls. Below lg, the nav moves into a full-screen menu.
+// "Servicii" opens a small list of the four service pages (native <details>). Sticky; gains a hairline once
+// the page scrolls. Below lg, the nav moves into a full-screen menu where the services are listed under it.
 import LanguageMenu from './LanguageMenu.astro';
 import Button from './ui/Button.astro';
 import Logo from './ui/Logo.astro';
 import { site } from '../config/site';
-import { homePath, sectionHref, useTranslations, type Lang, type Page } from '../i18n/utils';
+import { homePath, pages, sectionHref, serviceIds, useTranslations, type Lang, type Page } from '../i18n/utils';
 import { whatsappHref, telHref } from '../lib/contact';
 
 interface Props {
@@ -16,8 +17,9 @@ interface Props {
 const { lang, page = 'home' } = Astro.props;
 const t = useTranslations(lang);
 
+const services = serviceIds.map((id, i) => ({ href: pages[id][lang], label: t.solutions.items[i].title, tab: t.solutions.items[i].tab, current: page === id }));
 const links = [
-  { href: sectionHref(lang, 'solutions'), label: t.nav.solutions },
+  { href: sectionHref(lang, 'solutions'), label: t.nav.services },
   { href: sectionHref(lang, 'process'), label: t.nav.process },
   { href: sectionHref(lang, 'whyUs'), label: t.nav.whyUs },
   { href: sectionHref(lang, 'contact'), label: t.nav.contact },
@@ -35,7 +37,32 @@ const links = [
 
     <nav aria-label={t.nav.menu} class="mx-auto hidden lg:block">
       <ul class="flex items-center gap-10 text-[13px] font-medium uppercase">
-        {links.map((link) => (
+        <li>
+          <details class="nav-menu relative" data-nav-menu>
+            <summary class="flex cursor-pointer list-none items-center gap-1.5 py-2 transition-colors hover:text-accent-ink [&::-webkit-details-marker]:hidden">
+              {t.nav.services}
+              <svg viewBox="0 0 10 6" class="chevron size-2.5 transition-transform" aria-hidden="true">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" />
+              </svg>
+            </summary>
+            <ul class="absolute top-full left-1/2 z-50 mt-3 w-80 -translate-x-1/2 rounded-[3px] border border-line bg-paper py-2 text-left normal-case shadow-[0_12px_32px_-14px_rgb(0_0_0/0.3)]">
+              {services.map((sv) => (
+                <li>
+                  <a href={sv.href} aria-current={sv.current ? 'page' : undefined} class="block px-5 py-2.5 hover:bg-mist aria-[current=page]:bg-mist">
+                    <span class="block font-mono text-[11px] uppercase text-accent-ink">{sv.tab}</span>
+                    <span class="mt-0.5 block text-sm leading-snug font-semibold">{sv.label}</span>
+                  </a>
+                </li>
+              ))}
+              <li class="mx-5 mt-2 border-t border-line pt-2">
+                <a href={sectionHref(lang, 'solutions')} class="flex items-center justify-between py-2 text-[12px] font-semibold uppercase hover:text-accent-ink">
+                  {t.nav.allServices}<span aria-hidden="true" class="text-accent-ink">→</span>
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+        {links.slice(1).map((link) => (
           <li>
             <a href={link.href} class="nav-link py-2 transition-colors hover:text-accent-ink">{link.label}</a>
           </li>
@@ -76,6 +103,17 @@ const links = [
                 <span class="font-mono text-xs font-normal text-accent-ink">0{i + 1}</span>
                 {link.label}
               </a>
+              {i === 0 && (
+                <ul class="-mt-1 grid gap-1 pb-5 pl-9">
+                  {services.map((sv) => (
+                    <li>
+                      <a href={sv.href} aria-current={sv.current ? 'page' : undefined} class="flex items-center gap-3 py-1.5 text-[15px] font-semibold aria-[current=page]:text-accent-ink" data-menu-link>
+                        <span class="size-1.5 shrink-0 bg-accent" aria-hidden="true"></span>{sv.tab}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
@@ -95,6 +133,9 @@ const links = [
 <style>
   .site-header[data-scrolled] {
     box-shadow: 0 1px 0 var(--color-line);
+  }
+  .nav-menu[open] .chevron {
+    transform: rotate(180deg);
   }
   [aria-expanded='true'] .burger span:first-child {
     transform: translateY(5px) rotate(45deg);
@@ -133,4 +174,17 @@ const links = [
     }
   });
   window.matchMedia('(min-width: 64rem)').addEventListener('change', (e) => e.matches && setOpen(false));
+
+  // Services dropdown: close on outside click, Escape or after choosing a link.
+  const navMenu = header.querySelector<HTMLDetailsElement>('[data-nav-menu]')!;
+  document.addEventListener('click', (e) => {
+    if (navMenu.open && !navMenu.contains(e.target as Node)) navMenu.open = false;
+  });
+  navMenu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu.open) {
+      navMenu.open = false;
+      navMenu.querySelector('summary')!.focus();
+    }
+  });
+  navMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => (navMenu.open = false)));
 </script>

@@ -6,7 +6,7 @@ import Tabs from './ui/Tabs.astro';
 import NotchedImage from './ui/NotchedImage.astro';
 import Button from './ui/Button.astro';
 import LiveDot from './ui/LiveDot.astro';
-import { sectionHref, useTranslations, type Lang } from '../i18n/utils';
+import { pages, sectionHref, useTranslations, type Lang, type ServiceId } from '../i18n/utils';
 import iot from '../assets/images/iot-lathe.jpg';
 import vision from '../assets/images/vision-cameras.jpg';
 import rnd from '../assets/images/rnd-pcb-hand.jpg';
@@ -75,10 +75,13 @@ const tabs = t.solutions.items.map(({ id, tab }) => ({ id, label: tab }));
               ))}
             </ol>
 
-            <div class="mt-8">
+            <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5">
               <Button href={sectionHref(lang, 'contact')} variant="link" class="group text-[13px] font-semibold">
                 {t.solutions.cta}<span aria-hidden="true" class="inline-block text-accent-ink transition-transform group-hover:translate-x-1">→</span>
               </Button>
+              <a href={pages[item.id as ServiceId][lang]} class="group inline-flex items-center gap-2 text-[13px] font-semibold uppercase text-graphite hover:text-ink">
+                {t.services.labels.details}<span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-1">→</span>
+              </a>
             </div>
           </div>
         </div>

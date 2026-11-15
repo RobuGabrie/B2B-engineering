@@ -9,6 +9,8 @@ export const en: Dictionary = {
   },
   nav: {
     home: 'Home',
+    services: 'Services',
+    allServices: 'All services',
     solutions: 'Solutions',
     process: 'Process',
     whyUs: 'Why us',
@@ -200,6 +202,7 @@ export const en: Dictionary = {
       tech: 'Technologies',
       faq: 'Frequently asked questions',
       others: 'Other services',
+      details: 'Service details',
       more: 'Details',
       whatsapp: 'Message on WhatsApp',
       problem: 'The problem',
