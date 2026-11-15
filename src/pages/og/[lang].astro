@@ -1,0 +1,38 @@
+---
+// Source of the Open Graph images (public/og-ro.png, public/og-en.png), 1200×630.
+// Not linked or indexed; regenerate with `python3 scripts/og.py` while the dev server runs.
+import Base from '../../layouts/Base.astro';
+import CornerTicks from '../../components/ui/CornerTicks.astro';
+import NotchedImage from '../../components/ui/NotchedImage.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { site } from '../../config/site';
+import { languages, useTranslations, type Lang } from '../../i18n/utils';
+import hero from '../../assets/images/hero-soldering.jpg';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const [bold, rest] = site.wordmark;
+---
+
+<Base lang={lang} title="OG" description="Open Graph image" noindex>
+  <main class="og grid h-[630px] w-[1200px] grid-cols-[640px_1fr] overflow-hidden bg-paper">
+    <div class="flex flex-col py-12 pr-6 pl-14">
+      <p class="text-lg tracking-wide uppercase"><b class="font-extrabold">{bold}</b>{rest}</p>
+      <CornerTicks class="my-auto px-6 py-6" offset={0} size={5}>
+        <p class="font-display text-[2.6rem] leading-[1.04] font-bold uppercase">{t.hero.title}</p>
+      </CornerTicks>
+      <p class="flex items-center gap-3 text-[15px] leading-snug text-graphite">
+        <Icon name="trophy" class="size-7" />{t.hero.badge}
+      </p>
+    </div>
+    <NotchedImage src={hero} alt="" corner="bl" slant={0} joint={36} priority class="my-6 mr-6" imgClass="md:h-[582px] md:object-[60%_50%]">
+      <p class="flex items-center gap-3 text-xs font-semibold whitespace-nowrap uppercase">
+        <span class="size-1.5 bg-accent" aria-hidden="true"></span>{t.solutions.kicker}
+      </p>
+    </NotchedImage>
+  </main>
+</Base>

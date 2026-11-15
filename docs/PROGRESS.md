@@ -15,7 +15,7 @@ Last updated: 2026-11-15. **Read this first when resuming in a new terminal/sess
 | 7 | Cum lucrăm + De ce noi | ✅ done |
 | 8 | Contact form + WhatsApp + footer | ✅ done (Web3Forms key still a placeholder) |
 | 9 | Case studies placeholder (content collection, hidden while empty) | ✅ done |
-| 10 | SEO: Open Graph image, JSON-LD, robots.txt (sitemap + hreflang already done) | todo |
+| 10 | SEO: Open Graph image, JSON-LD, robots.txt (sitemap + hreflang already done) | ✅ done |
 | 11 | Polish: mobile QA, accessibility, Lighthouse ≥ 95 | todo |
 | 12 | Deploy + domain | todo |
 
@@ -37,7 +37,7 @@ Other open items (not blocking): real company name/logo/contacts/domain, real ph
 - **Studii de caz** (`Cases.astro`, between Proces and De ce noi): hidden until `src/content/cases/` has a case in that language (how-to in `_README.md`). First case = the reference "WATCH OUR VIDEO" block (notch **top-right**, orange play button, video in a dialog: YouTube or .mp4); the rest as an index list (number, vertical, title, thumbnail).
 8. **WhatsApp FAB** (`WhatsAppFab.astro`): below `lg` only, shows after the hero and hides over contact/footer.
 
-`/preview` is an internal page showing the UI primitives (noindex, not in sitemap).
+`/preview` and `/og/<lang>/` are internal pages showing the UI primitives (noindex, not in sitemap).
 
 ## Decisions & user feedback (keep honoring these)
 
@@ -75,3 +75,6 @@ Screenshots for checking: Python Playwright is installed (`webapp-testing` skill
 | Contact links (tel, mailto, WhatsApp) | `src/lib/contact.ts` |
 | Page assembly | `src/components/Home.astro` |
 | Photos | `src/assets/images/` |
+| JSON-LD (ProfessionalService + 4 Service) | `src/lib/schema.ts` |
+| OG images (`public/og-ro.png`, `og-en.png`) + apple-touch-icon | source `src/pages/og/[lang].astro`; regenerate with `python3 scripts/og.py` (dev server running) after changing the name/headline |
+| Case studies | `src/content/cases/` (how-to in `_README.md`) |
