@@ -1,0 +1,135 @@
+---
+// Layout from the reference: wordmark + language on the left, nav centered, text link + outline button on the right.
+// Sticky; gains a hairline once the page scrolls. Below lg, the nav moves into a full-screen menu.
+import LanguageMenu from './LanguageMenu.astro';
+import Button from './ui/Button.astro';
+import { site } from '../config/site';
+import { homePath, sectionHref, useTranslations, type Lang } from '../i18n/utils';
+import { whatsappHref, telHref } from '../lib/contact';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const links = [
+  { href: sectionHref(lang, 'solutions'), label: t.nav.solutions },
+  { href: sectionHref(lang, 'process'), label: t.nav.process },
+  { href: sectionHref(lang, 'whyUs'), label: t.nav.whyUs },
+  { href: sectionHref(lang, 'contact'), label: t.nav.contact },
+];
+const [bold, rest] = site.wordmark;
+---
+
+<header class="site-header sticky top-0 z-40 bg-paper transition-shadow" data-header>
+  <div class="container-site flex h-16 items-center gap-4 lg:h-20">
+    <div class="flex items-center gap-3">
+      <a href={homePath(lang)} class="text-[15px] tracking-wide uppercase" aria-label={site.name}>
+        <b class="font-extrabold">{bold}</b><span>{rest}</span>
+      </a>
+      <LanguageMenu lang={lang} />
+    </div>
+
+    <nav aria-label={t.nav.menu} class="mx-auto hidden lg:block">
+      <ul class="flex items-center gap-10 text-[13px] font-medium uppercase">
+        {links.map((link) => (
+          <li>
+            <a href={link.href} class="nav-link py-2 transition-colors hover:text-accent-ink">{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="ml-auto hidden items-center gap-8 lg:ml-0 lg:flex">
+      <a href={whatsappHref(lang)} class="text-[13px] font-medium uppercase hover:text-accent-ink" target="_blank" rel="noopener">
+        {t.contact.whatsapp}
+      </a>
+      <Button href={sectionHref(lang, 'contact')} variant="outline">{t.nav.cta}</Button>
+    </div>
+
+    <button
+      type="button"
+      class="ml-auto -mr-2 flex size-11 items-center justify-center lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+    >
+      <span class="sr-only" data-label-open>{t.nav.menu}</span>
+      <span class="sr-only hidden" data-label-close>{t.nav.close}</span>
+      <span class="burger relative block h-3 w-6" aria-hidden="true">
+        <span class="absolute top-0 left-0 h-0.5 w-full bg-ink transition-transform"></span>
+        <span class="absolute bottom-0 left-0 h-0.5 w-full bg-ink transition-transform"></span>
+      </span>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-paper lg:hidden" hidden data-menu>
+    <div class="container-site flex min-h-full flex-col pt-6 pb-10">
+      <nav aria-label={t.nav.menu}>
+        <ul class="border-t border-line">
+          {links.map((link, i) => (
+            <li class="border-b border-line">
+              <a href={link.href} class="flex items-baseline gap-4 py-5 font-display text-2xl font-bold uppercase" data-menu-link>
+                <span class="font-mono text-xs font-normal text-accent-ink">0{i + 1}</span>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="mt-auto grid gap-3 pt-10">
+        <Button href={sectionHref(lang, 'contact')} size="lg" data-menu-link>{t.hero.primary}</Button>
+        <div class="grid grid-cols-2 gap-3">
+          <Button href={whatsappHref(lang)} variant="outline" size="lg" target="_blank" rel="noopener">{t.contact.whatsapp}</Button>
+          <Button href={telHref} variant="outline" size="lg">{t.contact.phone}</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header[data-scrolled] {
+    box-shadow: 0 1px 0 var(--color-line);
+  }
+  [aria-expanded='true'] .burger span:first-child {
+    transform: translateY(5px) rotate(45deg);
+  }
+  [aria-expanded='true'] .burger span:last-child {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+  const menu = header.querySelector<HTMLElement>('[data-menu]')!;
+  const labelOpen = toggle.querySelector('[data-label-open]')!;
+  const labelClose = toggle.querySelector('[data-label-close]')!;
+
+  const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 4);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.hidden = !open;
+    labelOpen.classList.toggle('hidden', open);
+    labelClose.classList.toggle('hidden', !open);
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    header.toggleAttribute('data-scrolled', open || window.scrollY > 4);
+  };
+
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !menu.hidden) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  window.matchMedia('(min-width: 64rem)').addEventListener('change', (e) => e.matches && setOpen(false));
+</script>

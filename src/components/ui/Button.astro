@@ -1,5 +1,6 @@
 ---
-// Primary = safety-orange fill with ink text (AA contrast); outline = thin ink border, as in the nav of the reference.
+// As in the reference: plain sans uppercase labels, 3px corners. Primary = orange fill (ink text for AA contrast);
+// outline = thin orange border on white ("BOOK A DEMO" in the reference nav).
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = {
@@ -12,16 +13,16 @@ type Props = {
 const { variant = 'primary', size = 'md', href, class: className, ...rest } = Astro.props;
 
 const base =
-  'inline-flex items-center justify-center gap-3 font-display font-semibold uppercase tracking-wide transition-colors duration-150 select-none';
+  'inline-flex items-center justify-center gap-3 rounded-[3px] font-sans font-semibold uppercase tracking-wide transition-colors duration-150 select-none';
 
 const variants = {
   primary: 'bg-accent text-ink hover:bg-ink hover:text-paper',
-  outline: 'border border-ink/80 text-ink hover:border-accent hover:text-accent-ink',
-  link: 'text-ink underline decoration-accent decoration-2 underline-offset-8 hover:text-accent-ink',
+  outline: 'border border-accent bg-paper text-ink hover:bg-accent',
+  link: 'rounded-none text-ink underline decoration-accent decoration-1 underline-offset-8 hover:text-accent-ink',
 };
 
 const sizes = {
-  md: 'min-h-11 px-5 text-xs',
+  md: 'min-h-11 px-5 text-[13px]',
   lg: 'min-h-14 px-7 text-sm',
 };
 

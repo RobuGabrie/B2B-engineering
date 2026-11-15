@@ -1,6 +1,8 @@
 // All company details live here. Placeholders until the real data arrives.
 export const site = {
   name: 'NUMECOMPANIE',
+  /** Wordmark in the header: first part bold, second regular (as "PROIMPROVER" in the reference). */
+  wordmark: ['NUME', 'COMPANIE'],
   url: 'https://example.com',
   phone: '+40 700 000 000',
   email: 'contact@example.com',

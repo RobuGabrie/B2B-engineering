@@ -1,0 +1,61 @@
+---
+// "RO ⌄" dropdown next to the wordmark, as "EN ⌄" in the reference. Native <details>, no JS needed.
+import { homePath, languages, useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const codes = Object.keys(languages) as Lang[];
+---
+
+<details class="lang-menu relative" data-lang-menu>
+  <summary
+    class="flex min-h-11 cursor-pointer list-none items-center gap-1 px-2 text-[13px] font-semibold uppercase [&::-webkit-details-marker]:hidden"
+    aria-label={`${t.nav.language}: ${languages[lang]}`}
+  >
+    {lang}
+    <svg viewBox="0 0 10 6" class="chevron size-2.5 transition-transform" aria-hidden="true">
+      <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" />
+    </svg>
+  </summary>
+  <ul class="absolute top-full left-0 z-50 min-w-36 rounded-[3px] border border-line bg-paper py-1 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.25)]">
+    {codes.map((code) => (
+      <li>
+        <a
+          href={homePath(code)}
+          hreflang={code}
+          lang={code}
+          aria-current={code === lang ? 'page' : undefined}
+          class="flex min-h-11 items-center justify-between gap-4 px-4 text-sm hover:bg-mist aria-[current=page]:font-semibold"
+        >
+          {languages[code]}
+          <span class="text-[13px] uppercase text-steel">{code}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<style>
+  .lang-menu[open] .chevron {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  // Close when clicking outside or pressing Escape.
+  for (const menu of document.querySelectorAll<HTMLDetailsElement>('[data-lang-menu]')) {
+    document.addEventListener('click', (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+    });
+    menu.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+  }
+</script>
